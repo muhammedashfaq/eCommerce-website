@@ -54,9 +54,20 @@ const loadLogin=async (req,res)=>{
     }
 }
 
+const getHome = async(req,res)=>{
+    try {
+
+        res.render('home')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
 module.exports={
     registerLoad,
     veryfiyUser,
-    loadLogin
+    loadLogin,
+    getHome
 }
 
