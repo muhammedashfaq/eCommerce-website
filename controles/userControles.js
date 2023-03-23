@@ -45,6 +45,7 @@ const veryfiyUser= async (req,res)=>{
     const Udata = await data.save()
     
     if(Udata){
+
         res.render('login',{alert:'done'})
     }else{
         res.render('register',{alert:'note done'})
@@ -81,6 +82,7 @@ const veryfiLogin= async (req,res)=>{
             if(userData){
                 const passwordMatch= await bcrypt.compare(password,userData.password)
                 if(passwordMatch){
+                    req.session.user_id=userData.id
                     res.redirect('home')
                 }else{
                     res.render('login') 
@@ -105,6 +107,17 @@ const getHome = async(req,res)=>{
     try {
 
         res.render('home')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const userLogout=async(req,res)=>{
+    try {
+        req.session.destroy()
+        res.redirect('/')
         
     } catch (error) {
         console.log(error.message);
@@ -190,6 +203,7 @@ module.exports={
     loadLogin,
     veryfiLogin,
     getHome,
+    userLogout,
     getShop,
     getContact,
     getAbout,

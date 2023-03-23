@@ -1,6 +1,14 @@
 const express =require('express')
 
 const rout=express()
+const session=require('express-session')
+
+rout.use(session({
+    secret:"thisiemysecretkey",
+    resave:false,
+    saveUninitialized:true
+}))
+const auth=require('../middleware/userAuth')
 
 rout.set('view engine','ejs')
 rout.set('views','./views/users')
@@ -18,15 +26,17 @@ rout.get("/register",userController.registerLoad)
 rout.post("/register",userController.veryfiyUser)
 
 //login
-rout.get('/',userController.loadLogin)
+rout.get('/',auth.isLogout,userController.loadLogin)
 
 rout.get('/login',userController.loadLogin)
 rout.post('/login',userController.veryfiLogin)
 
+//logout
 
+rout.get('/logout',auth.isLogin,userController.userLogout)
 //home
 
-rout.get('/home',userController.getHome)
+rout.get('/home',auth.isLogin,userController.getHome)
 
 
 //shop

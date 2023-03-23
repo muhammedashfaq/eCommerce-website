@@ -45,17 +45,21 @@
       
                         <div class="form-outline mb-4">
                           <input type="email" id="form2Example11" name="email" class="form-control"
-                            placeholder=" email address" />
-                          <label class="form-label" for="form2Example11">Username</label>
+                            placeholder=" email address"  required/>
+                          <label class="form-label" for="form2Example11">Email</label>
                         </div>
+                        <span id="er1 " style="color: red;"></span>
+
       
                         <div class="form-outline mb-4">
-                          <input type="password" id="form2Example22" name="password" class="form-control" />
+                          <input type="password" id="form2Example22" name="password" class="form-control" required />
                           <label class="form-label" for="form2Example22">Password</label>
                         </div>
+                        <span id="er2" style="color: red;"></span>
+
       
                         <div class="text-center pt-1 mb-5 pb-1">
-                          <button  class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
+                          <button  class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onclick="validation()" type="submit">Log
                             in</button>
                           <a class="text-muted" href="#!">Forgot password?</a>
                         </div>
@@ -85,6 +89,22 @@
           </div>
         </div>
       </section>
+
+
+
+      <script>
+        const password = document.getElementById('form2Example22')
+
+        password.addEventListener('input',() => {
+          if(password.value.trim().length  < 8){
+            password.setCustomValidity('hello')
+          }
+        })
+  
+       
+
+      </script>
+
     
     
     <!-- JS here -->
