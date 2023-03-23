@@ -1,5 +1,19 @@
 const User= require("../model/user_model")
+const bcrypt =require('bcrypt')
 
+///bcrypt password
+const securePassword=async(password)=>{
+    try {
+        const passwordHash=await bcrypt.hash(password,10);
+        return passwordHash;
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+}
+
+//register page load
 
 const registerLoad = async (re,res)=>{
     try {
@@ -14,14 +28,18 @@ const registerLoad = async (re,res)=>{
     }
 }
 
-
+//register page insert user
 const veryfiyUser= async (req,res)=>{
     try {
+
+        const spassword=await securePassword(req.body.password);
+
         const data =new User({
         name:req.body.name,
         email:req.body.email,
         mob:req.body.mob,
-        password:req.body.password
+        password:spassword,
+        is_admin:0
     })
 
     const Udata = await data.save()
@@ -32,10 +50,6 @@ const veryfiyUser= async (req,res)=>{
         res.render('register',{alert:'note done'})
 
     }
-
-
-
-
         
     } catch (error) {
 
@@ -44,7 +58,7 @@ const veryfiyUser= async (req,res)=>{
     }
 }
 
-
+//login page
 const loadLogin=async (req,res)=>{
     try {
         res.render('login')
@@ -52,6 +66,39 @@ const loadLogin=async (req,res)=>{
         console.log(error.message);
         
     }
+}
+
+
+const veryfiLogin= async (req,res)=>{
+
+    try {
+
+
+        const email=req.body.email
+        const password=req.body.password 
+        const userData=await User.findOne({email:email})  
+
+            if(userData){
+                const passwordMatch= await bcrypt.compare(password,userData.password)
+                if(passwordMatch){
+                    res.redirect('home')
+                }else{
+                    res.render('login') 
+                    console.log('hi');
+
+                }
+            }else{
+                res.render('login')
+
+            }
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+
 }
 
 const getHome = async(req,res)=>{
@@ -64,10 +111,90 @@ const getHome = async(req,res)=>{
         
     }
 }
+const getShop = async(req,res)=>{
+    try {
+
+        res.render('shop')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const getContact = async(req,res)=>{
+    try {
+
+        res.render('contact')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
+const getAbout= async(req,res)=>{
+    try {
+
+        res.render('about')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
+const getCart = async(req,res)=>{
+    try {
+
+        res.render('cart')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const getProduct_details = async(req,res)=>{
+    try {
+
+        res.render('Product_details')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
+const getProduct_checkout = async(req,res)=>{
+    try {
+
+        res.render('checkout')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
+
+
+
 module.exports={
     registerLoad,
     veryfiyUser,
     loadLogin,
-    getHome
+    veryfiLogin,
+    getHome,
+    getShop,
+    getContact,
+    getAbout,
+    getCart,
+    getProduct_details,
+    getProduct_checkout
 }
 
