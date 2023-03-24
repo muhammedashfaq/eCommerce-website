@@ -47,7 +47,7 @@
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="text" name="name" id="name" class="form-control"  />
+                            <input type="text" name="name" id="Fname" class="form-control" required />
                             <label class="form-label" for="form3Example1c">Your Name</label>
                           </div>
                         </div>
@@ -56,7 +56,7 @@
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="email" name="email" id="email" class="form-control"  />
+                            <input type="email" name="email" id="Femail" class="form-control"  />
                             <label class="form-label" for="form3Example3c">Your Ema il</label>
                           </div>
                         </div>
@@ -65,7 +65,7 @@
                         <div class="d-flex flex-row align-items-center mb-4">
                             <i class="fas fa-mobile fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
-                              <input type="number" name="mob" id="mob" class="form-control"  />
+                              <input type="number" name="mob" id="Fmob" class="form-control"  />
                               <label class="form-label" for="form3Example3c">Your Mobile Number</label>
                             </div>
                           </div>
@@ -75,7 +75,7 @@
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="password" name="password" id="password" class="form-control"  />
+                            <input type="password" name="password" id="Fpassword" class="form-control"  />
                             <label class="form-label" for="form3Example4c">Password</label>
                           </div>
                         </div>
@@ -98,7 +98,7 @@
                         </div>
        -->
                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <button type="submit" class="btn btn-primary btn-lg" onclick="validation()" >Register</button>
+                          <button type="submit" class="btn btn-primary btn-lg" onclick="validation()">Register</button>
                         </div>
 
   
@@ -131,39 +131,65 @@
 
 
 
-        <script>
-          function validation(){
-            const Fname=document.getElementById('name')
-          const email=document.getElementById('email')
-          const mobile=document.getElementById('mob')
-          const password=document.getElementById('password')
 
-          if (Fname === "") {
-            document.getElementById('er1').innerText='Name must be filled out '
-
-
-        }
-       else if (email === "") {
-            document.getElementById('er2').innerText='Email must be filled out '
-        }
-       else if (mobile === "") {
-            document.getElementById('er3').innerText='Mobile Number must be filled out '  
-        }
-       else if (password === "") {
-            document.getElementById('er4').innerText='password must be filled out '
-        }
-             
-
-
-
-
-            
-          }
-
+      <script>
+       
+        function validation() {
+            const name= document.getElementById("Fname").value;
+            const email = document.getElementById("Femail").value;
+            const mob=document.getElementById("Fmob").value;
+            const password = document.getElementById("Fpassword").value;
     
-         
+    
+        
+            if (name === "") {
+                document.getElementById('er1').innerText='Name must be filled out '
+    
+    
+            }
+            if (email === "") {
+                document.getElementById('er2').innerText='Email must be filled out '
+            }
+            if (mob === "") {
+                document.getElementById('er3').innerText='Mobile Number must be filled out '  
+            }
+            if (password === "") {
+                document.getElementById('er4').innerText='password must be filled out '
+            }
+          
+        }
+          
+    
+      </script>
 
-        </script>
+
+
+<!-- <script>
+  const password = document.getElementById('form2Example22')
+
+  password.addEventListener('input',() => {
+    if(password.value.trim().length  < 8){
+      // password.setCustomValidity('Password must 8 digit')
+    }
+  })
+
+
+  
+          Fname.addEventListener('input',()=>{
+            if(Fname.value.trim().length =='')
+            Fname.innerText('name wdfedehaii')
+
+          })
+          email.addEventListener('input',()=>{
+            if(email.value.trim().length=='')
+            Fname.setCustomValidity('name wdfedehaii')
+
+          })
+
+
+ 
+
+</script> -->
 
    
 
