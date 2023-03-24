@@ -149,12 +149,16 @@ const veryfiLogin= async (req,res)=>{
 
         const email=req.body.email
         const password=req.body.password 
+        console.log(password);
         const userData=await User.findOne({email:email})  
 
             if(userData){
                 const passwordMatch= await bcrypt.compare(password,userData.password)
+                console.log(passwordMatch);
                 if(passwordMatch){
-                    req.session.user_id=userData.id
+                    req.session.user_id=userData._id
+                    console.log('hiiiiii');
+
                     res.redirect('/home')
                 }else{
                     res.render('login') 
