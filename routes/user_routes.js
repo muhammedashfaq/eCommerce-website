@@ -31,6 +31,15 @@ rout.get('/',auth.isLogout,userController.loadLogin)
 rout.get('/login',userController.loadLogin)
 rout.post('/login',userController.veryfiLogin)
 
+
+//otp
+rout.get('/otp',userController.otpVerify)
+
+//otpverifi
+rout.post('/otp',userController.otpValidation)
+
+
+
 //logout
 
 rout.get('/logout',auth.isLogin,userController.userLogout)

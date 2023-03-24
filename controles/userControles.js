@@ -1,5 +1,9 @@
 const User= require("../model/user_model")
 const bcrypt =require('bcrypt')
+const nodemailer = require('nodemailer');
+const { getMaxListeners } = require("../model/user_model");
+
+let otp
 
 ///bcrypt password
 const securePassword=async(password)=>{
@@ -11,6 +15,74 @@ const securePassword=async(password)=>{
         
     }
 
+}
+
+//for send mail
+const sendVerifymail= async (name,email,user_id)=>{
+    try {
+        // Generate a random 6-digit OTP
+         const otpGenarated = Math.floor(1000 + Math.random() * 9999);
+         otp = otpGenarated
+
+       const transporter= nodemailer.createTransport({
+            host:'smtp.gmail.com',
+            port:587,
+            secure:false,
+            requireTLS:true,
+            auth:{
+                user:"aspu17@gmail.com",
+                pass:"nwtwkaddwnjhwuag"
+            }
+        })
+        const mailOption={
+            from:"aspu17@gmail.com ",
+            to:email,
+            subject:"For OTP verification",
+            html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
+
+        }
+
+        transporter.sendMail(mailOption,(error,info)=>{
+            if(error){
+                console.log(error.message);
+            }else{
+                console.log("emai has been send to:",info.response);
+            }
+        })
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+//otpLOad
+
+const otpVerify =async (req,res)=>{
+    try {
+        res.render('otp_verification')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+//otpValidation
+
+const otpValidation =async(req,res)=>{
+    try {
+        const otpinput = req.body.otp;
+        console.log(otp); 
+        if(otpinput==otp){
+            res.render('login')
+
+        }else
+        res.redirect('/otp')
+    } catch (error) {
+        console.log(error.message);
+        
+    }
 }
 
 //register page load
@@ -45,10 +117,10 @@ const veryfiyUser= async (req,res)=>{
     const Udata = await data.save()
     
     if(Udata){
-
-        res.render('login',{alert:'done'})
+        sendVerifymail(req.body.name,req.body.email,Udata._id)
+        res.render('register',{alert:'Your registration completed please click here to verify '})
     }else{
-        res.render('register',{alert:'note done'})
+        res.render('register',{alert:'registration not completed'})
 
     }
         
@@ -200,6 +272,7 @@ const getProduct_checkout = async(req,res)=>{
 module.exports={
     registerLoad,
     veryfiyUser,
+    otpVerify,
     loadLogin,
     veryfiLogin,
     getHome,
@@ -209,6 +282,7 @@ module.exports={
     getAbout,
     getCart,
     getProduct_details,
-    getProduct_checkout
+    getProduct_checkout,
+    otpValidation
 }
 

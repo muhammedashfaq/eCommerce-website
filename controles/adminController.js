@@ -1,6 +1,7 @@
 const User= require("../model/user_model")
 const admin=require('../model/admin_model')
 
+
 const bcrypt =require('bcrypt')
 
 const getLogin=async (req,res)=>{

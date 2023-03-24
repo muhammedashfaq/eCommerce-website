@@ -104,6 +104,10 @@
   
       
                       </form>
+                      
+                            <% if(typeof alert !== 'undefined'){ %>
+                            <p id="er2" style="color: rgb(14, 241, 7);text-align: center;"><%= alert%> </p><a style="color: blue;" href="/otp">click here</a>
+                            <% } %>
 
 
                       
@@ -156,6 +160,7 @@
             if (password === "") {
                 document.getElementById('er4').innerText='password must be filled out '
             }
+            
           
         }
           
