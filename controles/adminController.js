@@ -31,7 +31,7 @@ const veryfiLogin=async (req,res)=>{
 
                 console.log("adminData");
 
-                res.render('home')
+                res.redirect('/admin/home')
             }else{
                 res.render('login')
             }
