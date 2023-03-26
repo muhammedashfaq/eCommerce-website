@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const { getMaxListeners } = require("../model/user_model");
 
 let otp
-
+let email2
 ///bcrypt password
 const securePassword=async(password)=>{
     try {
@@ -18,27 +18,28 @@ const securePassword=async(password)=>{
 }
 
 //for send mail
-const sendVerifymail= async (name,email,user_id)=>{
+const sendVerifymail= async (name,email,otp)=>{
     try {
-        // Generate a random 6-digit OTP
-         const otpGenarated = Math.floor(1000 + Math.random() * 9999);
-         otp = otpGenarated
-
+       
        const transporter= nodemailer.createTransport({
             host:'smtp.gmail.com',
             port:587,
             secure:false,
             requireTLS:true,
             auth:{
-                user:"aspu17@gmail.com",
-                pass:"nwtwkaddwnjhwuag"
+                user:" ",
+                pass:""
             }
         })
         const mailOption={
             from:"aspu17@gmail.com ",
             to:email,
             subject:"For OTP verification",
-            html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
+            //html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
+            // html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/otp " '+email+' >varify</a> for verify and enter the '+otp+ ' </p>'
+            html:'<p>hi'+name+',please click here to<a href="http://localhost:3000/otp">varify</a> and enter the'+otp+' for your verification '+email+ '</p>',
+
+    
 
         }
 
@@ -60,6 +61,7 @@ const sendVerifymail= async (name,email,user_id)=>{
 
 const otpVerify =async (req,res)=>{
     try {
+
         res.render('otp_verification')
         
     } catch (error) {
@@ -75,6 +77,9 @@ const otpValidation =async(req,res)=>{
         const otpinput = req.body.otp;
         console.log(otp); 
         if(otpinput==otp){
+
+ const hello=       await  User.findOneAndUpdate({email:email2},{$set:{is_verified:1}})
+            console.log( hello);
             res.render('login')
 
         }else
@@ -103,21 +108,35 @@ const registerLoad = async (re,res)=>{
 //register page insert user
 const veryfiyUser= async (req,res)=>{
     try {
-
-        const spassword=await securePassword(req.body.password);
+            const spassword=await securePassword(req.body.password);
+            const email = req.body.email;
+            const alreyMail = await User.findOne({email:email})
+            email2=email
+            
+            // if(alreyMail){
+            //     res.render('register',{message:"EMAIL ALREADY EXIST "})
+            // }else{
 
         const data =new User({
         name:req.body.name,
         email:req.body.email,
         mob:req.body.mob,
         password:spassword,
-        is_admin:0
+        is_admin:0,
+        is_verified:0
+
+
     })
 
     const Udata = await data.save()
     
     if(Udata){
-        sendVerifymail(req.body.name,req.body.email,Udata._id)
+
+         // Generate a random 4-digit OTP
+         const otpGenarated = Math.floor(1000 + Math.random() * 9999);
+         otp = otpGenarated
+
+        sendVerifymail(req.body.name,req.body.email,otpGenarated)
         res.render('register',{alert:'Your registration completed please click here to verify '})
     }else{
         res.render('register',{alert:'registration not completed'})

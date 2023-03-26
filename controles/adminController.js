@@ -73,11 +73,25 @@ const logout =async(req,res)=>{
     }
 }
 
+const getTable = async(req,res)=>{
+    try {
+
+
+        const userData =await User.find({is_admin:0})
+        res.render('tables',{data:userData})
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
 module.exports={
     getLogin,
     veryfiLogin,
     getHome,
-    logout
+    logout,
+    getTable
 }
 
 

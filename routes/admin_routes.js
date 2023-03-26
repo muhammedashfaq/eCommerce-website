@@ -34,5 +34,13 @@ admin_rout.get('/logout',auth.isLogin,adminController.logout)
 
 
 
+//tables
+admin_rout.get('/tables',auth.isLogin,adminController.getTable)
+
+
+
+
+
+
 
 module.exports = admin_rout
