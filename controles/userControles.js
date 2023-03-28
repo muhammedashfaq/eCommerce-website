@@ -2,7 +2,10 @@ const User= require("../model/user_model")
 const bcrypt =require('bcrypt')
 const nodemailer = require('nodemailer');
 const { getMaxListeners } = require("../model/user_model");
+const randomstring=require('randomstring')
 
+let dotenv = require('dotenv')
+dotenv.config()
 let otp
 let email2
 ///bcrypt password
@@ -18,6 +21,7 @@ const securePassword=async(password)=>{
 }
 
 //for send mail
+
 const sendVerifymail= async (name,email,otp)=>{
     try {
        
@@ -27,8 +31,8 @@ const sendVerifymail= async (name,email,otp)=>{
             secure:false,
             requireTLS:true,
             auth:{
-                user:" ",
-                pass:""
+                user:process.env.email,
+                pass:process.env.password
             }
         })
         const mailOption={
@@ -38,6 +42,46 @@ const sendVerifymail= async (name,email,otp)=>{
             //html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
             // html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/otp " '+email+' >varify</a> for verify and enter the '+otp+ ' </p>'
             html:'<p>hi'+name+',please click here to<a href="http://localhost:3000/otp">varify</a> and enter the'+otp+' for your verification '+email+ '</p>',
+
+    
+
+        }
+
+        transporter.sendMail(mailOption,(error,info)=>{
+            if(error){
+                console.log(error.message);
+            }else{
+                console.log("emai has been send to:",info.response);
+            }
+        })
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+//for reset password send mail
+
+const resetsendVerifymail= async (name,email,token)=>{
+    try {
+       
+       const transporter= nodemailer.createTransport({
+            host:'smtp.gmail.com',
+            port:587,
+            secure:false,
+            requireTLS:true,
+            auth:{
+                user:process.env.email,
+                pass:process.env.password
+            }
+        })
+        const mailOption={
+            from:process.env.email,
+            to:email,
+            subject:"For Reset password",
+            //html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
+            // html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/otp " '+email+' >varify</a> for verify and enter the '+otp+ ' </p>'
+            html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/reset_password?token='+token+'">Reset</a> your password </p>'
 
     
 
@@ -75,12 +119,12 @@ const otpVerify =async (req,res)=>{
 const otpValidation =async(req,res)=>{
     try {
         const otpinput = req.body.otp;
-        console.log(otp); 
+ 
         if(otpinput==otp){
 
- const hello=       await  User.findOneAndUpdate({email:email2},{$set:{is_verified:1}})
-            console.log( hello);
-            res.render('login')
+ await  User.findOneAndUpdate({email:email2},{$set:{is_verified:1}})
+
+            res.render('login',{message:"done"})
 
         }else
         res.redirect('/otp')
@@ -168,20 +212,17 @@ const veryfiLogin= async (req,res)=>{
 
         const email=req.body.email
         const password=req.body.password 
-        console.log(password);
         const userData=await User.findOne({email:email})  
 
             if(userData){
                 const passwordMatch= await bcrypt.compare(password,userData.password)
-                console.log(passwordMatch);
+       
                 if(passwordMatch){
                     req.session.user_id=userData._id
-                    console.log('hiiiiii');
 
                     res.redirect('/home')
                 }else{
                     res.render('login') 
-                    console.log('hi');
 
                 }
             }else{
@@ -198,6 +239,104 @@ const veryfiLogin= async (req,res)=>{
 
 }
 
+///forget passwd
+
+const forgetLoad =async(req,res)=>{
+    try {
+        res.render("forget_password")
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+}
+
+
+const forgetSendtoEmail =async(req,res)=>{
+    try {
+
+        const email=req.body.email;
+        const userData = await User.findOne({email : email})
+        if(userData){
+            if(userData.is_verified==0){
+                res.render('forget_password',{message:"Email Not veryfied"})
+            }else{
+                const randomstrinG= randomstring.generate()
+
+               const Updateddata=await User.updateOne({email:email},{$set:{token:randomstrinG}})
+               const user=await User.findOne({email:email})
+
+
+               resetsendVerifymail(user.name,user.email,randomstrinG)
+
+               res.render('forget_password',{message:"Please check your Mail for Reset your password"})
+
+
+            }
+
+
+        }else{
+            res.render('forget_password',{message:"Wrong Email Id"})
+        }
+    } catch (error) {
+
+        console.log(error.messages
+            );
+        
+    }
+}
+
+const resetpassLoad1 =async(req,res)=>{
+    try {
+        res.render('reset_password')
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const  resetpassLoad =async(req,res)=>{
+    try {
+
+        const token =req.query.token;
+        console.log(token);
+        const tokenData= await User.findOne({token:token})
+        if(tokenData){
+            console.log(tokenData);
+            res.render('reset_password',{user_id:tokenData._id})
+
+
+        }else{
+            res.render('404',{message:"Token invalid"})
+        }
+        res.render('reset_password')
+        
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+
+
+
+}
+
+const resetpassverify =async (req,res)=>{
+    try {
+        const password =req.body.password
+        const user_id=req.body.user_id;
+        
+        const spassword =await securePassword(password)
+
+       const updatedData= await User.findByIdAndUpdate({_id:user_id},{$set:{password:spassword,token:''}})
+
+       res.redirect('/')
+       
+    } catch (error) {
+        console.log(error.message);
+    }
+   
+}   
 const getHome = async(req,res)=>{
     try {
 
@@ -298,6 +437,11 @@ module.exports={
     otpVerify,
     loadLogin,
     veryfiLogin,
+    forgetLoad,
+    forgetSendtoEmail,
+    resetpassLoad1,
+    resetpassLoad,
+    resetpassverify,
     getHome,
     userLogout,
     getShop,

@@ -18,6 +18,7 @@ admin_rout.use(express.json())
 admin_rout.use(express.urlencoded({extended:true}))
 
 const adminController =require('../controles/adminController')
+const category_Model = require('../model/category_Model')
 
 //login
 admin_rout.get('/',auth.isLogout,adminController.getLogin)
@@ -35,11 +36,58 @@ admin_rout.get('/logout',auth.isLogin,adminController.logout)
 
 
 //tables
-admin_rout.get('/tables',auth.isLogin,adminController.getTable)
+admin_rout.get('/user_details',auth.isLogin,adminController.getTable)
+
+//add user
+admin_rout.get('/new_user',auth.isLogin,adminController.new_userLoad)
+
+admin_rout.post('/new_user',adminController.add_user)
 
 
 
 
+//edit_user
+admin_rout.get('/edit_user',auth.isLogin,adminController.edit_userLoad)
+
+admin_rout.post('/edit_user',adminController.updateUser)
+
+
+//delete_user
+admin_rout.get('/delete_user',auth.isLogin,adminController.deleteUser)
+
+//verify user
+admin_rout.get('/verify_user',auth.isLogin,adminController.veryfiUser)
+
+
+
+
+// category page
+
+admin_rout.get('/category',auth.isLogin,adminController.categoryLoad)
+
+//add category
+admin_rout.get('/add_category',auth.isLogin,adminController.add_categoryLoad)
+
+
+
+// Products page
+
+admin_rout.get('/Products',auth.isLogin,adminController.productload)
+
+
+
+
+
+
+
+
+
+
+admin_rout.get('*',function (req,res){
+
+    res.redirect('/admin')
+    
+    })
 
 
 

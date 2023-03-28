@@ -25,11 +25,12 @@
 
         <div class="d-flex flex-row mt-5">
           <input type="number" name="otp" id="otp" placeholder="OTP here">
+          <% if(typeof message !== 'undefined'){ %>
+            <span id="er2" style="color: rgb(241, 7, 7);text-align: center;"><%= message%></span>
+            <% } %>
         </div>
         <br>
-        <button type="submit" class="btn btn-success">Enter</button>
-
-
+        <button type="submit" onclick="validate()" class="btn btn-success">Enter</button>
     </form>
     
         <div class="text-center mt-5">
@@ -38,6 +39,30 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+    <script>
+
+      function validate(){
+      const otp = document.getElementById('otp').value;
+      if(otp==''){
+        document.getElementById('er1').innerText='Must fillout this field'
+      }
+      
+
+
+
+    }
+
+
+    </script>
     <script src="/user/assets/js/otp.js"></script>
   </body>
 </html>

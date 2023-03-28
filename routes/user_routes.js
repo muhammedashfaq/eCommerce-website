@@ -22,13 +22,13 @@ const userController= require('../controles/userControles')
 
 
 //register
-rout.get("/register",userController.registerLoad)
+rout.get("/register",auth.isLogout,userController.registerLoad)
 rout.post("/register",userController.veryfiyUser)
 
 //login
 rout.get('/',auth.isLogout,userController.loadLogin)
 
-rout.get('/login',userController.loadLogin)
+rout.get('/login',auth.isLogout,userController.loadLogin)
 rout.post('/login',userController.veryfiLogin)
 
 
@@ -37,6 +37,25 @@ rout.get('/otp',userController.otpVerify)
 
 //otpverifi
 rout.post('/otp',userController.otpValidation)
+
+//forget
+rout.get('/forget',auth.isLogout,userController.forgetLoad)
+
+
+rout.post('/forget',userController.forgetSendtoEmail)
+
+
+//password reset
+rout.get('/reset_password',auth.isLogout,userController.resetpassLoad1)
+
+
+rout.get('/reset_password',auth.isLogout,userController.resetpassLoad)
+
+rout.post('/reset_password',auth.isLogout,userController.resetpassverify)
+
+
+
+
 
 
 
@@ -71,6 +90,8 @@ rout.get('/product_details',userController.getProduct_details)
 
 //product_checkout
 rout.get('/checkout',userController.getProduct_checkout)
+
+
 
 
 
