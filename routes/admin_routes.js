@@ -68,6 +68,19 @@ admin_rout.get('/category',auth.isLogin,adminController.categoryLoad)
 //add category
 admin_rout.get('/add_category',auth.isLogin,adminController.add_categoryLoad)
 
+admin_rout.post('/add_category',auth.isLogin,adminController.insert_category)
+
+//delete category
+admin_rout.get('/delete_category',auth.isLogin,adminController.deletecategory)
+
+//edit_category
+admin_rout.get('/edit_category',auth.isLogin,adminController.edit_catLoad)
+
+admin_rout.post('/edit_category',adminController.updatecategory)
+
+
+
+
 
 
 // Products page

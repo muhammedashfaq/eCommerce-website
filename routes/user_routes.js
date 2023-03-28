@@ -46,10 +46,11 @@ rout.post('/forget',userController.forgetSendtoEmail)
 
 
 //password reset
-rout.get('/reset_password',auth.isLogout,userController.resetpassLoad1)
+//rout.get('/reset_password',auth.isLogout,userController.resetpassLoad1)
 
 
 rout.get('/reset_password',auth.isLogout,userController.resetpassLoad)
+
 
 rout.post('/reset_password',auth.isLogout,userController.resetpassverify)
 

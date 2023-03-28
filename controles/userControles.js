@@ -157,9 +157,9 @@ const veryfiyUser= async (req,res)=>{
             const alreyMail = await User.findOne({email:email})
             email2=email
             
-            // if(alreyMail){
-            //     res.render('register',{message:"EMAIL ALREADY EXIST "})
-            // }else{
+            if(alreyMail){
+                res.render('register',{message:"EMAIL ALREADY EXIST "})
+            }else{
 
         const data =new User({
         name:req.body.name,
@@ -186,6 +186,7 @@ const veryfiyUser= async (req,res)=>{
         res.render('register',{alert:'registration not completed'})
 
     }
+}
         
     } catch (error) {
 
@@ -296,39 +297,31 @@ const resetpassLoad1 =async(req,res)=>{
 }
 
 const  resetpassLoad =async(req,res)=>{
+
+
+
     try {
-
-        const token =req.query.token;
-        console.log(token);
-        const tokenData= await User.findOne({token:token})
-        if(tokenData){
-            console.log(tokenData);
-            res.render('reset_password',{user_id:tokenData._id})
-
-
+        const token = req.query.token
+        const userData = await User.findOne({token : token})
+        if(userData){
+            res.render('reset_password',{email : userData.email})
         }else{
-            res.render('404',{message:"Token invalid"})
+            res.render('404',{message : 'Invlaid Token'})
         }
-        res.render('reset_password')
-        
     } catch (error) {
-
         console.log(error.message);
-        
-    }
-
-
-
+    }
+ 
 }
 
 const resetpassverify =async (req,res)=>{
     try {
         const password =req.body.password
-        const user_id=req.body.user_id;
+        const email=req.body.email;
         
         const spassword =await securePassword(password)
 
-       const updatedData= await User.findByIdAndUpdate({_id:user_id},{$set:{password:spassword,token:''}})
+       const updatedData= await User.findByIdAndUpdate({email:email},{$set:{password:spassword,token:''}})
 
        res.redirect('/')
        

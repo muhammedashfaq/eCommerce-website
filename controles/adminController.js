@@ -1,5 +1,6 @@
 const User= require("../model/user_model")
 const admin=require('../model/admin_model')
+const CatDB=require('../model/category_Model')
 
 
 const bcrypt =require('bcrypt')
@@ -157,7 +158,7 @@ const add_user =async (req,res)=>{
 const veryfiUser = async(req,res)=>{
     try {
         const id=req.query.id
-        await User.updateOne({_id:id},{$set:{is_veryfied:1}})
+        await User.updateOne({_id:id},{$set:{is_verified:1}})
         res.redirect('/admin/user_details')
 
 
@@ -190,33 +191,19 @@ const edit_userLoad=async (req,res)=>{
 }
 
 
-// const edit_user=async (req,res)=>{
-//     try {
-        
-//         const name=req.body.name;
-//         if(name==' '){
-//             res.redirect('/admin/edit_user')
-//         }else{
-//             await User.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,email:req.body.email,mob:req.body.mob}})
-//             res.redirect('/admin/edit_user')
-//         }
-//     } catch (error) {
-//         console.log(error.message);
-        
-//     }
-// }
 
 
 const updateUser=async(req,res)=>{
     try {
       const name = req.body.name;
+      const email=req.body.email;
       console.log(name);
-      if(name==""){
-        res.redirect('/admin/dashboard')
+      if(name.trim().length==0){
+        res.redirect('/admin/user_details')
       }else{
-     const userData=await User.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,email:req.body.email,mob:req.body.mob}})
+     const userData=await User.findOneAndUpdate({email:req.body.email},{$set:{name:req.body.name,email:req.body.email,mob:req.body.mob}})
      console.log(userData);
-      res.redirect('/admin/dashboard')
+      res.redirect('/admin/user_details')
     }
     } catch (error) {
       console.log(error.message);
@@ -240,25 +227,108 @@ const deleteUser= async (req,res)=>{
 
 const categoryLoad = async (req,res)=>{
     try {
-        res.render('category')
+        const categryDetails =await CatDB.find()
+
+        res.render('category',{catData:categryDetails})
     } catch (error) {
         console.log(error.message);
         
     }
 }
 
-const productload = async (req,res)=>{
+const insert_category =async (req,res)=>{
     try {
-        res.render('products')
+        const name=req.body.name;
+        const alredy = await CatDB.findOne({name:name})
+        if(alredy){
+                res.render('add_category',{message:"This category alredy exist "})
+        }else{
+
+            const Catdata= new CatDB({ name:name})
+
+            const adddata =await Catdata.save()
+
+            if(adddata){
+                res.redirect('/admin/category')
+            }else{
+                res.render('add_category',{message:"somthing wrong "})
+            }
+        }
+
+
+
+
     } catch (error) {
+
         console.log(error.message);
         
     }
 }
+
+const deletecategory =async (req,res)=>{
+    try {
+        
+        const id=req.query.id
+        await CatDB.deleteOne({_id:id})
+        res.redirect('/admin/category')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 const add_categoryLoad = async (req,res)=>{
     try {
         res.render('add_category')
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const edit_catLoad =async(req,res)=>{
+    try {
+        const id=req.query.id
+        const editData=await CatDB.findById({_id:id})
+        if(editData){
+            res.render('edit_category',{data:editData})
+        }else{
+            res.render('edit_category')
+
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const updatecategory =async (req,res)=>{
+
+    try {
+        const name=req.body.name;
+        if(name.trim().length==0){
+            res.redirect('/admin/category')
+          }else{
+            const addData =await CatDB.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name}})
+            if(addData){
+                res.redirect('/admin/category')
+
+
+            }
+
+          }
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+}
+const productload = async (req,res)=>{
+    try {
+        res.render('products')
     } catch (error) {
         console.log(error.message);
         
@@ -279,6 +349,10 @@ module.exports={
     veryfiUser,
     deleteUser,
     categoryLoad,
+    insert_category,
+    edit_catLoad,
+    updatecategory,
+    deletecategory,
     productload,
     add_categoryLoad
 }
