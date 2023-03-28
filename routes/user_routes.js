@@ -93,10 +93,24 @@ rout.get('/product_details',userController.getProduct_details)
 rout.get('/checkout',userController.getProduct_checkout)
 
 
+//404 error
+
+//rout.get('*',auth.isLogin,userController.error404)
 
 
 
 
+
+
+
+
+
+
+// rout.get('*',function (req,res){
+
+//     res.redirect('/home')
+    
+//     })
 
 
 

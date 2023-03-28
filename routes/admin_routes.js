@@ -18,6 +18,7 @@ admin_rout.use(express.json())
 admin_rout.use(express.urlencoded({extended:true}))
 
 const adminController =require('../controles/adminController')
+const productContreoller =require('../controles/product_controller')
 const category_Model = require('../model/category_Model')
 
 //login
@@ -35,7 +36,7 @@ admin_rout.get('/logout',auth.isLogin,adminController.logout)
 
 
 
-//tables
+//User Details
 admin_rout.get('/user_details',auth.isLogin,adminController.getTable)
 
 //add user
@@ -43,14 +44,10 @@ admin_rout.get('/new_user',auth.isLogin,adminController.new_userLoad)
 
 admin_rout.post('/new_user',adminController.add_user)
 
-
-
-
 //edit_user
 admin_rout.get('/edit_user',auth.isLogin,adminController.edit_userLoad)
 
 admin_rout.post('/edit_user',adminController.updateUser)
-
 
 //delete_user
 admin_rout.get('/delete_user',auth.isLogin,adminController.deleteUser)
@@ -79,13 +76,17 @@ admin_rout.get('/edit_category',auth.isLogin,adminController.edit_catLoad)
 admin_rout.post('/edit_category',adminController.updatecategory)
 
 
+// Products page    in productContreoller
+
+admin_rout.get('/products',auth.isLogin,productContreoller.productload)
+
+//add_productsLoad
+admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
+
+//inert_products
+admin_rout.post('/insert_products',auth.isLogin,productContreoller.insertProduct)
 
 
-
-
-// Products page
-
-admin_rout.get('/Products',auth.isLogin,adminController.productload)
 
 
 

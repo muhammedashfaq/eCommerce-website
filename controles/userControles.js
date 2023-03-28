@@ -6,6 +6,7 @@ const randomstring=require('randomstring')
 
 let dotenv = require('dotenv')
 dotenv.config()
+
 let otp
 let email2
 ///bcrypt password
@@ -287,14 +288,6 @@ const forgetSendtoEmail =async(req,res)=>{
     }
 }
 
-const resetpassLoad1 =async(req,res)=>{
-    try {
-        res.render('reset_password')
-    } catch (error) {
-        console.log(error.message);
-        
-    }
-}
 
 const  resetpassLoad =async(req,res)=>{
 
@@ -321,7 +314,7 @@ const resetpassverify =async (req,res)=>{
         
         const spassword =await securePassword(password)
 
-       const updatedData= await User.findByIdAndUpdate({email:email},{$set:{password:spassword,token:''}})
+       const updatedData= await User.findOneAndUpdate({email:email},{$set:{password:spassword,token:''}})
 
        res.redirect('/')
        
@@ -422,7 +415,15 @@ const getProduct_checkout = async(req,res)=>{
 
 
 
-
+const error404=async(req,res)=>{
+    try {
+        res.render('404')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
 
 module.exports={
     registerLoad,
@@ -432,7 +433,6 @@ module.exports={
     veryfiLogin,
     forgetLoad,
     forgetSendtoEmail,
-    resetpassLoad1,
     resetpassLoad,
     resetpassverify,
     getHome,
@@ -443,6 +443,7 @@ module.exports={
     getCart,
     getProduct_details,
     getProduct_checkout,
-    otpValidation
+    otpValidation,
+    error404
 }
 

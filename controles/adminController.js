@@ -62,6 +62,7 @@ const veryfiLogin=async (req,res)=>{
 
 const getHome=async (req,res)=>{
     try {
+       
         res.render('home')
         
     } catch (error) {
@@ -85,8 +86,6 @@ const logout =async(req,res)=>{
 
 const getTable = async(req,res)=>{
     try {
-
-
         const userData =await User.find({is_admin:0})
         res.render('user_details',{data:userData})
     } catch (error) {
@@ -326,14 +325,7 @@ const updatecategory =async (req,res)=>{
 
 
 }
-const productload = async (req,res)=>{
-    try {
-        res.render('products')
-    } catch (error) {
-        console.log(error.message);
-        
-    }
-}
+
 
 
 module.exports={
@@ -353,7 +345,7 @@ module.exports={
     edit_catLoad,
     updatecategory,
     deletecategory,
-    productload,
+
     add_categoryLoad
 }
 
