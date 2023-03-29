@@ -14,11 +14,7 @@
            
             <!-- With avatar -->
                         <!-- With actions -->
-            <h4
-              class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
-            > 
-              Table with actions
-            </h4>
+           
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
               <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
@@ -38,9 +34,14 @@
                     </tr>
                   </thead>
                    <tbody
-                    class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-                  >
-               
+                    class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+
+                    <% if(product.length > 0){
+                        for(let i=0; i<product.length; i++){
+                          %>
+
+
+
                   
                  
                     <tr class="text-gray-700 dark:text-gray-400">
@@ -62,9 +63,9 @@
                             ></div>
                           </div>
                           <div>
-                            <p class="font-semibold"> </p>
+                            <p class="font-semibold"><%= product[i].name %> </p>
                             <p class="text-xs text-gray-600 dark:text-gray-400">
-                              10x Developer
+                              
                             </p>
                           </div>
                         </div>
@@ -154,6 +155,24 @@
                         </div>
                       </td>
                     </tr>
+                    
+                          
+                    <%
+                  }
+
+                }else{
+
+                  %>
+                  <tr>
+                    <td   colspan="5">no products </td>
+                  </tr>
+
+                  <%
+                }
+
+              %>
+          
+         
 
          
                    

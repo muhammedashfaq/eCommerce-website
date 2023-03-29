@@ -1,139 +1,92 @@
+<%- include('../admin/layouts/admin_header.ejs')%>
 
-        <%- include('../admin/layouts/admin_header.ejs')%>
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mx-auto grid">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Add Products
+    </h2>
 
-        <main class="h-full pb-16 overflow-y-auto " >
-            <div class="container px-6 mx-auto grid" >
-              
-                
-              
-                <h2
-                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-              >
-                Add Products
-              </h2>
-        
+    <div class="container">
+      <!-- General elements -->
 
-              <div style="margin-top: 0%; width: 90%; align-self: center;" >
+      <div
+        class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+      >
+        <form action="" method="post" enctype="multipart/form-data">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Name</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe" type="text" name="name"
+            />
+          </label>
 
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Price</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe" type="number" name="price"
+              name="Image"
+            />
+          </label>
 
-                <!-- General elements -->
-                <h4
-                  class="mb-2 text-lg font-semibold text-gray-600 dark:text-gray-300"
-                >
-                  
-                </h4>
-                <div
-                  class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
-                >
-                <form action="" method="post">
-    
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="block text-sm">
-                              <span class="text-gray-700 dark:text-gray-400">Name</span>
-                              <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                placeholder="Jane Doe" 
-                                />
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="block text-sm">
-                              <span class="text-gray-700 dark:text-gray-400">Price</span>
-                              <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                placeholder="Jane Doe" name="Image"
-                              />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Image</span>
-                                <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                placeholder="Jane Doe"
-                                />
-                            </label>
-                        </div>
-                        <div class="col">
-                            <label class="block mt-4 text-sm">
-                              <span class="text-gray-700 dark:text-gray-400">
-                                category
-                              </span>
-                              <select
-                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                              >
-                              <option>$1,000</option>
-                                <option>$5,000</option>
-                                <option>$10,000</option>
-                                <option>$25,000</option>
-                              </select>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    
-                    <label class="block mt-4 text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Description</span>
-                        <textarea
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        rows="3"
-                        placeholder="Enter some long form content."
-                        ></textarea>
-                    </label>
-                    <div class="row">
-                        <div class="col">
-                                <label class="block text-sm">
-                                    <span class="text-gray-700 dark:text-gray-400">Stock</span>
-                                    <input
-                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                      placeholder="Jane Doe"
-                                    />
-                                  </label>
-                                
-                            </div>
-                            <div class="col">
-                                <label class="block text-sm">
-                                  <span class="text-gray-700 dark:text-gray-400">Quanity</span>
-                                  <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Jane Doe"
-                                  />
-                                </label>
-    
-                            </div>
-                        </div>
-                      <br>
-                      <button type="submit"class="block w-50 px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Add New User
-                    
-                   </button>
-                </form>
-    
-             
-    
-                
-               
-                  </div>
-                </div>
-                </div>
-                
-
-                
-
-
-
-
-
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Image</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe" type="file" name="image"
+            />
+          </label>
            
-              </div>
-            </div>
-          </main>
 
-       
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400"> category </span>
+            <select  name="category"
+              class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+            > 
+              <option>$1,000</option>
+              <option>$5,000</option>
+              <option>$10,000</option>
+              <option>$25,000</option>
+            </select>
+          </label>
 
-         
-        
-          <%- include('../admin/layouts/admin_footer.ejs')%>
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Description</span>
+            <textarea name="description"
+              class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+              rows="3"
+              placeholder="Enter some long form content." 
+            ></textarea>
+          </label>
+
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Stock</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe" type="text" name="stock"
+            />
+          </label>
+
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Quantity</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe" type="number" name="quantity"
+            />
+          </label>
+
+          <br />
+          <button
+            type="submit"
+            class="block w-50 px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          >
+            Add New Products
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../admin/layouts/admin_footer.ejs')%>

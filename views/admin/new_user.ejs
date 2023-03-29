@@ -51,7 +51,7 @@
                 <span class="text-gray-700 dark:text-gray-400">Name</span>
                 <input
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Jane Doe" name="name" required
+                  placeholder="Jane Doe" name="name" required id="form2Example11"
                 />
               </label>
               
@@ -59,14 +59,14 @@
                 <span class="text-gray-700 dark:text-gray-400">Email</span>
                 <input
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Jane Doe" name="email" required 
+                  placeholder="Jane Doe" name="email" required  id="form2Example12"
                 />
               </label>
               <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Mobile Number</span>
                 <input
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="xxxxxxxx" name="mob" required
+                  placeholder="xxxxxxxx" name="mob" required id="form2Example13"
                   type="number"
                 />
               </label>
@@ -76,7 +76,7 @@
                 </span>
                 <input
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="***************" name="password" required
+                  placeholder="***************" name="password" required id="form2Example14"
                   type="password"
                 />
               </label>
@@ -95,5 +95,71 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+    <script>
+      const sname=document.getElementById('form2Example11')
+      const semail = document.getElementById('form2Example12')
+      const smob=document.getElementById('form2Example13')
+      const spassword = document.getElementById('form2Example14')
+
+
+      sname.addEventListener('input',() => {
+        if(sname.value.trim().length==''){
+        sname.setCustomValidity('This Field Canot be Null')
+        }
+        else if(sname.value.trim().length <=3){
+        sname.setCustomValidity(' minimum 3 letter required')
+        }else{
+          sname.setCustomValidity("")
+        }
+      })
+
+      
+      semail.addEventListener('input',() => {
+        if(semail.value.trim().length==''){
+        semail.setCustomValidity('This Field Canot be Null')
+        }
+       else{
+        semail.setCustomValidity("")
+        }
+      })
+
+      smob.addEventListener('input',() => {
+        if(smob.value.trim().length==''){
+        smob.setCustomValidity('This Field Canot be Null')
+        }
+        else if(smob.value.trim().length <10){
+          smob.setCustomValidity(' minimum 10 Digit required')
+        } else if(smob.value.trim().length >10){
+          smob.setCustomValidity(' minimum 10 Digit  only required')
+        }
+        else{
+          smob.setCustomValidity("")
+        }
+      })
+
+      spassword.addEventListener('input',() => {
+        if(spassword.value.trim().length==''){
+          spassword.setCustomValidity('This Field Canot be Null')
+        }
+        else if(spassword.value.trim().length <8){
+          spassword.setCustomValidity(' Password contain 8 ')
+        }else{
+          spassword.setCustomValidity("")
+        }
+      })
+
+
+
+
+      
+
+    </script>
+
   </body>
 </html>

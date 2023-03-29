@@ -104,14 +104,22 @@
 
 
       <script>
+        const Fname=document.getElementById('form2Example11')
         const password = document.getElementById('form2Example22')
 
         password.addEventListener('input',() => {
-          if(password.value.trim().length  < 8){
-            // password.setCustomValidity('Password must 8 digit')
+          if(password.value.trim().length< 8){
+          password.setCustomValidity('Password must 8 digit')
+          }else{
+            password.setCustomValidity("")
           }
         })
-  
+        Fname.addEventListener('input',()=>{
+          if(Fname.value.trim().length==''){
+            Fname.setCustomValidity('Must fill this field')
+          }
+
+        })
        
 
       </script>

@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
         required:true
     },
     price:{
-        trype:Number,
+        type:Number,
         required:true
     },
     description:{
@@ -15,10 +15,11 @@ const productSchema = new mongoose.Schema({
         required:true
 
     },
+
     image:{
         type:Array
     },
-    categody:{
+    category:{
         type:String,
         required:true
 
@@ -27,14 +28,15 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    qnty:{
+    quantity:{
         type:Number,
-        required:true``
+        required:true
     },
     blocked :{
         type : Boolean,
         default : false
     }
+
 },
 {
     timestamps: true
@@ -42,4 +44,8 @@ const productSchema = new mongoose.Schema({
 
 
 
-module.exports=mongoose.model('produst',productSchema)
+module.exports=mongoose.model('product',productSchema)
+
+
+
+

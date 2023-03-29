@@ -2,6 +2,8 @@ const express =require('express')
 
 const admin_rout=express()
 const session=require('express-session')
+const  multer=require('multer')
+const path= require('path')
 
 admin_rout.use(session({
     secret:"thisiemysecretkey",
@@ -16,6 +18,19 @@ admin_rout.set('views','./views/admin')
 
 admin_rout.use(express.json())
 admin_rout.use(express.urlencoded({extended:true}))
+
+const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,path.join(__dirname,'../public/admin/assets/product_images'))
+
+    },
+    filename:function(req,file,cb){
+        const name= Date.now()+'-'+file.originalname
+        cb(null,name)
+    }
+})
+
+const upload =multer({storage:storage})
 
 const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')
@@ -84,7 +99,7 @@ admin_rout.get('/products',auth.isLogin,productContreoller.productload)
 admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
 
 //inert_products
-admin_rout.post('/insert_products',auth.isLogin,productContreoller.insertProduct)
+admin_rout.post('/add_products',upload.single('image'),auth.isLogin,productContreoller.insertProduct)
 
 
 

@@ -47,43 +47,48 @@
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="text" name="name" id="Fname" class="form-control" required />
+                            <input type="text" name="name" id="form2Example11" class="form-control" required />
                             <label class="form-label" for="form3Example1c">Your Name</label>
+                            <span id="er1" style="color: red;"></span>
                           </div>
                         </div>
-                        <span id="er1" style="color: red;"></span>
       
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="email" name="email" id="Femail" class="form-control"  />
+                            <input type="email" name="email" id="form2Example12" class="form-control" required />
                             <label class="form-label" for="form3Example3c">Your Email</label>
+                            <span id="er2" style="color: red;"></span>
+                            <% if(typeof message !== 'undefined'){ %>
+                              <span id="er2" style="color: rgb(241, 7, 7);text-align: center;"><%= message%></span>
+                              <% } %>
+
                           </div>
                         </div>
-                        <% if(typeof message !== 'undefined'){ %>
-                          <span id="er2" style="color: rgb(241, 7, 7);text-align: center;"><%= message%></span>
-                          <% } %>
 
-                        <span id="er2" style="color: red;"></span>
+                       
+
 
                         <div class="d-flex flex-row align-items-center mb-4">
                             <i class="fas fa-mobile fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
-                              <input type="number" name="mob" id="Fmob" class="form-control"  />
-                              <label class="form-label" for="form3Example3c">Your Mobile Number</label>
+                              <input type="number" name="mob" id="form2Example13" class="form-control" required />
+                              <label class="form-label" for="form3Example3c"> Mobile Number</label>
+                              <span id="er3" style="color: red;"></span>
+
                             </div>
                           </div>
-                          <span id="er3" style="color: red;"></span>
 
       
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="password" name="password" id="Fpassword" class="form-control"  />
+                            <input type="password" name="password" id="form2Example14" class="form-control" required />
                             <label class="form-label" for="form3Example4c">Password</label>
+                            <span id="er4" style="color: red;"></span>
+
                           </div>
                         </div>
-                        <span id="er4" style="color: red;"></span>
 
       
                         <!-- <div class="d-flex flex-row align-items-center mb-4">
@@ -108,11 +113,11 @@
   
       
                       </form>
-                      
-                            <% if(typeof alert !== 'undefined'){ %>
-                            <p id="er2" style="color: rgb(14, 241, 7);text-align: center;"><%= alert%> </p><a style="color: blue;" href="/otp">click here</a>
-                            <% } %>
-
+                      <% if(typeof alert !== 'undefined'){ %>
+                        <span id="er2" style="color: rgb(0, 0, 0);text-align: center;"><%= alert%> </span> <a style="color: rgb(4, 0, 255);" href="/otp">click here to verify</a>
+                        <% } %>
+            
+                           
 
                       
                     <div class="d-flex align-items-center justify-content-center pb-4">
@@ -141,6 +146,69 @@
 
 
       <script>
+        const sname=document.getElementById('form2Example11')
+        const semail = document.getElementById('form2Example12')
+        const smob=document.getElementById('form2Example13')
+        const spassword = document.getElementById('form2Example14')
+
+
+        sname.addEventListener('input',() => {
+          if(sname.value.trim().length==''){
+          sname.setCustomValidity('This Field Canot be Null')
+          }
+          else if(sname.value.trim().length <=3){
+          sname.setCustomValidity(' minimum 3 letter required')
+          }else{
+            sname.setCustomValidity("")
+          }
+        })
+
+        
+        semail.addEventListener('input',() => {
+          if(semail.value.trim().length==''){
+          semail.setCustomValidity('This Field Canot be Null')
+          }
+         else{
+          semail.setCustomValidity("")
+          }
+        })
+
+        smob.addEventListener('input',() => {
+          if(smob.value.trim().length==''){
+          smob.setCustomValidity('This Field Canot be Null')
+          }
+          else if(smob.value.trim().length <10){
+            smob.setCustomValidity(' minimum 10 Digit required')
+          } else if(smob.value.trim().length >10){
+            smob.setCustomValidity(' minimum 10 Digit  only required')
+          }
+          else{
+            smob.setCustomValidity("")
+          }
+        })
+
+        spassword.addEventListener('input',() => {
+          if(spassword.value.trim().length==''){
+            spassword.setCustomValidity('This Field Canot be Null')
+          }
+          else if(spassword.value.trim().length <8){
+            spassword.setCustomValidity(' Password contain 8 ')
+          }else{
+            spassword.setCustomValidity("")
+          }
+        })
+
+
+
+
+        
+
+      </script>
+
+
+
+
+      <!-- <script>
        
         function validation() {
             const name= document.getElementById("Fname").value;
@@ -159,7 +227,7 @@
                 document.getElementById('er2').innerText='Email must be filled out '
             }
             if (mob === "") {
-                document.getElementById('er3').innerText='Mobile Number must be filled out '  
+                document.getElementById('er3').innerText=' Number must be filled out '  
             }
             if (password === "") {
                 document.getElementById('er4').innerText='password must be filled out '
@@ -169,7 +237,7 @@
         }
           
     
-      </script>
+      </script> -->
 
 
 

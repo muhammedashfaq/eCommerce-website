@@ -107,6 +107,8 @@ const resetsendVerifymail= async (name,email,token)=>{
 const otpVerify =async (req,res)=>{
     try {
 
+        
+
         res.render('otp_verification')
         
     } catch (error) {
@@ -182,7 +184,7 @@ const veryfiyUser= async (req,res)=>{
          otp = otpGenarated
 
         sendVerifymail(req.body.name,req.body.email,otpGenarated)
-        res.render('register',{alert:'Your registration completed please click here to verify '})
+        res.render('otp_verification')
     }else{
         res.render('register',{alert:'registration not completed'})
 

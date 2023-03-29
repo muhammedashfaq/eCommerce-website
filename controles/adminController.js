@@ -238,6 +238,13 @@ const categoryLoad = async (req,res)=>{
 const insert_category =async (req,res)=>{
     try {
         const name=req.body.name;
+
+        if(name.trim().length==0){
+            res.redirect('/admin/category')
+        }else{
+
+      
+
         const alredy = await CatDB.findOne({name:name})
         if(alredy){
                 res.render('add_category',{message:"This category alredy exist "})
@@ -253,7 +260,7 @@ const insert_category =async (req,res)=>{
                 res.render('add_category',{message:"somthing wrong "})
             }
         }
-
+    }
 
 
 
