@@ -1,84 +1,49 @@
 <%- include('../admin/layouts/admin_header.ejs')%>
 
-
-
-
-
-
-<div style="margin-top: 5%; width: 60%; align-self: center;" class="container">
-
+<div style="margin-top: 5%; width: 60%; align-self: center" class="container">
   <!-- Inputs with buttons -->
-  <h4 style="text-align: center;"
-  class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 "
->
-  add
-</h4>
-<div
-  class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
->
-  <form action="" method="post">
-
-  <label class="block mt-4 text-sm">
-    <span class="text-gray-700 dark:text-gray-400">
-      
-    </span>
-    <div
-      class="relative text-gray-500 focus-within:text-purple-600"
-    >
-      <input name="name" id="fname" required
-        class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-        
-      /><% if(typeof message !== 'undefined'){ %>
-        <span id="er2" style="color: rgb(246, 0, 0);text-align: center;"><%= message%> </span> 
-        <% } %>
-      <button
-        class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-      >
-        Add
-      </button>
-    </div>
-  </label>
- </form>
-</div>
-
+  <h4
+    style="text-align: center"
+    class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
+  >
+    add
+  </h4>
+  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <form action="" method="post">
+      <label class="block mt-4 text-sm">
+        <span class="text-gray-700 dark:text-gray-400"> </span>
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            name="name"
+            id="fname"
+            required
+            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+          /><% if(typeof message !== 'undefined'){ %>
+          <span id="er2" style="color: rgb(246, 0, 0); text-align: center"
+            ><%= message%>
+          </span>
+          <% } %>
+          <button
+            class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          >
+            Add
+          </button>
+        </div>
+      </label>
+    </form>
+  </div>
 </div>
 
 <script>
+  const name = document.getElementById("fname");
 
-  const name = document.getElementById('fname')
-
-      name.addEventListener('input',() => {
-        if(name.value.trim().length==''){
-        nmae.setCustomValidity('This Field Canot be Null')
-        }
-       else{
-        name.setCustomValidity("")
-        }
-      })
+  name.addEventListener("input", () => {
+    if (name.value.trim().length == "") {
+      nmae.setCustomValidity("This Field Canot be Null");
+    } else {
+      name.setCustomValidity("");
+    }
+  });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <%- include('../admin/layouts/admin_footer.ejs')%>

@@ -7,6 +7,7 @@ const productdb=require('../model/prodect_model')
 const productload = async (req,res)=>{
     try {
         const data = await productdb.find()
+
         res.render('products',{product:data})
     } catch (error) {
         console.log(error.message);
@@ -47,13 +48,9 @@ const insertProduct = async (req,res)=>{
         })
         const productdata =await Data.save()
 
-        
-        
-
         if(productdata){
 
-
-            res.render('products')
+            res.redirect('/admin/products')
         }else{
             res.render('add_products',{message:"error"})
 

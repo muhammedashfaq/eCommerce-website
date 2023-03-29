@@ -1,10 +1,10 @@
 <%- include('../admin/layouts/admin_header.ejs')%>
 
-        <div class="container">
+  
 
 
          
-        <main class="h-full pb-16 overflow-y-auto">
+    <main class="h-full pb-16 overflow-y-auto">
           <div class="container grid px-6 mx-auto">
             <h2
               class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
@@ -33,7 +33,9 @@
 
                     </tr>
                   </thead>
-                   <tbody
+
+
+              <tbody
                     class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 
                     <% if(product.length > 0){
@@ -64,41 +66,22 @@
                           </div>
                           <div>
                             <p class="font-semibold"><%= product[i].name %> </p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">
-                              
-                            </p>
+                          
                           </div>
                         </div>
                       </td>
                       <td class="px-4 py-3 text-sm">
+
+                        <img style="width: 60px; height: 60px;" src="../admin/assets/product_images/<%= product[i].image%>" alt="">
+
+                        
                       
                       </td>
                       <td class="px-4 py-3 text-xs">
 
                     
                           
-                        <span
-                        class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100"
-                      >
-                        Not verified
-                      </span>
-                       
-                     
                    
-                          <span
-                        class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                      >
-                         verified
-                      </span>
-
-                      
-
-                     
-                        
-                      <a href="#"  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                        >very</a>
-                    
-
                      
 
                         
@@ -177,7 +160,7 @@
          
                    
               
-                  </tbody>
+               </tbody>
                 </table>
               </div>
             </div>
@@ -192,7 +175,9 @@
 
 
 
-
+    </main>
+    
+    
 
 
 
