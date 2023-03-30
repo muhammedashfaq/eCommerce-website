@@ -50,57 +50,42 @@
                       <td class="px-4 py-3">
                         <div class="flex items-center text-sm">
                           <!-- Avatar with inset shadow -->
-                          <div
-                            class="relative hidden w-8 h-8 mr-3 rounded-full md:block"
-                          >
-                            <img
-                              class="object-cover w-full h-full rounded-full"
-                              src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                              alt=""
-                              loading="lazy"
-                            />
-                            <div
-                              class="absolute inset-0 rounded-full shadow-inner"
-                              aria-hidden="true"
-                            ></div>
-                          </div>
+                       
                           <div>
                             <p class="font-semibold"><%= product[i].name %> </p>
                           
                           </div>
                         </div>
                       </td>
-                      <td class="px-4 py-3 text-sm">
+                      <td class="px-4 py-3 text-sm " >
 
-                        <img style="width: 60px; height: 60px;" src="../admin/assets/product_images/<%= product[i].image%>" alt="">
-
+                        <%= product[i].price%>
                         
                       
                       </td>
-                      <td class="px-4 py-3 text-xs">
-
-                    
-                          
-                   
                      
+                      <td class="px-4 py-3 text-xs">
+                        <img style="width: 60px; height: 60px;" src="../admin/assets/product_images/<%= product[i].image%>" alt="">
 
-                        
+
+          
                       </td>
                       <td class="px-4 py-3 text-sm">
-                       ///
+                        <%= product[i].category%>
                       </td>
                       <td class="px-4 py-3 text-sm">
-                        ///
+                        <%= product[i].stock%>
                        </td>
+                    
                        <td class="px-4 py-3 text-sm">
-                        ///
+                        <%= product[i].quantity%>
                        </td>
                       <td class="px-4 py-3">
                         <div class="flex items-center space-x-4 text-sm">
 
-                          <a href="#">
+                          <a href="/admin/edit_products?id=<%=product[i]._id %>">
 
-                          <button
+                          <button 
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit"
                           >
@@ -147,7 +132,7 @@
 
                   %>
                   <tr>
-                    <td   colspan="5">no products </td>
+                    <td   colspan="7">no products </td>
                   </tr>
 
                   <%

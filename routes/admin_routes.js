@@ -101,6 +101,15 @@ admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
 //inert_products
 admin_rout.post('/add_products',upload.single('image'),auth.isLogin,productContreoller.insertProduct)
 
+//edit_products
+
+admin_rout.get('/edit_products',upload.single('image'),auth.isLogin,productContreoller.editProduct)
+
+admin_rout.post('/edit_products',upload.single('image'),auth.isLogin,productContreoller.posteditProduct)
+
+
+
+
 
 
 

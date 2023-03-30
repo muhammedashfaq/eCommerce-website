@@ -316,12 +316,9 @@ const updatecategory =async (req,res)=>{
         if(name.trim().length==0){
             res.redirect('/admin/category')
           }else{
-            const addData =await CatDB.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name}})
-            if(addData){
+        await CatDB.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name}})
+        
                 res.redirect('/admin/category')
-
-
-            }
 
           }
         

@@ -19,9 +19,9 @@ const productload = async (req,res)=>{
 const addProductload = async (req,res)=>{
     try {
 
-        
+        const categoryData=await CatDB.find()
 
-        res.render('add_products')
+        res.render('add_products',{Catdata:categoryData})
     } catch (error) {
         console.log(error.message);
         
@@ -55,13 +55,7 @@ const insertProduct = async (req,res)=>{
             res.render('add_products',{message:"error"})
 
 
-        }
-
-
-
-
-
-        
+        }     
     } catch (error) {
         console.log(error.message);
         
@@ -69,10 +63,66 @@ const insertProduct = async (req,res)=>{
 
 }
 
+const editProduct =async (req,res)=>{
+    try {
+        
+        const id=req.query.id
+    
+        const editData=await productdb.findById({_id:id})
+        const data =await CatDB.find()
+       
+        res.render('edit_products',{dataedit:editData,Catdata:data})
+
+       
+
+    } catch (error) {
+
+        
+    }
+}
+const posteditProduct = async(req,res)=>{
+    try {
+        console.log('ttttttt');
+
+        const name = req.body.name;
+        
+       if(name.trim().length==0){
+        res.redirect('/admin/products')
+
+        console.log('hello');
+
+       }else{
+
+        console.log('hello');
+
+
+
+  const product=  await productdb.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,
+        price:req.body.price,
+        description:req.body.description,
+        stock:req.body.stock,
+        quantity:req.body.quantity,}})
+
+        console.log(product);
+
+
+        res.redirect('/admin/products')
+
+
+      }
+    } catch (error) {
+
+
+        
+    }
+
+}
 module.exports={
 
     productload,
     addProductload,
-    insertProduct
+    insertProduct,
+    editProduct,
+    posteditProduct
 
 }

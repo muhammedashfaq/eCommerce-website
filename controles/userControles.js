@@ -3,6 +3,9 @@ const bcrypt =require('bcrypt')
 const nodemailer = require('nodemailer');
 const { getMaxListeners } = require("../model/user_model");
 const randomstring=require('randomstring')
+const productDB = require('../model/prodect_model')
+const CatDB = require('../model/category_Model')
+
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -328,7 +331,9 @@ const resetpassverify =async (req,res)=>{
 const getHome = async(req,res)=>{
     try {
 
-        res.render('home')
+        const data =await productDB.find()
+
+        res.render('home',{product:data})
         
     } catch (error) {
         console.log(error.message);
@@ -349,7 +354,9 @@ const userLogout=async(req,res)=>{
 const getShop = async(req,res)=>{
     try {
 
-        res.render('shop')
+        const data =await productDB.find()
+
+        res.render('shop',{product:data})
         
     } catch (error) {
         console.log(error.message);
