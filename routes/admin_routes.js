@@ -70,6 +70,10 @@ admin_rout.get('/delete_user',auth.isLogin,adminController.deleteUser)
 //verify user
 admin_rout.get('/verify_user',auth.isLogin,adminController.veryfiUser)
 
+//block/unblock user
+admin_rout.get('/block_unblockUser',auth.isLogin,adminController.blockUser)
+
+
 
 
 
@@ -106,6 +110,11 @@ admin_rout.post('/add_products',upload.single('image'),auth.isLogin,productContr
 admin_rout.get('/edit_products',upload.single('image'),auth.isLogin,productContreoller.editProduct)
 
 admin_rout.post('/edit_products',upload.single('image'),auth.isLogin,productContreoller.posteditProduct)
+
+//delete_product
+
+admin_rout.get('/delete_products',upload.single('image'),auth.isLogin,productContreoller.deletetProduct)
+
 
 
 

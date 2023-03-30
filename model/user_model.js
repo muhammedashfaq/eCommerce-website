@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
         default:''
 
 
+    },
+    is_blocked:{
+        type:Boolean,
+        default:false
+
     }
 
 

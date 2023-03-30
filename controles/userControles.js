@@ -173,7 +173,8 @@ const veryfiyUser= async (req,res)=>{
         mob:req.body.mob,
         password:spassword,
         is_admin:0,
-        is_verified:0
+        is_verified:0,
+        is_blocked:false
 
 
     })
@@ -221,7 +222,7 @@ const veryfiLogin= async (req,res)=>{
         const password=req.body.password 
         const userData=await User.findOne({email:email})  
 
-            if(userData){
+            if(userData.email&&userData.is_verified==1&&userData.is_blocked==false){
                 const passwordMatch= await bcrypt.compare(password,userData.password)
        
                 if(passwordMatch){
@@ -355,6 +356,7 @@ const getShop = async(req,res)=>{
     try {
 
         const data =await productDB.find()
+        
 
         res.render('shop',{product:data})
         
@@ -402,7 +404,11 @@ const getCart = async(req,res)=>{
 const getProduct_details = async(req,res)=>{
     try {
 
-        res.render('Product_details')
+         const id = req.query.id
+         
+         const prodata=await productDB.findById({_id:id})
+
+        res.render('Product_details',{product:prodata})
         
     } catch (error) {
         console.log(error.message);

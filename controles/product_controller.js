@@ -93,17 +93,17 @@ const posteditProduct = async(req,res)=>{
 
        }else{
 
-        console.log('hello');
+        console.log('working')
+        const id = req.query.id
+        console.log(id)
 
-
-
-  const product=  await productdb.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,
+  const product=  await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
         price:req.body.price,
         description:req.body.description,
         stock:req.body.stock,
         quantity:req.body.quantity,}})
 
-        console.log(product);
+        
 
 
         res.redirect('/admin/products')
@@ -111,18 +111,38 @@ const posteditProduct = async(req,res)=>{
 
       }
     } catch (error) {
+        console.log(error.message);
 
 
         
     }
 
 }
+
+const deletetProduct =async (req,res)=>{
+    try {
+    
+
+        const id=req.query.id
+        await productdb.deleteOne({_id:id})
+        res.redirect('/admin/products')
+        
+    } catch (error) {
+
+        console.log(error.message);
+
+        
+    }
+
+}
+
 module.exports={
 
     productload,
     addProductload,
     insertProduct,
     editProduct,
-    posteditProduct
+    posteditProduct,
+    deletetProduct,
 
 }

@@ -170,6 +170,27 @@ const veryfiUser = async(req,res)=>{
 
 }
 
+const blockUser =async (req,res)=>{
+    try {
+        const id=req.query.id
+
+        const userData =await User.findById({_id:id})
+
+        if(userData.is_blocked==true){
+            await User.updateOne({_id:id},{$set:{is_blocked:false}})
+            res.redirect('/admin/user_details')
+
+        }if(userData.is_blocked==false){
+            await User.updateOne({_id:id},{$set:{is_blocked:true}})
+            res.redirect('/admin/user_details')
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
 
 
 
@@ -343,6 +364,7 @@ module.exports={
     edit_userLoad,
     updateUser,
     veryfiUser,
+    blockUser,
     deleteUser,
     categoryLoad,
     insert_category,
