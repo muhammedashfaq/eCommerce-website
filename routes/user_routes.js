@@ -10,6 +10,9 @@ rout.use(session({
 }))
 const auth=require('../middleware/userAuth')
 
+
+  
+
 rout.set('view engine','ejs')
 rout.set('views','./views/users')
 
@@ -69,28 +72,28 @@ rout.get('/home',auth.isLogin,userController.getHome)
 
 
 //shop
-rout.get('/shop',userController.getShop)
+rout.get('/shop',auth.isLogin,userController.getShop)
 
 
 //contact
-rout.get('/contact',userController.getContact)
+rout.get('/contact',auth.isLogin,userController.getContact)
 
 
 
 //about
-rout.get('/about',userController.getAbout)
+rout.get('/about',auth.isLogin,userController.getAbout)
 
 
 //cart
-rout.get('/cart',userController.getCart)
+rout.get('/cart',auth.isLogin,userController.getCart)
 
 
 //product_details
-rout.get('/product_details',userController.getProduct_details)
+rout.get('/product_details',auth.isLogin,userController.getProduct_details)
 
 
 //product_checkout
-rout.get('/checkout',userController.getProduct_checkout)
+rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 
 
 //404 error
@@ -106,6 +109,7 @@ rout.get('/checkout',userController.getProduct_checkout)
 
 
 
+  
 // rout.get('*',function (req,res){
 
 //     res.redirect('/home')

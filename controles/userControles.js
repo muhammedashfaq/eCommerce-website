@@ -337,6 +337,7 @@ const getHome = async(req,res)=>{
         res.render('home',{product:data})
         
     } catch (error) {
+        
         console.log(error.message);
         
     }
@@ -344,7 +345,7 @@ const getHome = async(req,res)=>{
 
 const userLogout=async(req,res)=>{
     try {
-        req.session.destroy()
+        req.session.user_id=false
         res.redirect('/')
         
     } catch (error) {

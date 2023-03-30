@@ -6,6 +6,9 @@ const app=express()
 const PORT=3000;
 
 
+app.set('view engine','ejs')
+app.set('views','./views/users')
+
 
 //for cache controll
 app.use((req, res, next) => {
@@ -33,10 +36,11 @@ app.use('/admin',adminRout)
 
 
 
-
-
-
-
+app.use((req,res)=>{
+   res.status(404).render("404")
+  })
+  
+  
 
 app.listen(PORT,()=>{
     console.log(`server running on port no:${PORT}`);

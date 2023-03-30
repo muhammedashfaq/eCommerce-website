@@ -74,7 +74,7 @@ const getHome=async (req,res)=>{
 const logout =async(req,res)=>{
     try {
         
-        req.session.destroy()
+        req.session.admin_id = false
         res.redirect('/admin')
 
         

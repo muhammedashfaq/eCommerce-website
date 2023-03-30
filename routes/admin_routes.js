@@ -36,6 +36,10 @@ const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')
 const category_Model = require('../model/category_Model')
 
+
+
+  
+
 //login
 admin_rout.get('/',auth.isLogout,adminController.getLogin)
 
@@ -127,14 +131,11 @@ admin_rout.get('/delete_products',upload.single('image'),auth.isLogin,productCon
 
 
 
+// admin_rout.get('*',function (req,res){
 
-
-
-admin_rout.get('*',function (req,res){
-
-    res.redirect('/admin')
+//     res.redirect('/admin')
     
-    })
+//     })
 
 
 
