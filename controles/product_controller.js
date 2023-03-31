@@ -89,7 +89,7 @@ const editProduct =async (req,res)=>{
 const posteditProduct = async(req,res)=>{
     try {
 
-       // const name = req.body.name;  
+       //lconst name = req.body.name;  
         //    if(name.trim().length==0){
         //     res.redirect('/admin/products')
 
@@ -102,13 +102,14 @@ const posteditProduct = async(req,res)=>{
             image[i]=req.files[i].filename
         }
 
-    //    
+    
          await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
             price:req.body.price,
             description:req.body.description,
             category:req.body.category,
             stock:req.body.stock,
             quantity:req.body.quantity,}})
+
     
 
        }else{
@@ -120,7 +121,9 @@ const posteditProduct = async(req,res)=>{
         stock:req.body.stock,
         quantity:req.body.quantity,}})
 
+
         if(product){
+
             
             res.redirect('/admin/products')
     }else{
