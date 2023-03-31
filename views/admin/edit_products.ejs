@@ -37,6 +37,11 @@
                type="file" name="image"
             />
           </label>
+          <div style="width: 100px;height: 100px  ; border: solid 2px white;" >
+
+            <img style=" border-radius: 40px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[0]%>" alt="">
+
+          </div>
            
 
           <label class="block mt-4 text-sm">
@@ -45,18 +50,16 @@
             <select  name="category" value="<%=dataedit.category%>"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             > 
+            <option>Choose </option>
+
             <%
             if(Catdata.length>0){
               for(let i=0;i<Catdata.length;i++){
                 %>
-              <option><%= Catdata[i].name%></option>
+
+              <option value=<%d=dataedit.category %> ><%= Catdata[i].name%> </option>
             <%
           }
-        }else{
-          %>
-         
-          <option>No Category Availiable</option>
-          <%
         }
         %>
       </select>

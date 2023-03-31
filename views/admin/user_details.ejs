@@ -72,52 +72,35 @@
                       <td class="px-4 py-3 text-sm">
                         <%= data[i].email%>
                       </td>
+
                       <td class="px-4 py-3 text-xs">
 
                         <%
                         if(data[i].is_verified==0){
                           %>
-                          
+                          <a href="/admin/verify_user?id=<%= data[i]._id %>">
                         <span
                         class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100"
                       >
                         Not verified
                       </span>
+                    </a>
                        
                       <%
 
                         }else{
                           %>
+                          <a href="/admin/verify_user?id=<%= data[i]._id %>">
                           <span
                         class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                       >
                          verified
                       </span>
+                    </a>
 
                           <%
                         }
                         %>
-
-                        
-
-                                  <%
-                        if(data[i].is_verified==0){
-                          %>
-                          
-                        
-                      <a href="/admin/verify_user?id=<%= data[i]._id %>"  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                        >very</a>
-                      <%
-
-                        }else{
-                          %>
-                        
-
-                          <%
-                        }
-                        %>
-
-                     
 
                         
                       </td>
@@ -125,17 +108,17 @@
 
 
 
-                      <td class="px-4 py-3 text-xs">
+                      <td class="px-4 py-3 text-xs">  
 
                         <%
-                        if(data[i].is_blocked==false){
+                        if(data[i].is_blocked==true){
                           %>
                          
                           <a href="/admin/block_unblockUser?id=<%=data[i]._id%>">
                         <span
                         class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100"
                       >
-                       Block
+                       Blocked
                       </span>
                     </a>
                        
@@ -147,7 +130,7 @@
                             <span
                         class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                       >
-                         Unblock
+                         Unblocked
                       </span>
                       
                           </a>
@@ -155,28 +138,6 @@
                           <%
                         }
                         %>
-
-                        
-
-                                  <%
-                        if(data[i].is_blocked==false){
-                          %>
-<!--                           
-                        
-                      <a href="/admin/verify_user?id=<%= data[i]._id %>"  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                        >very</a> -->
-                      <%
-
-                        }else{
-                          %>
-                        
-
-                          <%
-                        }
-                        %>
-
-                     
-
                         
                       </td>
 

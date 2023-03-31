@@ -157,8 +157,16 @@ const add_user =async (req,res)=>{
 const veryfiUser = async(req,res)=>{
     try {
         const id=req.query.id
-        await User.updateOne({_id:id},{$set:{is_verified:1}})
-        res.redirect('/admin/user_details')
+
+     const userData=   await User.findById({_id:id})
+        if(userData.is_verified==0){
+            await User.updateOne({_id:id},{$set:{is_verified:1}})
+            res.redirect('/admin/user_details')
+        }if(userData.is_verified==1){
+            await User.updateOne({_id:id},{$set:{is_verified:0}})
+            res.redirect('/admin/user_details')
+        }
+
 
 
     } catch (error) {
@@ -351,6 +359,32 @@ const updatecategory =async (req,res)=>{
 
 }
 
+const hideshowcategory =async (req,res)=>{
+    try {
+
+        const id=req.query.id
+
+
+        const Cdata =await CatDB.findById({_id:id})
+
+        console.log(Cdata)
+
+        if(Cdata.blocked==false){
+            await CatDB.updateOne({_id:id},{$set:{blocked:true}})
+            res.redirect('/admin/category')
+        }
+            if(Cdata.blocked==true){
+                await CatDB.updateOne({_id:id},{$set:{blocked:false}})
+                res.redirect('/admin/category')
+            
+        }
+
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 module.exports={
@@ -371,8 +405,8 @@ module.exports={
     edit_catLoad,
     updatecategory,
     deletecategory,
-
-    add_categoryLoad
+    add_categoryLoad,
+    hideshowcategory
 }
 
 

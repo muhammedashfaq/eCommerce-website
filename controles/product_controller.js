@@ -17,9 +17,11 @@ const productload = async (req,res)=>{
 
 
 const addProductload = async (req,res)=>{
-    try {
+    try {   
+        // const id=req.body.id
 
-        const categoryData=await CatDB.find()
+        const categoryData=await CatDB.find({blocked:false})
+
 
         res.render('add_products',{Catdata:categoryData})
     } catch (error) {
@@ -31,6 +33,10 @@ const addProductload = async (req,res)=>{
 
 const insertProduct = async (req,res)=>{
     try {
+        const image=[];
+        for(let i=0;i<req.files.length;i++){
+            image[i]=req.files[i].filename
+        }
 
         const Data = new productdb({
 
@@ -41,7 +47,7 @@ const insertProduct = async (req,res)=>{
             quantity:req.body.quantity,
             description:req.body.description,
 
-            image:req.file.filename,
+            image:image,
 
             blocked:false
 
@@ -82,31 +88,33 @@ const editProduct =async (req,res)=>{
 }
 const posteditProduct = async(req,res)=>{
     try {
-        console.log('ttttttt');
-
-        const name = req.body.name;
-        
+    
+        const name = req.body.name;  
        if(name.trim().length==0){
         res.redirect('/admin/products')
 
-        console.log('hello');
-
        }else{
+        const image=[];
+        for(let i=0;i<req.files.length;i++){
+            image[i]=req.files[i].filename
+        }
 
-        console.log('working')
         const id = req.query.id
-        console.log(id)
-
-  const product=  await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
+        const product=  await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
         price:req.body.price,
         description:req.body.description,
+        category:req.body.category,
         stock:req.body.stock,
         quantity:req.body.quantity,}})
+        const imageUpdate= await productdb.findByIdAndUpdate(id,{$push:{image:image}})
 
-        
+        if(product||imageUpdate){
 
+            res.redirect('/admin/products')
+    }else{
+        res.render('eidt_products',{message:"edit failed"})
 
-        res.redirect('/admin/products')
+    }
 
 
       }

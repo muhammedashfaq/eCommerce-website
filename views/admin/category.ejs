@@ -21,6 +21,9 @@
               <th class="px-4 py-3">Category</th>
 
               <th class="px-4 py-3">Actions</th>
+
+              <th class="px-4 py-3">Status</th>
+
             </tr>
           </thead>
           <tbody
@@ -91,18 +94,63 @@
                     </a>
                   </div>
                 </td>
+
+
+
+
+                
+                <td class="px-4 py-3 text-xs">  
+
+                  <%
+                  if(catData[i].blocked==true){
+                    %>
+                   
+                    <a href="/admin/hideshow_category?id=<%= catData[i]._id%>">
+                  <span
+                  class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100"
+                >
+                 Hde
+                </span>
+              </a>
+                 
+                <%
+
+                  }else{
+                    %>
+                    <a href="/admin/hideshow_category?id=<%= catData[i]._id%>">
+                      <span
+                  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
+                >
+                   Show
+                </span>
+                
+                    </a>
+
+                    <%
+                  }
+                  %>
+                  
+                </td>
+
+
+
+
+                
               </tr>
 
               <% } }else{ %>
               <tr>
                 <h1>user not found</h1>
               </tr>
-              <% } %> <%-
-              include('../admin/layouts/admin_footer.ejs')%></catData.length;i++){
-            >
+              <% } %>
+            
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </main>
+
+
+<%-
+include('../admin/layouts/admin_footer.ejs')%>
