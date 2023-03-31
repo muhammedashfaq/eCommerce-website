@@ -88,17 +88,30 @@ const editProduct =async (req,res)=>{
 }
 const posteditProduct = async(req,res)=>{
     try {
-    
-        const name = req.body.name;  
-       if(name.trim().length==0){
-        res.redirect('/admin/products')
 
-       }else{
+       // const name = req.body.name;  
+        //    if(name.trim().length==0){
+        //     res.redirect('/admin/products')
+
+
+        if(req.files.length!=0){
+        const id = req.query.id
+
         const image=[];
         for(let i=0;i<req.files.length;i++){
             image[i]=req.files[i].filename
         }
 
+    //    
+         await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
+            price:req.body.price,
+            description:req.body.description,
+            category:req.body.category,
+            stock:req.body.stock,
+            quantity:req.body.quantity,}})
+    
+
+       }else{
         const id = req.query.id
         const product=  await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
         price:req.body.price,
@@ -106,10 +119,9 @@ const posteditProduct = async(req,res)=>{
         category:req.body.category,
         stock:req.body.stock,
         quantity:req.body.quantity,}})
-        const imageUpdate= await productdb.findByIdAndUpdate(id,{$push:{image:image}})
 
-        if(product||imageUpdate){
-
+        if(product){
+            
             res.redirect('/admin/products')
     }else{
         res.render('eidt_products',{message:"edit failed"})
