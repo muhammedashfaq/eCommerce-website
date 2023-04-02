@@ -58,15 +58,9 @@ admin_rout.get('/logout',auth.isLogin,adminController.logout)
 //User Details
 admin_rout.get('/user_details',auth.isLogin,adminController.getTable)
 
-//add user
-admin_rout.get('/new_user',auth.isLogin,adminController.new_userLoad)
 
-admin_rout.post('/new_user',adminController.add_user)
 
-//edit_user
-admin_rout.get('/edit_user',auth.isLogin,adminController.edit_userLoad)
 
-admin_rout.post('/edit_user',adminController.updateUser)
 
 //delete_user
 admin_rout.get('/delete_user',auth.isLogin,adminController.deleteUser)

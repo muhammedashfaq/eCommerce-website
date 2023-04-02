@@ -334,7 +334,9 @@ const getHome = async(req,res)=>{
 
         const data =await productDB.find()
 
-        res.render('home',{product:data})
+        const userd=await User.find()
+
+        res.render('home',{product:data,user:userd})
         
     } catch (error) {
         

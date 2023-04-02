@@ -47,6 +47,12 @@ rout.get('/forget',auth.isLogout,userController.forgetLoad)
 
 rout.post('/forget',userController.forgetSendtoEmail)
 
+//otpresend
+
+//rout.get('/resend',auth.isLogout,userController.resend)
+
+
+
 
 //password reset
 //rout.get('/reset_password',auth.isLogout,userController.resetpassLoad1)

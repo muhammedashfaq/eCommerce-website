@@ -20,18 +20,13 @@
         <div class="product_image_area">
             <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-6">
-                <div class="product_img_slide owl-carousel">
-                    <div class="single_product_img">
-                        <img src="../admin/assets/product_images/<%= product.image%>"" alt="#" class="img-fluid">
+                <div class="col-lg-4">
+
+                    <div id="img-container" class="single_product_img">
+                        <img src="../admin/assets/product_images/<%= product.image%>" alt="#" class="img-fluid">
                     </div>
-                    <div class="single_product_img">
-                        <img src="/user/assets/img/gallery/gallery01.png" alt="#" class="img-fluid">
-                    </div>
-                    <div class="single_product_img">
-                        <img src="/user/assets/img/gallery/gallery1.png" alt="#" class="img-fluid">
-                    </div>
-                </div>
+                
+               
                 </div>
                 <div class="col-lg-8">
                 <div class="single_product_text text-center">
@@ -79,4 +74,16 @@
         </section>
         <!-- subscribe part end -->
     </main>
+
+
+    <script>
+        var options = {
+            width: 500,
+            zoomWidth: 200,
+            
+            offset: {vertical: -130, horizontal:-80}
+        };
+        new ImageZoom(document.getElementById("img-container"), options);
+         
+        </script>
     <%- include('../users/layouts/user_footer.ejs')%>
