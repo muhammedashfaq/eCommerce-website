@@ -32,14 +32,14 @@
 
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Image</span>
-            <input value="<%=dataedit.image%>"
+            <input value="<%=dataedit.image%>" onchange="viewimage(event)"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-               type="file" name="image"
+               type="file" name="image" multiple
             />
           </label>
           <div style="width: 100px;height: 100px  ; border: solid 2px white;" >
 
-            <img style=" border-radius: 40px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[0]%>" alt="">
+            <img style=" border-radius: 40px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[0]%>" alt="" id="imgView">
 
           </div>
            
@@ -96,7 +96,7 @@
 
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                type="number" name="quantity"
-            />
+            /> 
           </label>
 
           <br />
@@ -111,5 +111,11 @@
     </div>
   </div>
 </main>
+
+<script>
+  function viewimage(event){
+    document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+  }
+</script>
 
 <%- include('../admin/layouts/admin_footer.ejs')%>

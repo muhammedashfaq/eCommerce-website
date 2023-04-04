@@ -21,7 +21,7 @@ rout.use(express.json())
 rout.use(express.urlencoded({extended:true}))
 
 const userController= require('../controles/userControles')
-//rout.use('/',userController)
+
 
 
 //register
@@ -49,7 +49,7 @@ rout.post('/forget',userController.forgetSendtoEmail)
 
 //otpresend
 
-//rout.get('/resend',auth.isLogout,userController.resend)
+//  `rout.get('/resend',auth.isLogout,userController.resend)
 
 
 

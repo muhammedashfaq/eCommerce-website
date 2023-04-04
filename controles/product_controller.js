@@ -90,10 +90,10 @@ const editProduct =async (req,res)=>{
 const posteditProduct = async(req,res)=>{
     try {
 
-       //lconst name = req.body.name;  
-        //    if(name.trim().length==0){
-        //     res.redirect('/admin/products')
-
+       const name = req.body.name;  
+       if(name.trim().length==0  ){
+          res.redirect('/admin/products')
+       }else{
 
         if(req.files.length!=0){
         const id = req.query.id
@@ -109,7 +109,14 @@ const posteditProduct = async(req,res)=>{
             description:req.body.description,
             category:req.body.category,
             stock:req.body.stock,
-            quantity:req.body.quantity,}})
+            quantity:req.body.quantity,
+            
+            image:image,
+        
+        
+        }})
+        res.redirect('/admin/products')
+
 
     
 
@@ -122,15 +129,9 @@ const posteditProduct = async(req,res)=>{
         stock:req.body.stock,
         quantity:req.body.quantity,}})
 
-
-        if(product){
-
-            
-            res.redirect('/admin/products')
-    }else{
-        res.render('eidt_products',{message:"edit failed"})
-
+         res.redirect('/admin/products')
     }
+      
 
 
       }

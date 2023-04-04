@@ -110,8 +110,6 @@ const resetsendVerifymail= async (name,email,token)=>{
 const otpVerify =async (req,res)=>{
     try {
 
-        
-
         res.render('otp_verification')
         
     } catch (error) {
@@ -119,6 +117,25 @@ const otpVerify =async (req,res)=>{
         
     }
 }
+
+//otp resend
+
+// const resend = async(req,res)=>{
+//     try {
+
+//          // Generate a random 4-digit OTP
+//          const otpGenarated = Math.floor(1000 + Math.random() * 9999);
+//          otp = otpGenarated
+
+//         sendVerifymail(req.body.name,req.body.email,otpGenarated)
+//         res.redirect('/otp_verification')
+
+        
+//     } catch (error) {
+//         console.log(error.message);
+        
+//     }
+// }
 
 //otpValidation
 
@@ -230,11 +247,11 @@ const veryfiLogin= async (req,res)=>{
 
                     res.redirect('/home')
                 }else{
-                    res.render('login') 
+                    res.render('login',{message:"Incorrect Email Or Password"}) 
 
                 }
             }else{
-                res.render('login')
+                res.render('login',{message:"Incorrect Email Or Password"})
 
             }
         
@@ -333,10 +350,9 @@ const getHome = async(req,res)=>{
     try {
 
         const data =await productDB.find()
+        const userd=await User.findOne({_id:req.session.user_id})
 
-        const userd=await User.find()
-
-        res.render('home',{product:data,user:userd})
+        res.render('home',{product:data,user:userd.name})
         
     } catch (error) {
         
@@ -359,9 +375,9 @@ const getShop = async(req,res)=>{
     try {
 
         const data =await productDB.find()
-        
+        const userd=await User.findOne({_id:req.session.user_id})
 
-        res.render('shop',{product:data})
+        res.render('shop',{product:data, user:userd.name})
         
     } catch (error) {
         console.log(error.message);
@@ -395,8 +411,10 @@ const getAbout= async(req,res)=>{
 
 const getCart = async(req,res)=>{
     try {
+        const data =await productDB.find()
+        const userd=await User.findOne({_id:req.session.user_id})
 
-        res.render('cart')
+        res.render('cart',{product:data,user:userd.name})
         
     } catch (error) {
         console.log(error.message);
@@ -410,8 +428,10 @@ const getProduct_details = async(req,res)=>{
          const id = req.query.id
          
          const prodata=await productDB.findById({_id:id})
+         const userd=await User.findOne({_id:req.session.user_id})
 
-        res.render('Product_details',{product:prodata})
+
+        res.render('Product_details',{product:prodata,user:userd.name})
         
     } catch (error) {
         console.log(error.message);
@@ -447,6 +467,7 @@ module.exports={
     registerLoad,
     veryfiyUser,
     otpVerify,
+    
     loadLogin,
     veryfiLogin,
     forgetLoad,

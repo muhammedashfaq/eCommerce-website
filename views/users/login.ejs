@@ -57,6 +57,7 @@
                         <div class="form-outline mb-4">
                           <input placeholder="Password" type="password" id="form2Example22" name="password" class="form-control" required />
                           <label  class="form-label" for="form2Example22"></label>
+
                         </div>
                         <span id="er2" style="color: red;"></span>
 
@@ -68,7 +69,7 @@
                         </div>
                           
                    
-
+                        
                         
 
                         <div class="d-flex align-items-center justify-content-center pb-4">
@@ -79,6 +80,10 @@
                           <a  href="/register">Create new</a>
                           <!-- <button type="button" class="btn btn-outline-danger">Create new</button> -->
                         </div>
+                        <% if(typeof message !== 'undefined'){ %>
+                          <span id="er2" style="color: rgb(254, 0, 0);text-align: center;"><%= message%> </span>
+                          <% } %>
+              
       
                       </form>
       
