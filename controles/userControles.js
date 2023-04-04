@@ -12,6 +12,7 @@ dotenv.config()
 
 let otp
 let email2
+let name2
 ///bcrypt password
 const securePassword=async(password)=>{
     try {
@@ -110,6 +111,7 @@ const resetsendVerifymail= async (name,email,token)=>{
 const otpVerify =async (req,res)=>{
     try {
 
+        
         res.render('otp_verification')
         
     } catch (error) {
@@ -118,24 +120,30 @@ const otpVerify =async (req,res)=>{
     }
 }
 
+
+
+
+
 //otp resend
 
-// const resend = async(req,res)=>{
-//     try {
+const resend = async(req,res)=>{
+    try {
 
-//          // Generate a random 4-digit OTP
-//          const otpGenarated = Math.floor(1000 + Math.random() * 9999);
-//          otp = otpGenarated
+         //Generate a random 4-digit OTP
+         const otpGenarated = Math.floor(1000 + Math.random() * 9999);
+         otp = otpGenarated
 
-//         sendVerifymail(req.body.name,req.body.email,otpGenarated)
-//         res.redirect('/otp_verification')
+        sendVerifymail(name2,email2,otpGenarated)
+        res.render('otp_verification')
 
         
-//     } catch (error) {
-//         console.log(error.message);
+    } catch (error) {
+        console.log(error.message);
         
-//     }
-// }
+    }
+}
+
+
 
 //otpValidation
 
@@ -147,7 +155,7 @@ const otpValidation =async(req,res)=>{
 
  await  User.findOneAndUpdate({email:email2},{$set:{is_verified:1}})
 
-            res.render('login',{message:"done"})
+            res.render('login',{message:"success..!!!"})
 
         }else
         res.redirect('/otp')
@@ -177,8 +185,10 @@ const veryfiyUser= async (req,res)=>{
     try {
             const spassword=await securePassword(req.body.password);
             const email = req.body.email;
+            const name=req.body.name;
             const alreyMail = await User.findOne({email:email})
             email2=email
+            name2=name
             
             if(alreyMail){
                 res.render('register',{message:"EMAIL ALREADY EXIST "})
@@ -467,7 +477,7 @@ module.exports={
     registerLoad,
     veryfiyUser,
     otpVerify,
-    
+    resend,
     loadLogin,
     veryfiLogin,
     forgetLoad,

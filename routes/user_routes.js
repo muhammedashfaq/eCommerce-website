@@ -49,7 +49,7 @@ rout.post('/forget',userController.forgetSendtoEmail)
 
 //otpresend
 
-//  `rout.get('/resend',auth.isLogout,userController.resend)
+rout.get('/resend',auth.isLogout,userController.resend)
 
 
 

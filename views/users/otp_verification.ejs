@@ -34,8 +34,7 @@
     
         <div class="text-center mt-5">
           
-          <span class="d-block mobile-text" id="countdown"></span>
-          <span class="d-block mobile-text" id="resend"></span>
+          <p style="color:rgb(8, 8, 8);" id="countdown-timer">OTP will expire in <span id="countdown">30</span> seconds.</p>
         </div>
       </div>
     </div>
@@ -44,7 +43,41 @@
 
 
 
+    
+      <script>
+  function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
 
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+var countdown = document.getElementById("countdown");
+var countdownTimer = document.getElementById("countdown-timer");
+
+startTimer(30, countdown);
+// Update timer element and display message when OTP expires
+function countdownExpired() {
+  countdownTimer.innerHTML = 'OTP has expired. Resend the OTP <a href="/resend">here</a>.';
+
+}
+
+setTimeout(countdownExpired, 30000);
+</script>
+ 
+
+
+<!-- 
     <script>
       let timerOn = true;
 function timer(remaining) {
@@ -78,7 +111,7 @@ timer(60);
 
     </script>
 
-
+ -->
 
 
     <script>
