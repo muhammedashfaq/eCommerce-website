@@ -36,6 +36,8 @@ const insertProduct = async (req,res)=>{
         
         const image=[];
         for(let i=0;i<req.files.length;i++){
+
+            
             image[i]=req.files[i].filename
         }
 

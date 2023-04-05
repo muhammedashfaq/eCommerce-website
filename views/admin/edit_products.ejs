@@ -32,17 +32,26 @@
 
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Image</span>
-            <input value="<%=dataedit.image%>" onchange="viewimage(event)"
+            <input value="<%=dataedit.image%>" onchange="viewimage(event)" accept="image/jpeg"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                type="file" name="image" multiple
             />
           </label>
-          <div style="width: 100px;height: 100px  ; border: solid 2px white;" >
 
-            <img style=" border-radius: 40px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[0]%>" alt="" id="imgView">
+          <br>
+          <div style="display: flex;">
+            <%dataedit.image.forEach((value,index)=>{%>
+            
+          
+          <div   style="width: 100px;height: 100px  ; border: solid 2px white; margin-right: 25px;" >
+          
+
+            <img style=" border-radius: 40px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[index]%>" alt="" id="imgView">
 
           </div>
-           
+          <%})%>
+        
+        </div>
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400"> category </span>

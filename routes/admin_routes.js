@@ -108,17 +108,17 @@ admin_rout.get('/products',auth.isLogin,productContreoller.productload)
 admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
 
 //inert_products
-admin_rout.post('/add_products',upload.array('image',10),auth.isLogin,productContreoller.insertProduct)
+admin_rout.post('/add_products',upload.array('image',5),auth.isLogin,productContreoller.insertProduct)
 
 //edit_products
 
-admin_rout.get('/edit_products',upload.array('image',10),auth.isLogin,productContreoller.editProduct)
+admin_rout.get('/edit_products',upload.array('image',5),auth.isLogin,productContreoller.editProduct)
 
-admin_rout.post('/edit_products',upload.array('image',10),auth.isLogin,productContreoller.posteditProduct)
+admin_rout.post('/edit_products',upload.array('image',5),auth.isLogin,productContreoller.posteditProduct)
 
 //delete_product
 
-admin_rout.get('/delete_products',upload.array('image',10),auth.isLogin,productContreoller.deletetProduct)
+admin_rout.get('/delete_products',upload.array('image',5),auth.isLogin,productContreoller.deletetProduct)
 
 
 

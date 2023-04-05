@@ -32,7 +32,6 @@ const veryfiLogin=async (req,res)=>{
         const password= req.body.password
 
         const adminData=await admin.findOne({email:email})
-        console.log(adminData);
 
 
         if(adminData){
@@ -181,7 +180,9 @@ const insert_category =async (req,res)=>{
 
       
 
-        const alredy = await CatDB.findOne({name:name})
+        const alredy = await CatDB.findOne({name:  /^name/i })
+
+
         if(alredy){
                 res.render('add_category',{message:"This category alredy exist "})
         }else{

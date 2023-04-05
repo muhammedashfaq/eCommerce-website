@@ -34,15 +34,18 @@
                     </tr>
                   </thead>
 
-
+ 
               <tbody
                     class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 
-                    <% if(product.length > 0){
-                        for(let i=0; i<product.length; i++){
-                          %>
+                  <%product.forEach((value,index)=>{%>
+                    
+                    
+                    
+                    
 
 
+                  
 
                   
                  
@@ -52,36 +55,36 @@
                           <!-- Avatar with inset shadow -->
                        
                           <div>
-                            <p class="font-semibold"><%= product[i].name %> </p>
+                            <p class="font-semibold"><%= value.name %> </p>
                           
                           </div>
                         </div>
                       </td>
                       <td class="px-4 py-3 text-sm " >
 
-                        <%= product[i].price%>
+                        <%= value.price%>
                         
                       
                       </td>
                      
                       <td class="px-4 py-3 text-xs">
-                        <img style="width: 60px; height: 60px;" src="../admin/assets/product_images/<%= product[i].image%>" alt="">
+                        <img  style="width: 60px; height: 60px;" src="../admin/assets/product_images/<%= value.image[0]%>" alt="">
 
                       </td>
                       <td class="px-4 py-3 text-sm">
-                        <%= product[i].category%>
+                        <%= value.category%>
                       </td>
                       <td class="px-4 py-3 text-sm">
-                        <%= product[i].stock%>
+                        <%= value.stock%>
                        </td>
                     
                        <td class="px-4 py-3 text-sm">
-                        <%= product[i].quantity%>
+                        <%= value.quantity%>
                        </td>
                       <td class="px-4 py-3">
                         <div class="flex items-center space-x-4 text-sm">
 
-                          <a href="/admin/edit_products?id=<%=product[i]._id %>">
+                          <a href="/admin/edit_products?id=<%=value._id %>">
 
                           <button 
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
@@ -99,7 +102,7 @@
                             </svg>
                           </button> 
                         </a>
-                          <a href="/admin/delete_products?id=<%=product[i]._id%>">
+                          <a href="/admin/delete_products?id=<%=value._id%>">
                           <button 
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Delete"
@@ -122,26 +125,14 @@
                       </td>
                     </tr>
                     
-                          
-                    <%
-                  }
+           
 
-                }else{
-
-                  %>
-                  <tr>
-                    <td style="color: white;"  colspan="7">No products </td>
-                  </tr>
-
-                  <%
-                }
-
-              %>
+             
           
          
 
          
-                   
+                    <%})%>
               
                </tbody>
                 </table>

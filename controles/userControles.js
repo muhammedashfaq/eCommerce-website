@@ -249,21 +249,37 @@ const veryfiLogin= async (req,res)=>{
         const password=req.body.password 
         const userData=await User.findOne({email:email})  
 
-            if(userData.email&&userData.is_verified==1&&userData.is_blocked==false){
-                const passwordMatch= await bcrypt.compare(password,userData.password)
-       
-                if(passwordMatch){
-                    req.session.user_id=userData._id
+        if(userData.is_verified==1){
+            if(userData.is_blocked==false){
+                if(userData.email){
 
-                    res.redirect('/home')
+                               const passwordMatch= await bcrypt.compare(password,userData.password)
+
+                     if(passwordMatch){
+
+                              req.session.user_id=userData._id
+                              res.redirect('/home')
+
+                     }else{
+                              res.render('login',{message:"Incorrect Email Or Password"}) 
+
+                          }
+
                 }else{
-                    res.render('login',{message:"Incorrect Email Or Password"}) 
+                              res.render('login',{message:"Incorrect Email Or Password"})
 
-                }
+                     }
             }else{
-                res.render('login',{message:"Incorrect Email Or Password"})
+                               res.render('login',{message:"Your Blocked..."})
 
-            }
+
+                 }
+
+        }else{
+                              res.render('login',{message:"Your Not verified"})
+
+
+             }
         
     } catch (error) {
         console.log(error.message);
