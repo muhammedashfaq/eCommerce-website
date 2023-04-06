@@ -17,19 +17,76 @@
         </div>
         <!-- Hero Area End-->
         <!--================Single Product Area =================-->
-        <div class="product_image_area">
-            <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-4">
+        <!-- <div class="product_image_area">
+            <div class="container carousel slide">
+            <div class="row justify-content-center" >
+              
 
-                    <div id="img-container" class="single_product_img">
-                        <img width="100%" height="100%" src="../admin/assets/product_images/<%= product.image%>" alt="#" class="img-fluid">
+
+                    
+                <div class="col-lg-4">
+                   
+                    <%
+                    if(product.image.length>0){
+                        for(let i=0;i<product.image.length;i++){
+                            %>
+
+
+
+
+
+
+
+
+                            
+                       
+                    <div id="img-container" class="product_img_slide owl-carousel">
+                        <img width="100%" height="100%" src="../admin/assets/product_images/<%= product.image[i]%>" alt="#" class="img-fluid">
                     </div>
-                
-               
+                    <%
+                }}%>    
+                    
+                    
                 </div>
+          
+
+                            
+         
+  
                 <div class="col-lg-8">
-                <div class="single_product_text text-center">
+                <div class="single_product_text text-center"> -->
+
+
+
+                    <div class="product_image_area">
+                        <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-4">
+
+
+                            <div  class="product_img_slide owl-carousel" >
+                                <%
+                                if(product.image.length>0){
+                                    for(let i=0;i<product.image.length;i++){
+                                        %>
+            
+                                    
+
+                                <div id="img-container" class="single_product_img " >
+                                    <img width="100%" height="100%" src="../admin/assets/product_images/<%= product.image [i]%>" alt="#" class="img-fluid">
+                                </div>
+
+                                <%
+                                    }
+                            
+                        }%>    
+
+
+                               
+                            </div>
+                            </div>
+                            <div class="col-lg-8">
+                            <div class="single_product_text text-center">
                     <h3><%=product.name%> <br>
                         for<%=product.category%></h3>
                     <p>
