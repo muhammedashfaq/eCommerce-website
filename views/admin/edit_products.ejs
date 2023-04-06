@@ -51,7 +51,7 @@
           <ul>
             <li>
 
-               <button type="submit" 
+               <button type="submit" onclick="deletephoto('<%= index%>','<%= dataedit._id%>')"
               class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Remove</button>
             </li>
           </ul>
@@ -132,6 +132,28 @@
     </div>
   </div>
 </main>
+
+<script>
+
+  function deletephoto(position,id){
+    $.ajax({
+
+        url:"/admin/delete_image",
+        method:"post",
+        encoded:true,
+        data:{
+
+          position:position,
+          id:id,
+        },
+    })
+    .done((data)=>{
+      if(data.success){
+        location.reload()
+      }
+    })
+  }
+</script>
 
 <script>
   function viewimage(event){

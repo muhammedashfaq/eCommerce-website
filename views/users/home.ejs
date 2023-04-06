@@ -165,9 +165,7 @@
                         <div class="single-popular-items mb-50 text-center">
                             <div class="popular-img">
                                 <img src="../admin/assets/product_images/<%= product[i].image[0]%>" alt="">
-                                <div class="img-cap">
-                                    <span>Add to cart</span>
-                                </div>
+                             
                                 <div class="favorit-items">
                                     <span class="flaticon-heart"></span>
                                 </div>
@@ -175,6 +173,9 @@
                             <div class="popular-caption">
                                 <h3><a href="./product_details?id=<%=product[i]._id%>"><%= product[i].name%></a></h3>
                                 <span><%=product[i].price%></span>
+
+                                <button type="submit" onclick="" class="btn btn-danger">add to cart</button>
+
                             </div>
                         </div>
                     </div>

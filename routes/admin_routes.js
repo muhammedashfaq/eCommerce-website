@@ -116,6 +116,13 @@ admin_rout.get('/edit_products',upload.array('image',5),auth.isLogin,productCont
 
 admin_rout.post('/edit_products',upload.array('image',5),auth.isLogin,productContreoller.posteditProduct)
 
+//delete_images_in_edit page
+
+admin_rout.post('/delete_image',auth.isLogin,productContreoller.postdelete_image)
+
+
+
+
 //delete_product
 
 admin_rout.get('/delete_products',upload.array('image',5),auth.isLogin,productContreoller.deletetProduct)

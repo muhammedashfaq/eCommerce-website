@@ -489,6 +489,23 @@ const error404=async(req,res)=>{
     }
 }
 
+const getUser_profile =async(req,res)=>{
+
+    try {
+        
+        const userd=await User.findOne({_id:req.session.user_id})
+        const userData=await User.findOne({_id:req.session.user_id})
+
+
+        res.render('user_profile',{user:userd.name,data:userData})
+
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
 module.exports={
     registerLoad,
     veryfiyUser,
@@ -509,6 +526,7 @@ module.exports={
     getProduct_details,
     getProduct_checkout,
     otpValidation,
-    error404
+    error404,
+    getUser_profile
 }
 

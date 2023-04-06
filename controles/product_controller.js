@@ -160,6 +160,30 @@ const deletetProduct =async (req,res)=>{
     }
 
 }
+//remove single image from edit_product
+
+const postdelete_image = async(req,res)=>{
+    try {
+        
+        const position=req.body.position
+        const id =  req.body.id
+
+        const productImage =await productdb.findById(id)
+
+        const image=productImage.image[position]
+        const data =await productdb.updateOne({_id:id},{$pullAll:{image:[image]}})
+
+        if(data){
+            res.json({success:true})
+        }else{
+            res.redirect('/admin/products')
+        }
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+}
 
 module.exports={
 
@@ -169,5 +193,5 @@ module.exports={
     editProduct,
     posteditProduct,
     deletetProduct,
-
+    postdelete_image,
 }

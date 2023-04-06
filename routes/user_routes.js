@@ -102,6 +102,13 @@ rout.get('/product_details',auth.isLogin,userController.getProduct_details)
 rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 
 
+
+///user_profile
+
+rout.get('/user_profile',auth.isLogin,userController.getUser_profile)
+
+
+
 //404 error
 
 //rout.get('*',auth.isLogin,userController.error404)
