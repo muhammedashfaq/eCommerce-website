@@ -39,8 +39,7 @@ const veryfiLogin=async (req,res)=>{
 
                 req.session.admin_id=adminData._id;
 
-                console.log("adminData");
-
+               
                 res.redirect('/admin/home')
             }else{
                 res.render('login')

@@ -437,39 +437,43 @@ const getAbout= async(req,res)=>{
 
 const getCart = async(req,res)=>{
     try {
-        const data =await productDB.find()
+        // const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
         const id =req.session.user_id
         const cartData=await cart.findOne({user:req.session.user_id}).populate('product.productId')
-
+        const products=cartData.product
         if(cartData){
+
             if(cartData.product.length>0){
-                const products=cartData.product
-                const total = await cart.aggregate([{$match:{user:userd.name}},
+                
+                const total = await cart.aggregate([{$match:{user:userd._id}},
 
                     {$unwind:"$product"},
 
                     {$project:{price:"$product.price",quantity:"$product.quantity"}},
 
-                    {$group:{_id:null,total:{$sum:{$multiply:["$quantity","$price"]}}}}]);
+                    {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
 
-                    const Total= total[0].total
+                    console.log('cart data take');
+                    console.log(total);
+
+                    const Total= total[0].total;
+
                     const useRID=userd._id
-                    let customer=true
-                    res.render('cart',{product:data,user:userd.name,customer,products, Total,useRID})
+                    console.log(products);
+                    console.log(total);
+                    res.render('cart',{user:userd.name,products:products, Total,useRID})
             }else{
-                let customer=true
 
-                res.render('cart',{product:data,user:userd.name,customer,message:"hi"})
+                res.render('cart',{user:userd.name,message:"hi"})
             }
 
         }else{
-            let customer=true
 
-            res.render('cart',{product:data,user:userd.name,customer,message:"hi"})
+            res.render('cart',{products:products,user:userd.name,message:"hi"})
         }
 
-        res.render('cart',{product:data,user:userd.name})
+        
         
     } catch (error) {
         console.log(error.message);

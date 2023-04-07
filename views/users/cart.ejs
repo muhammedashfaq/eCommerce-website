@@ -20,9 +20,18 @@
         <div class="container">
           <div class="cart_inner">
             <div class="table-responsive">
+              
+
+             
+
               <table class="table">
+                  
+                  
+                 
+
                 <thead>
                   <tr>
+                    <!-- <th scope="col">SL NO</th> -->
                     <th scope="col">Product</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
@@ -30,23 +39,33 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <%products.forEach((value,index)=>{%>
+
+          
 
 
-                  
                   <tr>
+                    <!-- <td>
+                      <h5><%= index+1 %></h5>
+                    </td> -->
+
+
                     <td>
                       <div class="media">
                         <div class="d-flex">
-                          <img src="/user/assets/img/gallery/card1.png" alt="" />
+                          <img src="../admin/assets/product_images/<%= value.productId.image[0]%>" alt="">
                         </div>
                         <div class="media-body">
-                          <p>Minimalistic shop for multipurpose use</p>
+                          <p><%= value.productId.name%></p>
                         </div>
                       </div>
                     </td>
+
+
                     <td>
-                      <h5>$360.00</h5>
+                      <h5><%=value.productId.price%></h5>
                     </td>
+
                     <td>
                       <div class="product_count">
                         <span class="input-number-decrement"> <i class="ti-minus"></i></span>
@@ -54,41 +73,17 @@
                         <span class="input-number-increment"> <i class="ti-plus"></i></span>
                       </div>
                     </td>
+
                     <td>
-                      <h5>$720.00</h5>
+                      <h5>total</h5>
                     </td>
+
                   </tr>
 
+                  <%})%>
 
 
-
-                  <tr>
-                    <td>
-                      <div class="media">
-                        <div class="d-flex">
-                          <img src="/user/assets/img/gallery/card2.png" alt="" />
-                        </div>
-                        <div class="media-body">
-                          <p>Minimalistic shop for multipurpose use</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <h5>$360.00</h5>
-                    </td>
-                    <td>
-                      <div class="product_count">
-                          <span class="input-number-decrement"> <i class="ti-minus"></i></span>
-                          <input class="input-number" type="text" value="1" min="0" max="10">
-                          <span class="input-number-increment"> <i class="ti-plus"></i></span>
-                      </div>
-                    </td>
-                    <td>
-                      <h5>$720.00</h5>
-                    </td>
-                  </tr>
-
-
+              
 
 
                   <tr class="bottom_button">
@@ -110,7 +105,7 @@
                       <h5>Subtotal</h5>
                     </td>
                     <td>
-                      <h5>$2160.00</h5>
+                      <h5><%=Total  %></h5>
                     </td>
                   </tr>
                   <tr class="shipping_area">
@@ -158,8 +153,12 @@
                       </div>
                     </td>
                   </tr>
+                  
                 </tbody>
               </table>
+
+         
+              
               <div class="checkout_btn_inner float-right">
                 <a class="btn_1" href="#">Continue Shopping</a>
                 <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
