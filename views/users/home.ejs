@@ -174,7 +174,7 @@
                                 <h3><a href="./product_details?id=<%=product[i]._id%>"><%= product[i].name%></a></h3>
                                 <span><%=product[i].price%></span>
 
-                                <button type="submit" onclick="" class="btn btn-danger">add to cart</button>
+                                <button type="submit" onclick="addToCart('<%=product[i]._id%>')" class="btn btn-danger">add to cart</button>
 
                             </div>
                         </div>
@@ -376,7 +376,32 @@
         <!-- Shop Method End-->
     </main>
 
+    <script>
+        function addToCart(id){
+            console.log(id);
+            $.ajax({
+                url:'/add_to_cart',
+                method:"post",
+                encoded:true,
+                data:{
+                    id:id,
+                },
+            }).done((data)=>{
+                if (data.success){
+                    Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Product added to cart',
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+                }
+            })
 
+        }
+
+       
+    </script>
 
 
 
