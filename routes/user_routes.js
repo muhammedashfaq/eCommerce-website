@@ -64,7 +64,13 @@ rout.get('/reset_password',auth.isLogout,userController.resetpassLoad)
 rout.post('/reset_password',auth.isLogout,userController.resetpassverify)
 
 
+//cart
+rout.get('/cart',auth.isLogin,userController.getCart)
 
+
+//addtocart
+
+rout.post("/add_to_cart",auth.isLogin,userController.addtoCart)
 
 
 
@@ -90,8 +96,6 @@ rout.get('/contact',auth.isLogin,userController.getContact)
 rout.get('/about',auth.isLogin,userController.getAbout)
 
 
-//cart
-rout.get('/cart',auth.isLogin,userController.getCart)
 
 
 //product_details

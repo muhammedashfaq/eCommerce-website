@@ -5,7 +5,7 @@ const { getMaxListeners } = require("../model/user_model");
 const randomstring=require('randomstring')
 const productDB = require('../model/prodect_model')
 const CatDB = require('../model/category_Model')
-
+const cart = require('../model/cart_model')
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -439,8 +439,89 @@ const getCart = async(req,res)=>{
     try {
         const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
+        const id =req.session.user_id
+        const cartData=await cart.findOne({user:req.session.user_id}).populate('product.productId')
+
+        if(cartData){
+            if(cartData.product.length>0){
+                const products=cartData.product
+                const total = await cart.aggregate([{$match:{user:userd.name}},
+
+                    {$unwind:"$product"},
+
+                    {$project:{price:"$product.price",quantity:"$product.quantity"}},
+
+                    {$group:{_id:null,total:{$sum:{$multiply:["$quantity","$price"]}}}}]);
+
+                    const Total= total[0].total
+                    const useRID=userd._id
+                    let customer=true
+                    res.render('cart',{product:data,user:userd.name,customer,products, Total,useRID})
+            }else{
+                let customer=true
+
+                res.render('cart',{product:data,user:userd.name,customer,message:"hi"})
+            }
+
+        }else{
+            let customer=true
+
+            res.render('cart',{product:data,user:userd.name,customer,message:"hi"})
+        }
 
         res.render('cart',{product:data,user:userd.name})
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const addtoCart =async (req,res)=>{
+    try {
+
+
+        const productId= req.body.id
+      
+        const UserId= await User.findOne({_id:req.session.user_id})
+        // console.log('sfegreg'+email);
+        // const userData=await User.findOne({_id:email})
+        // const UserId =userData._id
+        // console.log(UserId);
+
+        //database checking
+        const productData = await productDB.findById(productId)
+        const Usercart =await cart.findOne({user:UserId})
+       
+        if(Usercart) {
+            //checking cart prodcut avaliable
+            const productavaliable = await Usercart.product.findIndex( product => product.productId == productId)
+            if(productavaliable != -1){
+                //if have product in cart the qnty increse
+                await cart.findOneAndUpdate({user : UserId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
+                res.json({success:true})
+            }else{
+                //if no product in cart add product
+                await cart.findOneAndUpdate({user : UserId},{$push : {product:{productId : productId, price : productData.price}}})
+                res.json({success:true})
+            }
+
+        }else{
+            const CartData =new cart({
+                user:UserId._id,
+                product:[{
+                    productId:productId,
+                    price:productData.price
+                }]
+
+            })
+            const cartData=await CartData.save();
+            if(cartData){
+                res.json({success:true})
+            }else{
+                res.redirect('/home')
+            }
+        }
         
     } catch (error) {
         console.log(error.message);
@@ -518,11 +599,13 @@ module.exports={
     resetpassLoad,
     resetpassverify,
     getHome,
+    getCart,
+    addtoCart,
     userLogout,
     getShop,
     getContact,
     getAbout,
-    getCart,
+    
     getProduct_details,
     getProduct_checkout,
     otpValidation,
