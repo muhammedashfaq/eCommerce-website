@@ -181,7 +181,7 @@ const insert_category =async (req,res)=>{
 
       
 
-        const alredy = await CatDB.findOne({name:  /^name/i })
+        const alredy = await CatDB.findOne({name: {$regex:name,$options: "i"}})
 
 
         if(alredy){
