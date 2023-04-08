@@ -21,6 +21,8 @@ rout.use(express.json())
 rout.use(express.urlencoded({extended:true}))
 
 const userController= require('../controles/userControles')
+const adddressController= require('../controles/address_controlller')
+
 
 
 
@@ -72,6 +74,25 @@ rout.get('/cart',auth.isLogin,userController.getCart)
 
 rout.post("/add_to_cart",auth.isLogin,userController.addtoCart)
 
+//product_checkout
+rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
+
+
+
+
+//adddressController
+
+//add address
+rout.get('/add_address',auth.isLogin,adddressController.getadd_address)
+//post
+rout.post('/add_address',adddressController.veryfyaddess)
+
+//delete_address
+
+rout.get('/delete_address',adddressController.deleteaddress)
+
+
+
 
 
 
@@ -102,8 +123,8 @@ rout.get('/about',auth.isLogin,userController.getAbout)
 rout.get('/product_details',auth.isLogin,userController.getProduct_details)
 
 
-//product_checkout
-rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
+
+
 
 
 

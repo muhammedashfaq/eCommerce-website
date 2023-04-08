@@ -21,7 +21,10 @@
           <div class="cart_inner">
             <div class="table-responsive">
               
-
+              
+              <% if(typeof products !== "undefined"){
+                %>
+             
              
 
               <table class="table">
@@ -75,7 +78,7 @@
                     </td>
 
                     <td>
-                      <h5>total</h5>
+                      <h5><%= value.quantity%></h5>
                     </td>
 
                   </tr>
@@ -105,7 +108,7 @@
                       <h5>Subtotal</h5>
                     </td>
                     <td>
-                      <h5><%=Total  %></h5>
+                      <h5><%=Total%></h5>
                     </td>
                   </tr>
                   <tr class="shipping_area">
@@ -157,11 +160,18 @@
                 </tbody>
               </table>
 
+              <%
+            }else{
+              %>
+              <h1>cart empty</h1>
+              <%
+            } %>
          
-              
+
+         
               <div class="checkout_btn_inner float-right">
                 <a class="btn_1" href="#">Continue Shopping</a>
-                <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
+                <a class="btn_1 checkout_btn_1" href="./checkout">Proceed to checkout</a>
               </div>
             </div>
           </div>

@@ -84,7 +84,9 @@ const logout =async(req,res)=>{
 
 const getTable = async(req,res)=>{
     try {
+
         const userData =await User.find({is_admin:0})
+        
         res.render('user_details',{data:userData})
     } catch (error) {
         console.log(error.message);

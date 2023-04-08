@@ -6,6 +6,7 @@ const randomstring=require('randomstring')
 const productDB = require('../model/prodect_model')
 const CatDB = require('../model/category_Model')
 const cart = require('../model/cart_model')
+const user_address =require('../model/address_Model')
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -441,10 +442,13 @@ const getCart = async(req,res)=>{
         const userd=await User.findOne({_id:req.session.user_id})
         const id =req.session.user_id
         const cartData=await cart.findOne({user:req.session.user_id}).populate('product.productId')
-        const products=cartData.product
+        console.log(cartData);
+        
+        
         if(cartData){
-
-            if(cartData.product.length>0){
+            const products=cartData.product
+            
+            if(products.length>0){
                 
                 const total = await cart.aggregate([{$match:{user:userd._id}},
 
@@ -455,22 +459,21 @@ const getCart = async(req,res)=>{
                     {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
 
                     console.log('cart data take');
-                    console.log(total);
-
+                  
+                   
                     const Total= total[0].total;
 
                     const useRID=userd._id
-                    console.log(products);
-                    console.log(total);
+            
                     res.render('cart',{user:userd.name,products:products, Total,useRID})
             }else{
 
-                res.render('cart',{user:userd.name,message:"hi"})
+                res.render('cart',{user:userd.name,products: undefined})
             }
 
-        }else{
+         }else{
 
-            res.render('cart',{products:products,user:userd.name,message:"hi"})
+            res.render('cart',{user:userd.name,})
         }
 
         
@@ -553,14 +556,35 @@ const getProduct_details = async(req,res)=>{
 
 const getProduct_checkout = async(req,res)=>{
     try {
+        const address =await user_address.findOne({user:req.session.user_id});
+        const data =await productDB.find()
+        const userd=await User.findOne({_id:req.session.user_id})
+        if(userd){
+            const addressData = address.address;
 
-        res.render('checkout')
+            res.render('checkout',{product:data, user:userd.name,address:addressData})
+
+
+        }else{
+            res.render('checkout',{product:data, user:userd.name})
+
+            
+        }
+        
+
+       
         
     } catch (error) {
         console.log(error.message);
         
     }
 }
+
+
+
+
+
+
 
 
 
@@ -612,6 +636,7 @@ module.exports={
     
     getProduct_details,
     getProduct_checkout,
+
     otpValidation,
     error404,
     getUser_profile
