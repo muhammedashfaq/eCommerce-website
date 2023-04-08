@@ -442,7 +442,7 @@ const getCart = async(req,res)=>{
         const userd=await User.findOne({_id:req.session.user_id})
         const id =req.session.user_id
         const cartData=await cart.findOne({user:req.session.user_id}).populate('product.productId')
-        console.log(cartData);
+        
         
         
         if(cartData){
