@@ -41,15 +41,18 @@
                         
                          id="flexCheckDefault" required> <br>
                         <label class="form-check-label" for="flexCheckDefault">
-                          <%= value.fname%><%= value.sname %>
+                          <%= value.fname%><%= value.sname %> <br>
                          <%= value.address %> <br>
-                         <%= value.mobile %>,
-                         <%= value.email%> 
+                         Ph : <%= value.mobile %>,
+                         <%= value.email%> <br>
                          <%= value.pin %>
                         </label>
                         <br>
                         <div>
-                        <a  style="color: red;" href="/delete_address?id=<%=value._id%>">delet</a>
+                        
+                            <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/delete_address?id=<%=value._id%>">delet</a>
+
+                         
                         </div>
                         <hr>
                         <% })%>
@@ -62,22 +65,22 @@
                 </div>
                 <div class="col-lg-4">
                   <div class="order_box">
-                    <h2>Your Order</h2>
+                    <h2>Your Order Payement Deatails</h2>
                     
                     <ul class="list list_2">
                       <li>
                         <a href="#">Subtotal
-                          <span>$2160.00</span>
+                          <span>RS :<%= Total%></span>
                         </a>
                       </li>
                       <li>
                         <a href="#">Shipping
-                          <span>Flat rate: $50.00</span>
+                          <span>---</span>
                         </a>
                       </li>
                       <li>
                         <a href="#">Total
-                          <span>$2210.00</span>
+                          <span>RS :<%= Total%></span>
                         </a>
                       </li>
                     </ul>

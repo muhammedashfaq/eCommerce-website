@@ -458,7 +458,7 @@ const getCart = async(req,res)=>{
 
                     {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
 
-                    console.log('cart data take');
+                    
                   
                    
                     const Total= total[0].total;
@@ -559,10 +559,25 @@ const getProduct_checkout = async(req,res)=>{
         const address =await user_address.findOne({user:req.session.user_id});
         const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
-        if(userd){
+        const cartData=await cart.findOne({user:userd._id}).populate("product.productId")
+        if(cartData.product.length>0){
             const addressData = address.address;
 
-            res.render('checkout',{product:data, user:userd.name,address:addressData})
+            const total = await cart.aggregate([{$match:{user:userd._id}},
+
+                {$unwind:"$product"},
+
+                {$project:{price:"$product.price",quantity:"$product.quantity"}},
+
+                {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
+
+                console.log('cart data take');
+              
+               
+                const Total= total[0].total;
+
+
+            res.render('checkout',{product:data,Total, user:userd.name,address:addressData})
 
 
         }else{
@@ -573,6 +588,19 @@ const getProduct_checkout = async(req,res)=>{
         
 
        
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+const ordersuccess_pageLoad=async(req,res)=>{
+    try {
+        const data =await productDB.find()
+        const userd=await User.findOne({_id:req.session.user_id})
+
+        res.render('order_success',{product:data,user:userd.name})
         
     } catch (error) {
         console.log(error.message);
@@ -629,6 +657,8 @@ module.exports={
     getHome,
     getCart,
     addtoCart,
+
+    ordersuccess_pageLoad,
     userLogout,
     getShop,
     getContact,

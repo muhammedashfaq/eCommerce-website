@@ -91,6 +91,14 @@ rout.post('/add_address',adddressController.veryfyaddess)
 
 rout.get('/delete_address',adddressController.deleteaddress)
 
+//place order
+
+
+//order_success
+
+rout.get('/order_success',auth.isLogin,userController.ordersuccess_pageLoad)
+
+
 
 
 
