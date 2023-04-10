@@ -7,6 +7,7 @@ const productDB = require('../model/prodect_model')
 const CatDB = require('../model/category_Model')
 const cart = require('../model/cart_model')
 const user_address =require('../model/address_Model')
+const order =require('../model/order_Model')
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -560,6 +561,7 @@ const getProduct_checkout = async(req,res)=>{
         const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
         const cartData=await cart.findOne({user:userd._id}).populate("product.productId")
+
         if(cartData.product.length>0){
             const addressData = address.address;
 
@@ -595,18 +597,73 @@ const getProduct_checkout = async(req,res)=>{
     }
 }
 
-const ordersuccess_pageLoad=async(req,res)=>{
+const placetheorder =async(req,res)=>{
     try {
-        const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
+        const total = await cart.aggregate([{$match:{user:userd._id}},
 
-        res.render('order_success',{product:data,user:userd.name})
+            {$unwind:"$product"},
+
+            {$project:{price:"$product.price",quantity:"$product.quantity"}},
+
+            {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
+
+            
+          
+           
+            const Total= total[0].total;
+           
+
+      
+        const address=req.body.address
+        const payment=req.body.payment
+        // const userData = req.session.user_id
+        const userDetails =await User.findOne({_id:req.session.user_id})
+        const cartData =await cart.findOne({user:userDetails._id})
+        const products=cartData.product
+
+        const status = payment === "COD"?"placed" :"pending"
+
+
+
+      const newOrder = new order({
+
+
+           deliveryDetails:address,
+            user:userDetails._id,
+            paymentMethod:payment,
+            product:products,   
+            totalamount:Total,
+            date:Date.now(),
+            status:status
+
+        })
+
+        const saveOrder = await newOrder.save()
+        const orderid=newOrder._id
+         
         
-    } catch (error) {
+
+        if(status=="placed"){
+            
+            await cart.deleteOne({user:userDetails._id})
+            
+            res.render('order_success',{user:userd.name,Total})
+        }else{
+            
+            res.render('order_success',{user:userd.name})
+        }
+
+
+
+    } catch (error) {  
+
         console.log(error.message);
-        
     }
 }
+
+
+
 
 
 
@@ -629,12 +686,13 @@ const error404=async(req,res)=>{
 const getUser_profile =async(req,res)=>{
 
     try {
-        
+        const address =await user_address.findOne({user:req.session.user_id});
+
         const userd=await User.findOne({_id:req.session.user_id})
         const userData=await User.findOne({_id:req.session.user_id})
 
 
-        res.render('user_profile',{user:userd.name,data:userData})
+        res.render('user_profile',{user:userd.name,data:userData,address})
 
     } catch (error) {
         console.log(error.message);
@@ -657,15 +715,17 @@ module.exports={
     getHome,
     getCart,
     addtoCart,
+    getProduct_details,
+    getProduct_checkout,
+    placetheorder,
 
-    ordersuccess_pageLoad,
+
     userLogout,
     getShop,
     getContact,
     getAbout,
     
-    getProduct_details,
-    getProduct_checkout,
+
 
     otpValidation,
     error404,

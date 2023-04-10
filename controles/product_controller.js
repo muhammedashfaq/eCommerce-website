@@ -185,6 +185,7 @@ const postdelete_image = async(req,res)=>{
     }
 }
 
+
 module.exports={
 
     productload,
@@ -194,4 +195,5 @@ module.exports={
     posteditProduct,
     deletetProduct,
     postdelete_image,
+  
 }

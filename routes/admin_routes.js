@@ -97,6 +97,9 @@ admin_rout.post('/edit_category',adminController.updatecategory)
 admin_rout.get('/hideshow_category',adminController.hideshowcategory)
 
 
+//order_details
+admin_rout.get('/order_details',auth.isLogin,adminController.orderDetails)
+
 
 
 
@@ -119,6 +122,9 @@ admin_rout.post('/edit_products',upload.array('image',5),auth.isLogin,productCon
 //delete_images_in_edit page
 
 admin_rout.post('/delete_image',auth.isLogin,productContreoller.postdelete_image)
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 <%- include('../users/layouts/user_header.ejs')%>
 
     <main>
+      <form action="" method="post">
         <!-- Hero Area Start-->
         <div class="slider-area ">
             <div class="single-slider slider-height2 d-flex align-items-center">
@@ -35,10 +36,11 @@
                  
                    <div style="width:auto;height:auto" class="order_box">
 
-                     <% address.forEach((value)=>{%>
+                     <% address.forEach((value,index)=>{%>
                       
                    <input class="form-check-input" name="address" type="radio" 
-                        
+                 value="  <%= value.fname%><%= value.sname %> 
+                   <%= value.address %> <%= value.pin %>"
                          id="flexCheckDefault" required> <br>
                         <label class="form-check-label" for="flexCheckDefault">
                           <%= value.fname%><%= value.sname %> <br>
@@ -48,12 +50,23 @@
                          <%= value.pin %>
                         </label>
                         <br>
+                        <div style="display: flex;">
+
+<!--                       
                         <div>
                         
-                            <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/delete_address?id=<%=value._id%>">delet</a>
+                            <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/edit_address?id=<%=value._id%>">edit</a>
 
                          
-                        </div>
+                        </div>  -->
+                        <div style="margin-left: 10px;">
+                        
+                          <a   class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/delete_address?id=<%=value._id%>">delet</a>
+                      
+
+                       
+                      </div>
+                    </div>
                         <hr>
                         <% })%>
                       </div>
@@ -79,29 +92,33 @@
                         </a>
                       </li>
                       <li>
-                        <a href="#">Total
-                          <span>RS :<%= Total%></span>
+                   
+                        <a href="#">Total 
+                        <span>RS :<%= Total%></span>  
                         </a>
+                      
                       </li>
                     </ul>
                     <div class="payment_item">
                       <div class="radion_btn">
-                        <input type="radio" id="f-option5" name="selector" />
+                        <input type="radio" id="f-option5" name="payment"  value="COD"/>
                         <label for="f-option5">COD</label>
                         <div class="check"></div>
                       </div>
                     </div>
                     
                   
-                    
-                    <a class="btn_3" href="#">Proceed to Pay</a>
-                  </div>
+                    <button class="btn_3" type="submit">Place order</button>
+                  </div> 
                 </div>
               </div>
             </div>
           </div>
+        </form>
         </section>
         <!--================End Checkout Area =================-->
     </main>
+
+
    
     <%- include('../users/layouts/user_footer.ejs')%>

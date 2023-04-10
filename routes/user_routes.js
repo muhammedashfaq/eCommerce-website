@@ -87,17 +87,21 @@ rout.get('/add_address',auth.isLogin,adddressController.getadd_address)
 //post
 rout.post('/add_address',adddressController.veryfyaddess)
 
+
+
+
 //delete_address
 
 rout.get('/delete_address',adddressController.deleteaddress)
 
+//edit_address
+
+rout.get('/edit_address',adddressController.editaddress)
+
+
 //place order
 
-
-//order_success
-
-rout.get('/order_success',auth.isLogin,userController.ordersuccess_pageLoad)
-
+rout.post('/checkout',userController.placetheorder)
 
 
 

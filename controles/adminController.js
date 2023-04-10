@@ -1,6 +1,8 @@
 const User= require("../model/user_model")
 const admin=require('../model/admin_model')
 const CatDB=require('../model/category_Model')
+const order =require('../model/order_Model')
+
 
 
 const bcrypt =require('bcrypt')
@@ -295,6 +297,23 @@ const hideshowcategory =async (req,res)=>{
 }
 
 
+//user order_details listing
+
+const orderDetails =async (req,res)=>{
+    try {
+
+        const orderData =await order.find()
+        
+        res.render('order_details',{orderData})
+
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
 
 module.exports={
     getLogin,
@@ -311,7 +330,8 @@ module.exports={
     updatecategory,
     deletecategory,
     add_categoryLoad,
-    hideshowcategory
+    hideshowcategory,
+    orderDetails
 }
 
 

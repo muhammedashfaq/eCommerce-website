@@ -30,8 +30,6 @@ const getadd_address =async (req,res)=>{
 
 const veryfyaddess =async (req,res)=>{
     try {
-
-      
             const user=req.session.user_id
 
             const userData= await User.findOne({_id:req.session.user_id})
@@ -55,10 +53,7 @@ const veryfyaddess =async (req,res)=>{
                     res.redirect('/checkout')
 
 
-                }else{
-                    res.redirect('/checkout')
-
-                }
+              
 
 
 
@@ -80,13 +75,14 @@ const veryfyaddess =async (req,res)=>{
         if(addressData){
             res.redirect('/checkout')
         }else{
-            res.redirect('/checkout')
+            res.render('/add_address')
 
         }
 
     }
+}
         
-    } catch (error) {
+    }catch (error) {
         console.log(error.message);
         
     }
@@ -95,7 +91,7 @@ const veryfyaddess =async (req,res)=>{
 const deleteaddress=async (req,res)=>{
     try {
         const id=req.query.id
-        await address_Model.updateOne({user:req.session.user_id},{$pull:{address:{_id:id}}})
+        await user_address.updateOne({user:req.session.user_id},{$pull:{address:{_id:id}}})
         res.redirect('/checkout')
     } catch (error) {
         console.log(error.message);
@@ -104,9 +100,31 @@ const deleteaddress=async (req,res)=>{
 }
 
 
+
+
+
+const editaddress = async (req,res)=>{
+    try {
+        const id=req.query.id
+        const userd=await User.findOne({_id:req.session.user_id})
+
+
+        const editData=await user_address.findOne({user:req.session.user_id})
+
+             res.render('edit_address',{ user:userd.name ,editData})
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+   
+}
 module.exports={
     getadd_address,
     veryfyaddess,
-    deleteaddress
+    deleteaddress,
+    editaddress
 
 }
