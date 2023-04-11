@@ -599,7 +599,7 @@ const getProduct_checkout = async(req,res)=>{
 
 const placetheorder =async(req,res)=>{
     try {
-        const userd=await User.findOne({_id:req.session.user_id})
+         const userd=await User.findOne({_id:req.session.user_id})
         const total = await cart.aggregate([{$match:{user:userd._id}},
 
             {$unwind:"$product"},
@@ -631,10 +631,11 @@ const placetheorder =async(req,res)=>{
 
            deliveryDetails:address,
             user:userDetails._id,
+            userName:userDetails.name,
             paymentMethod:payment,
             product:products,   
-            totalamount:Total,
-            date:Date.now(),
+            totalAmount:Total,
+            Date:Date.now(),
             status:status
 
         })

@@ -76,15 +76,8 @@
                   <p class="text-muted mb-0"><%= data.mob%></p>
                 </div>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Address</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
-                </div>
-              </div>
+             
+              
             </div>
           </div>
           <a class="btn_3" href="./add_address">ADD ADDRESS</a> <br><br>
@@ -93,14 +86,47 @@
         
                    
             <div class="card-body">
-              <% for(let i=0;i<address.length;i++){
+              <% address.address.forEach((value)=>{
                 %>
 
-              <%address[i].fname%>
-              <hr>
-              <%
-          
-            }%> 
+                <%= value.fname%><%=value.sname%> <br>
+                <%=value.address%><br>
+                <%= value.mobile%><br>
+                <%=value.email%><br>
+                <%= value.pin%><br>
+
+                <div style="display: flex;">
+
+                                     
+                                          <div>
+                                          
+                                              <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/edit_address?id=<%=value._id%>">edit</a>
+                  
+                                           
+                                          </div> 
+                                          <div style="margin-left: 10px;">
+                                          
+                                            <a   class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/delete_address?id=<%=value._id%>">delet</a>
+                                        
+                  
+                                         
+                                        </div>
+                                      </div>
+
+                <hr>
+
+                <%
+              })%>
+
+              
+
+
+         
+
+            
+   
+             
+            
           </div>
           
          

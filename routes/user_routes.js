@@ -79,6 +79,11 @@ rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 
 
 
+//place order
+
+rout.post('/checkout',userController.placetheorder)
+
+
 
 //adddressController
 
@@ -97,11 +102,6 @@ rout.get('/delete_address',adddressController.deleteaddress)
 //edit_address
 
 rout.get('/edit_address',adddressController.editaddress)
-
-
-//place order
-
-rout.post('/checkout',userController.placetheorder)
 
 
 

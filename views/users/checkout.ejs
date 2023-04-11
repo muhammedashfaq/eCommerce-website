@@ -28,7 +28,7 @@
 
                   <hr>
 
-                  <a class="btn_3" href="./add_address">ADD ADDRESS</a>
+                  <a class="btn_3" href="./user_profile">ADD ADDRESS</a>
                   <br><br>
  
                   <% if(typeof address !== "undefined"){%>
@@ -50,23 +50,7 @@
                          <%= value.pin %>
                         </label>
                         <br>
-                        <div style="display: flex;">
-
-<!--                       
-                        <div>
-                        
-                            <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/edit_address?id=<%=value._id%>">edit</a>
-
-                         
-                        </div>  -->
-                        <div style="margin-left: 10px;">
-                        
-                          <a   class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/delete_address?id=<%=value._id%>">delet</a>
-                      
-
                        
-                      </div>
-                    </div>
                         <hr>
                         <% })%>
                       </div>

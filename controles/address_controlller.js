@@ -50,7 +50,7 @@ const veryfyaddess =async (req,res)=>{
                 }}})
                 console.log(update);
                 if(update){
-                    res.redirect('/checkout')
+                    res.redirect('/user_profile')
 
 
               
@@ -73,7 +73,7 @@ const veryfyaddess =async (req,res)=>{
         })
         const addressData= await data.save()
         if(addressData){
-            res.redirect('/checkout')
+            res.redirect('/user_profile')
         }else{
             res.render('/add_address')
 
@@ -92,7 +92,7 @@ const deleteaddress=async (req,res)=>{
     try {
         const id=req.query.id
         await user_address.updateOne({user:req.session.user_id},{$pull:{address:{_id:id}}})
-        res.redirect('/checkout')
+        res.redirect('/user_profile')
     } catch (error) {
         console.log(error.message);
         
@@ -109,8 +109,8 @@ const editaddress = async (req,res)=>{
         const userd=await User.findOne({_id:req.session.user_id})
 
 
-        const editData=await user_address.findOne({user:req.session.user_id})
-
+        const editData=await user_address.findById({user:id})
+        
              res.render('edit_address',{ user:userd.name ,editData})
         
     } catch (error) {

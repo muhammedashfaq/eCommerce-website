@@ -303,7 +303,7 @@ const orderDetails =async (req,res)=>{
     try {
 
         const orderData =await order.find()
-        
+        console.log(orderData);
         res.render('order_details',{orderData})
 
         
@@ -314,7 +314,56 @@ const orderDetails =async (req,res)=>{
 }
 
 
+//orderstatus
+const orderstatus =async (req,res)=>{
+    try {
+        const id=req.query.id
 
+        console.log(id);
+        const orderData =await order.findById({_id:id})
+        
+        if(orderData.status=="pending"){
+
+            await order.updateOne({_id:id},{$set:{status:"placed"}})
+            res.redirect('/admin/order_details')
+
+        }if(orderData.status=="placed"){
+            await order.updateOne({_id:id},{$set:{status:"pending"}})
+            res.redirect('/admin/order_details')
+
+
+        }else{
+            res.redirect('/admin/order_details')
+
+
+        }
+        
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+}
+
+const ordercancelstatus =async (req,res)=>{
+    try {
+        const id=req.query.id
+        const orderData =await order.findById({_id:id})
+
+        if(orderData){
+            await order.updateOne({_id:id},{$set:{status:"canceled"}})
+            res.redirect('/admin/order_details')
+
+        }
+
+
+
+
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
 module.exports={
     getLogin,
     veryfiLogin,
@@ -331,7 +380,9 @@ module.exports={
     deletecategory,
     add_categoryLoad,
     hideshowcategory,
-    orderDetails
+    orderDetails,
+     orderstatus,
+     ordercancelstatus
 }
 
 

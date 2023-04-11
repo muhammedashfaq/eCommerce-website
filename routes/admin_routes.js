@@ -100,6 +100,15 @@ admin_rout.get('/hideshow_category',adminController.hideshowcategory)
 //order_details
 admin_rout.get('/order_details',auth.isLogin,adminController.orderDetails)
 
+//
+ admin_rout.get('/order_status',auth.isLogin,adminController.orderstatus)
+
+ //orderCancel
+
+ admin_rout.get('/order_cancel',auth.isLogin,adminController.ordercancelstatus)
+
+
+
 
 
 

@@ -9,6 +9,10 @@ const orderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
     },
+    userName:{
+        type:String,
+        required:true
+    },
     paymentMethod: {
         type: String,
     },
