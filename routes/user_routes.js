@@ -69,6 +69,12 @@ rout.post('/reset_password',auth.isLogout,userController.resetpassverify)
 //cart
 rout.get('/cart',auth.isLogin,userController.getCart)
 
+// remove i tem from cart
+
+rout.post('/delete_cartitem',auth.isLogin,userController.deletcartitem)
+
+
+
 
 //addtocart
 

@@ -578,12 +578,14 @@ const getProduct_checkout = async(req,res)=>{
                
                 const Total= total[0].total;
 
-
             res.render('checkout',{product:data,Total, user:userd.name,address:addressData})
+            console.log('0ne');
+
 
 
         }else{
-            res.render('checkout',{product:data, user:userd.name})
+            console.log('tne');
+            res.render('checkout',{product:data, user:userd.name,address:undefined })
 
             
         }
@@ -664,7 +666,23 @@ const placetheorder =async(req,res)=>{
 }
 
 
+//deletcartitem
 
+const deletcartitem =async(req,res)=>{
+    try {
+        
+        const id =req.body.id
+
+        console.log(id);
+        
+        await cart.findOneAndUpdate({"product.productId":id},{$pull:{product:{productId:id}}})
+        res.json({success:true})
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+        
 
 
 
@@ -692,8 +710,13 @@ const getUser_profile =async(req,res)=>{
         const userd=await User.findOne({_id:req.session.user_id})
         const userData=await User.findOne({_id:req.session.user_id})
 
-
+      
         res.render('user_profile',{user:userd.name,data:userData,address})
+
+
+           
+
+
 
     } catch (error) {
         console.log(error.message);
@@ -719,6 +742,8 @@ module.exports={
     getProduct_details,
     getProduct_checkout,
     placetheorder,
+    deletcartitem,
+   
 
 
     userLogout,

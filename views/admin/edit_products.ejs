@@ -1,5 +1,5 @@
 <%- include('../admin/layouts/admin_header.ejs')%>
-<style>
+<!-- <style>
   html * {
 box-sizing: border-box;
 }
@@ -134,7 +134,7 @@ for (var i = 0; i < imgArray.length; i++) {
 $(this).parent().parent().remove();
 });
 }
-</script>
+</script> -->
 
 <main class="h-full pb-16 overflow-y-auto">
   <div class="container px-6 mx-auto grid">
@@ -166,64 +166,40 @@ $(this).parent().parent().remove();
             />
           </label>
 
-          <!-- <label class="block text-sm">
+          <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Image</span>
             <input value="<%=dataedit.image%>" onchange="viewimage(event)" accept="image/*"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                type="file" name="image" multiple
             />
-          </label> -->
-<!-- 
-          <br> -->
-          <!-- <div style="display: flex;">_
+          </label>
+
+          <br> 
+           <div style="display: flex;">
             <%dataedit.image.forEach((value,index)=>{%>
             
           
-          <div   style="width: 100px;height: 100px  ; border: solid 2px white; margin-right: 25px;" >
+          <div   style="width: 100px;height: 100px  ; border: solid 2px rgb(250, 10, 10); margin-right: 25px;" >
           
 
-            <img style=" border-radius: 10px; width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[index]%>" alt="" id="imgView">
+            <img style="  width: 100px; height: 100px;" src="../admin/assets/product_images/<%= dataedit.image[index]%>" alt="" id="imgView">
             <br>
-          <ul>
-            <li>
-               <button type="submit" onclick="deletephoto('<%= index%>','<%= dataedit._id%>')"
-              class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Remove</button>
-            </li>
-          </ul>
-
+            <div>
+            
+         
+              <button  type="submit" onclick="deletephoto('<%= index%>','<%= dataedit._id%>')"
+             class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Remove</button>
+         
+         </div>
           </div>
+       
 
 
           <%})%>
         
-        </div> -->
-
-        <div class="upload__box">
-          <div class="upload__btn-box">
-            <label class="upload__btn">
-              <p>Upload images</p>
-              <input  value="<%=dataedit.image%>" onchange="viewimage(event)" type="file" multiple="" data-max_length="20" name="image" class="upload__inputfile" accept="image/*">
-            </label>
-          </div>
-          <div class="upload__img-wrap">
-            
-            <%dataedit.image.forEach((value,index)=>{%>
-            
-              <img src="../admin/assets/product_images/<%= dataedit.image[index]%>"  alt="" style="width: 100px;height: auto; padding-left: 10px;" id="imgView">
-              <!-- <a  class="fa fa-trash" onclick="deletephoto('<%= index%>','<%= dataedit._id%>')" style="font-size:20px;color:rgb(235, 14, 14) ; text-decoration: none; background-color: rgba(240, 248, 255, 0); border: none;" >delete  </a> -->
-          
-              
-              <ul>
-                <li>
-                   <button type="submit" onclick="deletephoto('<%= index%>','<%= dataedit._id%>')"
-                  class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Remove</button>
-                </li>
-              </ul>
-           <% })%>
-            
-          
-          </div>
         </div>
+
+       
         <br>
         <br>
 
