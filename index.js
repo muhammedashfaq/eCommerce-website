@@ -1,5 +1,9 @@
+
+
 var mongoose=require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/eCommerce')
+const mongoDB =require('./config/auth')
+
+mongoDB.mongoDB()
 const path =require('path')
 const express=require("express")
 const app=express()

@@ -2,7 +2,7 @@ const User= require("../model/user_model")
 const admin=require('../model/admin_model')
 const CatDB=require('../model/category_Model')
 const productdb=require('../model/prodect_model')
-
+const sharp =require('sharp')
 
 const productload = async (req,res)=>{
     try {
@@ -37,6 +37,8 @@ const insertProduct = async (req,res)=>{
         const image=[];
         for(let i=0;i<req.files.length;i++){   
             image[i]=req.files[i].filename
+            sharp('./public/admin/assets/imgs/'+req.files[i].filename)
+            .resize(600,600).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
         }
 
         const Data = new productdb({
@@ -119,6 +121,8 @@ const posteditProduct = async(req,res)=>{
         }})
 
         for(let i=0;i<req.files.length;i++){
+            sharp('./public/admin/assets/imgs/'+req.files[i].filename)
+            .resize(600,600).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
          const imageUpdate = await productdb.findByIdAndUpdate({_id:req.query.id},{$push:{image:req.files[i].filename}});
         }
         res.redirect('/admin/products')

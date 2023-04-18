@@ -21,12 +21,18 @@ admin_rout.use(express.urlencoded({extended:true}))
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'../public/admin/assets/product_images'))
+        cb(null,path.join(__dirname,'../public/admin/assets/imgs'))
 
     },
     filename:function(req,file,cb){
+      if(file.mimetype=== 'image/jpeg' || file.mimetype === 'image/png'|| file.mimetype === 'image/svg'){
+
+     
         const name= Date.now()+'-'+file.originalname
         cb(null,name)
+      }else {
+        cb(new Error('Only jpg/jpeg images are allowed'))
+      }
     }
 })
 const fileFilter = function (req, file, cb) {

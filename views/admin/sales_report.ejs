@@ -27,6 +27,7 @@
                         <th class="px-4 py-3">Order Id</th>
                         <th class="px-4 py-3">Date</th>
                         <th class="px-4 py-3">Amount</th>
+                        <th class="px-4 py-3">Method</th>
                         <th class="px-4 py-3">Status</th>
                       </tr>
                     </thead>
@@ -50,6 +51,9 @@
                         <td class="px-4 py-3 text-xs">
                           RS: <%= value.totalAmount%>
                         </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= value.paymentMethod%>
+                          </td>
                         <td class="px-4 py-3 text-sm">
                         <%= value.status%>
                         </td>

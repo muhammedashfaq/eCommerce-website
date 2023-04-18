@@ -8,7 +8,7 @@ const CatDB = require('../model/category_Model')
 const cart = require('../model/cart_model')
 const user_address =require('../model/address_Model')
 const order =require('../model/order_Model')
- const Razorpay= require('razorpay')
+const Razorpay= require('razorpay')
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -843,8 +843,6 @@ const placetheorderbuy =async(req,res)=>{
         const prodcutdata =await productDB.findById({_id:productId})
         const products =prodcutdata.product
 
-        console.log(productId);
-
         const Total = prodcutdata.price
            
 
@@ -865,7 +863,7 @@ const placetheorderbuy =async(req,res)=>{
             user:userDetails._id,
             userName:userDetails.name,
             paymentMethod:payment,
-            product:products,   
+            product:[{productId: prodcutdata._id,quantity : 0}],   
             totalAmount:Total,
             Date:Date.now(),
             status:status
