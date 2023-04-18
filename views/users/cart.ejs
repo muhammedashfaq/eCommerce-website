@@ -36,8 +36,10 @@
                   <tr>
                     
                     <th scope="col">Product</th>
-                    <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
+
+                    <th scope="col">Price</th>
+                    <th scope="col">Total Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -62,9 +64,26 @@
                         </div>
                       </div>
                     </td>
+                    <td>
+                      <!-- <div class="product_count">
+                       <button style="width: 30px; height: 30px;">hou</button>
+                        <input style="width: 40px; height: 30px;" type="text" value="1" min="0" max="10">
+                       <button style="width: 30px; height: 30px;" >hi</button>
+                      </div> -->
 
+                      <div class="product_count" style="display: flex;">
+                         <a type="button"   onclick="changeQuantity('<%=value.productId._id%>',-1)"  class="genric-btn primary-border small">-</a>
+                        <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="1" max="100">
+
+                        <!-- <a href="#" class="genric-btn primary-border small">S</a> -->
+                        <a type="button"  onclick="changeQuantity('<%=value.productId._id%>',1)" class="genric-btn primary-border small">+</a>
+
+
+                      </div>
+                    </td>
 
                     <td>
+                      
                       <h5><%=value.productId.price%></h5>
                     </td>
                     <td>
@@ -74,7 +93,7 @@
                    
                    
                     <td>
-                      <a onclick="detelecartitem('<%=value.productId._id %>')" class="genric-btn danger-border small">Remove</a>
+                      <a  onclick="detelecartitem( '<%= value.productId._id%>')" class="genric-btn danger-border small">Remove</a>
 
                     </td>
 
@@ -93,6 +112,8 @@
                   <tr>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                       <h5>Subtotal</h5>
                     </td>
@@ -105,6 +126,12 @@
                     <td></td>
                     <td>
                       <h5>Shipping</h5>
+                    </td>
+                    <td>
+                   
+                    </td>
+                    <td>
+                   
                     </td>
                     <td>
                       <div class="shipping_box">
@@ -161,25 +188,83 @@
   </main>
 
   <script>
+		function changeQuantity(proId,count){
+			$.ajax({
+				url:'/cartqntyincrese',
+				data:{
+					
+					product:proId,
+					count:count
+				},
+				method:'post',
+				success:(response)=>{
+          
 
-    function detelecartitem(id){
-      console.log(id);
-      $.ajax({
+				}
+			}).done((data)=>{
+				if(data.success){
+					location.reload();
+				}else if(data.check){
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Out Of Stock!'
+					})
+				}
+			})
+		}
+	</script>
+
+  <script>
+
+    // function detelecartitem(id){
+    //   console.log(id);
+    //   $.ajax({
   
-          url:"/delete_cartitem",
-          method:"post",
-          encoded:true,
-          data:{
+    //       url:"/delete_cartitem",
+    //       method:"post",
+    //       encoded:true,
+    //       data:{
 
-            id:id,
+    //         id:id,
+    //       },
+    //   })
+    //   .done((data)=>{
+    //     if(data.success){
+    //      location.reload()
+    //     }
+    //   })
+    // }
+
+
+    function detelecartitem( proId) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/delete_cartitem",
+          data: {
+           
+            product: proId,
           },
-      })
-      .done((data)=>{
-        if(data.success){
-          location.reload()
-        }
-      })
-    }
+          method: "post",
+          success: (response) => {
+            if ((response.remove = true)) {
+              location.reload();
+            }
+          },
+        });
+      }
+    });
+  }
   </script>
 
   <%- include('../users/layouts/user_footer.ejs')%>

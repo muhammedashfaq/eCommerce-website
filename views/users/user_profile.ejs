@@ -38,6 +38,18 @@
           </div>
           
         </div>
+
+        
+
+
+
+
+
+
+
+
+
+
         <div class="col-lg-8">
           <div class="card mb-4">
             <div class="card-body">
@@ -80,15 +92,63 @@
               
             </div>
           </div>
-         
+
+
+            <a class="btn_3" href="./add_address">ADD ADDRESS</a> <br><br>
+          <div class="card mb-4">
+
+                   
+            <div class="card-body">
+              <% address.address.forEach((value)=>{
+                %>
+
+                <%= value.fname%><%=value.sname%> <br>
+                <%=value.address%><br>
+                <%= value.mobile%><br>
+                <%=value.email%><br>
+                <%= value.pin%><br>
+                <br>
+                <div style="display: flex;">
+
+                                     
+                                          <!-- <div>
+                                          
+                                              <a  class="btn hero-btn " style="color: rgb(248, 246, 246);" href="/edit_address?id=<%=value._id%>">edit</a>
+                  
+                                           
+                                          </div>  -->
+                                          <div style="margin-left: 10px;">
+                                          
+                                            <a class="genric-btn danger-border circle arrow"  href="/delete_address?id=<%=value._id%>">Delete</a>
+                                        
+                  
+                                         
+                                        </div>
+                                      </div>
+
+                <hr>
+
+                <%
+              })%>
+              
+
+
+       
+
+            
+   
              
             
           </div>
+
+
+        
+
           
          
 
         </div>
-        
+       
       </div>
 
     </div>

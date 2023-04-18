@@ -33,7 +33,7 @@ const addProductload = async (req,res)=>{
 
 const insertProduct = async (req,res)=>{
     try {
-        
+     
         const image=[];
         for(let i=0;i<req.files.length;i++){   
             image[i]=req.files[i].filename
@@ -91,18 +91,20 @@ const posteditProduct = async(req,res)=>{
     try {
 
        const name = req.body.name;  
-       if(name.trim().length==0  ){
+       if(name.trim().length==0  ){ 
           res.redirect('/admin/products')
        }else{
 
         if(req.files.length!=0){
         const id = req.query.id
+        
 
-        const image=[];
-        for(let i=0;i<req.files.length;i++){
-            image[i]=req.files[i].filename
-        }
+        // const image=[];
+        // for(let i=0;i<req.files.length;i++){
+            
+        //     image[i]=req.files[i].filename
 
+     
     
          await productdb.findByIdAndUpdate(id,{$set:{name:req.body.name,
             price:req.body.price,
@@ -111,10 +113,14 @@ const posteditProduct = async(req,res)=>{
             stock:req.body.stock,
             quantity:req.body.quantity,
             
-            image:image,
+         
         
         
         }})
+
+        for(let i=0;i<req.files.length;i++){
+         const imageUpdate = await productdb.findByIdAndUpdate({_id:req.query.id},{$push:{image:req.files[i].filename}});
+        }
         res.redirect('/admin/products')
 
 

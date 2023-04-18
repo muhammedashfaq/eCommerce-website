@@ -29,6 +29,15 @@ const storage = multer.diskStorage({
         cb(null,name)
     }
 })
+const fileFilter = function (req, file, cb) {
+    // Check if file is a jpg/jpeg image
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/*') {
+      cb(null, true)
+    } else {
+      cb(new Error('Only jpg/jpeg images are allowed'))
+    }
+  }
+  
 
 const upload =multer({storage:storage})
 
@@ -132,18 +141,15 @@ admin_rout.post('/edit_products',upload.array('image',5),auth.isLogin,productCon
 
 admin_rout.post('/delete_image',auth.isLogin,productContreoller.postdelete_image)
 
-
-
-
-
-
-
 //delete_product
 
 admin_rout.get('/delete_products',upload.array('image',5),auth.isLogin,productContreoller.deletetProduct)
 
+////sales_reports
 
 
+
+admin_rout.get('/sales_reports',auth.isLogin,adminController.salesReports)
 
 
 

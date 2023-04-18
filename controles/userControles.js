@@ -8,6 +8,7 @@ const CatDB = require('../model/category_Model')
 const cart = require('../model/cart_model')
 const user_address =require('../model/address_Model')
 const order =require('../model/order_Model')
+ const Razorpay= require('razorpay')
 
 let dotenv = require('dotenv')
 dotenv.config()
@@ -15,6 +16,14 @@ dotenv.config()
 let otp
 let email2
 let name2
+
+
+
+var instance = new Razorpay({
+    key_id: process.env.Razorid,
+    key_secret: process.env.RazorKey
+  });
+
 ///bcrypt password
 const securePassword=async(password)=>{
     try {
@@ -557,38 +566,49 @@ const getProduct_details = async(req,res)=>{
 
 const getProduct_checkout = async(req,res)=>{
     try {
+
+
         const address =await user_address.findOne({user:req.session.user_id});
         const data =await productDB.find()
         const userd=await User.findOne({_id:req.session.user_id})
         const cartData=await cart.findOne({user:userd._id}).populate("product.productId")
+        const total = await cart.aggregate([{$match:{user:userd._id}},
 
+            {$unwind:"$product"},
+
+            {$project:{price:"$product.price",quantity:"$product.quantity"}},
+
+            {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
+
+           
+          
+           
+        const Total= total[0].total;
+
+        if(address){
+
+
+        
         if(cartData.product.length>0){
             const addressData = address.address;
+            
 
-            const total = await cart.aggregate([{$match:{user:userd._id}},
-
-                {$unwind:"$product"},
-
-                {$project:{price:"$product.price",quantity:"$product.quantity"}},
-
-                {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
-
-                console.log('cart data take');
-              
-               
-                const Total= total[0].total;
-
+           
+            
             res.render('checkout',{product:data,Total, user:userd.name,address:addressData})
-            console.log('0ne');
 
 
 
         }else{
-            console.log('tne');
-            res.render('checkout',{product:data, user:userd.name,address:undefined })
+            res.render('checkout',{product:data, user:userd.name,Total})
 
             
         }
+    }else{
+
+        res.redirect('/add_address')
+
+    }
         
 
        
@@ -601,6 +621,7 @@ const getProduct_checkout = async(req,res)=>{
 
 const placetheorder =async(req,res)=>{
     try {
+        
          const userd=await User.findOne({_id:req.session.user_id})
         const total = await cart.aggregate([{$match:{user:userd._id}},
 
@@ -643,25 +664,81 @@ const placetheorder =async(req,res)=>{
         })
 
         const saveOrder = await newOrder.save()
-        const orderid=newOrder._id
-         
-        
-
         if(status=="placed"){
-            
             await cart.deleteOne({user:userDetails._id})
-            
-            res.render('order_success',{user:userd.name,Total})
-        }else{
-            
-            res.render('order_success',{user:userd.name})
+            res.json({codsuccess:true})
         }
+        else{
+            const orderid=saveOrder._id
+            const totalamount=saveOrder.totalAmount
+            var options={
+                    amount: totalamount*100,
+                    currency: "INR",
+                    receipt: ""+orderid
+            }
+            instance.orders.create(options,function(err,order){
+                res.json({order});
+            })
 
-
-
+        }
     } catch (error) {  
 
         console.log(error.message);
+    }
+}
+
+const orderplaced =async (req,res)=>{
+    try {
+
+        const userd=await User.findOne({_id:req.session.user_id})
+
+        res.render('order_success',{user:userd.name})
+
+      
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }   
+}
+
+///verifyOnlinePayment
+
+const verifyOnlinePayment =async(req,res)=>{
+    try {
+        
+
+        // const totalPrice = req.body.amount2;
+        // const total = req.body.amount;
+        // const wal = totalPrice - total;
+        const details= (req.body)
+        console.log(details);
+        const crypto = require('crypto');
+        let hmac = crypto.createHmac('sha256', process.env.RazorKey);
+        hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id)  
+            
+        hmac = hmac.digest('hex');
+        console.log(hmac);
+
+        console.log(details.payment.razorpay_signature);
+        
+        if (hmac == details.payment.razorpay_signature) {
+
+            console.log('test444');
+
+            await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
+            await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
+            await cart.deleteOne({user:req.session.user_id});
+            res.json({success:true});
+        }else{
+            await order.findByIdAndRemove({_id:details.order.receipt});
+            res.json({success:false});
+        }
+        
+
+    } catch (error) {
+        console.log(error.message);
+        
     }
 }
 
@@ -670,13 +747,10 @@ const placetheorder =async(req,res)=>{
 
 const deletcartitem =async(req,res)=>{
     try {
-        
-        const id =req.body.id
-
-        console.log(id);
-        
-        await cart.findOneAndUpdate({"product.productId":id},{$pull:{product:{productId:id}}})
-        res.json({success:true})
+       
+        let id = req.body.product;
+         await cart.findOneAndUpdate({"product.productId":id},{$pull:{product:{productId:id}}})
+        res.json({remove:true})
     } catch (error) {
         console.log(error.message);
         
@@ -684,11 +758,82 @@ const deletcartitem =async(req,res)=>{
 }
         
 
+const cartquantity = async(req,res)=>{
+    try{
+        // const userId = req.body.user
+         const proId = req.body.product;
+         let count = req.body.count;
+         count = parseInt(count);       
+       const  productData =await cart.updateOne({user:req.session.user_id,"product.productId":req.body.product},{$inc:{"product.$.quantity":count}});
+
+        if(productData){
+            res.json({success:true});
+
+        }else{
+            console.log('hello');
+
+        }
+    }catch(error){
+        console.log(error.message);
+    }
+}
 
 
 
+var uid
+const buynow= async (req,res)=>{
+    try {
 
 
+        const user=await User.findOne({_id:req.session.user_id})
+        const id =req.body.id
+uid=id
+        console.log(id);
+
+        const prodcut =await productDB.findById({_id:id})
+
+        const Total = prodcut.price
+        console.log(prodcut);
+        console.log(Total);
+
+        if (prodcut){
+            res.json({success:true})
+
+           
+
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+const date= async(req,res)=>{
+    try {
+        const address =await user_address.findOne({user:req.session.user_id});
+        const addressData = address.address;
+
+        const user=await User.findOne({_id:req.session.user_id})
+        const id =req.body.id
+ console.log(id);
+
+        const prodcut =await productDB.findById({_id:uid})
+
+        const Total = prodcut.price
+        console.log(prodcut);
+        console.log(Total);
+
+        if (prodcut){
+            res.render('checkoutbuy',{prodcut,Total,user:user.name ,address:addressData})
+
+           
+
+        }
+
+        
+    } catch (error) {
+        
+    }
+}
 
 
 
@@ -710,10 +855,16 @@ const getUser_profile =async(req,res)=>{
         const userd=await User.findOne({_id:req.session.user_id})
         const userData=await User.findOne({_id:req.session.user_id})
 
+        if(address){
+
+     
       
         res.render('user_profile',{user:userd.name,data:userData,address})
 
+    }else{
+        res.render('user_profile',{user:userd.name,data:userData})
 
+    }
            
 
 
@@ -742,15 +893,18 @@ module.exports={
     getProduct_details,
     getProduct_checkout,
     placetheorder,
+    orderplaced,
+    verifyOnlinePayment,
     deletcartitem,
-   
+    cartquantity,
+    buynow,
 
 
     userLogout,
     getShop,
     getContact,
     getAbout,
-    
+    date,
 
 
     otpValidation,

@@ -74,11 +74,22 @@ rout.get('/cart',auth.isLogin,userController.getCart)
 rout.post('/delete_cartitem',auth.isLogin,userController.deletcartitem)
 
 
+// direct buy now
+rout.post("/buynow",auth.isLogin,userController.buynow)
+
+//checkoutbuy
+rout.get("/checkoutbuy",auth.isLogin,userController.date)
+
 
 
 //addtocart
 
 rout.post("/add_to_cart",auth.isLogin,userController.addtoCart)
+
+//cartqntyincrese
+rout.post("/cartqntyincrese",auth.isLogin,userController.cartquantity)
+
+
 
 //product_checkout
 rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
@@ -89,6 +100,18 @@ rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 
 rout.post('/checkout',userController.placetheorder)
 
+// order-placed
+
+rout.get('/order-placed',auth.isLogin,userController.orderplaced)
+
+
+
+//verifyOnlinePayment
+
+rout.post('/verifyPayment',userController.verifyOnlinePayment)
+
+
+
 
 
 //adddressController
@@ -97,6 +120,7 @@ rout.post('/checkout',userController.placetheorder)
 rout.get('/add_address',auth.isLogin,adddressController.getadd_address)
 //post
 rout.post('/add_address',adddressController.veryfyaddess)
+
 
 
 
