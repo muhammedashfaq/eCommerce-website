@@ -148,8 +148,12 @@ admin_rout.get('/delete_products',upload.array('image',5),auth.isLogin,productCo
 ////sales_reports
 
 
-
+///sales report
 admin_rout.get('/sales_reports',auth.isLogin,adminController.salesReports)
+
+/// report export_to_pdf
+admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
+
 
 
 

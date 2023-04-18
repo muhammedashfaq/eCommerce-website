@@ -145,7 +145,7 @@
         console.log(payment)
         e.preventDefault();
         $.ajax({
-          url:"/checkout",
+          url:"/checkoutbuy",
           method:"post",
           data:{
             amount:amount,
@@ -198,7 +198,7 @@
         const amount = document.getElementById("total1").innerHTML;
         // const amount2 = document.getElementById("gt2").innerHTML;
         $.ajax({
-          url:"/verifyPayment",
+          url:"/verifyBuynowPayment",
           method:"post",
           data:{
             payment,

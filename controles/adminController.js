@@ -4,10 +4,15 @@ const CatDB=require('../model/category_Model')
 const order =require('../model/order_Model')
 const productDB = require('../model/prodect_model')
 
-
+///html to pdfgenerate require things
+ const ejs =require('ejs')
+ const pdf=require('html-pdf')
+ const fs= require('fs')
+ const path = require('path')
 
 
 const bcrypt =require('bcrypt')
+const { response } = require("../routes/admin_routes")
 
 
 const securePassword=async(password)=>{
@@ -66,20 +71,72 @@ const getHome=async (req,res)=>{
     try {
        
             const userData = await User.find({is_admin:0,is_verified:0});
-            const Total = await order.aggregate([{$group:{_id:null,totalAmount:{$sum:"$totalAmount"}}}])
+            const total = await order.aggregate([{$group:{_id:null,totalAmount:{$sum:"$totalAmount"}}}])
             const Users = await User.find({is_admin:0}).count();
             const Orders = await order.find({}).count();
             const Products = await productDB.find({}).count();
-           // const total = total[0].total;
-            const onlineCount = await order.aggregate([{$group:{_id:"$paymentMethod",totalPayment:{$count:{}}}}])
+            const Total = total[0].totalAmount;
+            const onlineCount = await order.aggregate([{$match:{paymentMethod:"online"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
+            const COD = await order.aggregate([{$match:{paymentMethod:"COD"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
 
+            // const onlineCount =onlineCount1[1].totalPayment
             console.log(onlineCount);
             console.log(Total);
            console.log(Products);
            console.log(Users);
+           if(onlineCount){
+
+
+            let sales = [];
+
+            var date = new Date();
+
+            var year = date.getFullYear();
+
+            var currentyear = new Date(year, 0, 1);
+
+        let salesByYear = await order.aggregate([{$match:{createdAt:{$gte:currentyear},status:{$ne:"cancelled"}}},{$group:{
+              
+            _id:{$dateToString:{format:"%m",date:"$createdAt"}},
+               
+            total:{$sum:"$Amount"},  
+           
+        }},{$sort:{_id:1}}]);
+
+
+            for(let i=1;i<=12;i++){
+                let result = true;
+                for(let k=0;k<salesByYear.length;k++){
+                    result = false;
+                    if(salesByYear[k]._id==i){
+                        sales.push(salesByYear[k])
+                        break;
+                    }else{
+                        result = true
+                    }
+                }
+                if(result) sales.push({_id:i,total:0});
+            }
+
+            let salesData = [];
+            for(let i=0;i<sales.length;i++){
+                salesData.push(sales[i].total);
+            }
+            console.log('agggregat');
+
+            res.render('home',{userData,Users,Orders,Products,Total,onlineCount,COD,month:salesData})
+
+                if(COD){
+
+                }
+            res.render('home',{userData,Users,Orders,Products,Total,onlineCount,COD,month:salesData})
+
+           }else{
+            res.render('home')
+
+           }
           
 
-        res.render('home',{userData,Users,Orders,Products,Total,onlineCount})
         
     } catch (error) {
         console.log(error.message,);
@@ -421,6 +478,48 @@ const salesReports =async (req,res)=>{
     
   }
 }
+
+
+//export sales report to pdf
+
+const exportTopdf =async (req,res)=>{
+    try {
+            
+        const orderdetails = await order.find({status:{$ne:"cancelled"}}).sort({Date:-1})
+        
+        const data={
+            report:orderdetails
+        }
+
+        const filepath =path.resolve(__dirname,'../views/admin/salesreporttopdf.ejs')
+        const htmlstring=fs.readFileSync(filepath).toString()
+       
+       let option={
+        format:"A3"
+       }
+       const ejsData=  ejs.render(htmlstring,data)
+       pdf.create(ejsData,option).toFile('salesReport.pdf',(err,response)=>{
+        if(err) console.log(err);
+
+      const filepath= path.resolve(__dirname,'../salesReport.pdf')
+      fs.readFile(filepath,(err,file)=>{
+        if(err) {
+            console.log(err);
+            return res.status(500).send('could not download file')
+        }
+        res.setHeader('Content-Type','application/pdf')
+        res.setHeader('Content-Disposition','attatchment;filename="sales Report.pdf"')
+
+        res.send(file)
+
+      })
+       })
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+}
 module.exports={
     getLogin,
     veryfiLogin,
@@ -440,7 +539,8 @@ module.exports={
     orderDetails,
      orderstatus,
      ordercancelstatus,
-     salesReports
+     salesReports,
+     exportTopdf
 }
 
 

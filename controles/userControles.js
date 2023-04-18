@@ -724,7 +724,6 @@ const verifyOnlinePayment =async(req,res)=>{
         
         if (hmac == details.payment.razorpay_signature) {
 
-            console.log('test444');
 
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
@@ -778,16 +777,16 @@ const cartquantity = async(req,res)=>{
     }
 }
 
+///// BUY NOW SECTION
 
-
-var uid
+var productId
 const buynow= async (req,res)=>{
     try {
 
 
         const user=await User.findOne({_id:req.session.user_id})
         const id =req.body.id
-uid=id
+productId=id
         console.log(id);
 
         const prodcut =await productDB.findById({_id:id})
@@ -799,15 +798,13 @@ uid=id
         if (prodcut){
             res.json({success:true})
 
-           
-
         }
 
     } catch (error) {
         console.log(error.message);
     }
 }
-const date= async(req,res)=>{
+const buynowrender= async(req,res)=>{
     try {
         const address =await user_address.findOne({user:req.session.user_id});
         const addressData = address.address;
@@ -816,7 +813,10 @@ const date= async(req,res)=>{
         const id =req.body.id
  console.log(id);
 
-        const prodcut =await productDB.findById({_id:uid})
+        const prodcut =await productDB.findById({_id:productId})
+
+
+        console.log(productId);
 
         const Total = prodcut.price
         console.log(prodcut);
@@ -825,8 +825,6 @@ const date= async(req,res)=>{
         if (prodcut){
             res.render('checkoutbuy',{prodcut,Total,user:user.name ,address:addressData})
 
-           
-
         }
 
         
@@ -834,6 +832,110 @@ const date= async(req,res)=>{
         
     }
 }
+
+
+const placetheorderbuy =async(req,res)=>{
+    try {
+            
+        const userd=await User.findOne({_id:req.session.user_id})
+
+
+        const prodcutdata =await productDB.findById({_id:productId})
+        const products =prodcutdata.product
+
+        console.log(productId);
+
+        const Total = prodcutdata.price
+           
+
+      
+        const address=req.body.address
+        const payment=req.body.payment
+        // const userData = req.session.user_id
+        const userDetails =await User.findOne({_id:req.session.user_id})
+       
+
+        const status = payment === "COD"?"placed" :"pending"
+
+
+      const newOrder = new order({
+
+
+           deliveryDetails:address,
+            user:userDetails._id,
+            userName:userDetails.name,
+            paymentMethod:payment,
+            product:products,   
+            totalAmount:Total,
+            Date:Date.now(),
+            status:status
+
+        })
+
+        const saveOrder = await newOrder.save()
+        if(status=="placed"){
+            res.json({codsuccess:true})
+        }
+        else{
+            const orderid=saveOrder._id
+            const totalamount=saveOrder.totalAmount
+            var options={
+                    amount: totalamount*100,
+                    currency: "INR",
+                    receipt: ""+orderid
+            }
+            instance.orders.create(options,function(err,order){
+                res.json({order});
+            })
+
+        }
+    } catch (error) {  
+
+        console.log(error.message);
+    }
+}
+
+
+///verifyOnlinePayment
+
+const verifyBuynowPayment =async(req,res)=>{
+    try {
+        
+
+        // const totalPrice = req.body.amount2;
+        // const total = req.body.amount;
+        // const wal = totalPrice - total;
+        const details= (req.body)
+        console.log(details);
+        const crypto = require('crypto');
+        let hmac = crypto.createHmac('sha256', process.env.RazorKey);
+        hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id)  
+            
+        hmac = hmac.digest('hex');
+        console.log(hmac);
+
+        console.log(details.payment.razorpay_signature);
+        
+        if (hmac == details.payment.razorpay_signature) {
+
+
+            await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
+            await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
+            res.json({success:true});
+        }else{
+            await order.findByIdAndRemove({_id:details.order.receipt});
+            res.json({success:false});
+        }
+        
+
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
+
+///// END BUY NOW SECTION
 
 
 
@@ -898,13 +1000,15 @@ module.exports={
     deletcartitem,
     cartquantity,
     buynow,
+    placetheorderbuy,
+    verifyBuynowPayment,
 
 
     userLogout,
     getShop,
     getContact,
     getAbout,
-    date,
+    buynowrender,
 
 
     otpValidation,
