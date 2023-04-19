@@ -38,9 +38,10 @@ const insertProduct = async (req,res)=>{
         for(let i=0;i<req.files.length;i++){   
             image[i]=req.files[i].filename
             sharp('./public/admin/assets/imgs/'+req.files[i].filename)
-            .resize(600,600).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
+            .resize(400,500).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
         }
-
+        
+        
         const Data = new productdb({
 
             name:req.body.name,
@@ -64,7 +65,8 @@ const insertProduct = async (req,res)=>{
             res.render('add_products',{message:"error"})
 
 
-        }     
+        }
+        
     } catch (error) {
         console.log(error.message);
         
@@ -122,7 +124,7 @@ const posteditProduct = async(req,res)=>{
 
         for(let i=0;i<req.files.length;i++){
             sharp('./public/admin/assets/imgs/'+req.files[i].filename)
-            .resize(600,600).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
+            .resize(500,400).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
          const imageUpdate = await productdb.findByIdAndUpdate({_id:req.query.id},{$push:{image:req.files[i].filename}});
         }
         res.redirect('/admin/products')

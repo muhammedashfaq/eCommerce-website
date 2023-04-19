@@ -508,7 +508,7 @@ const exportTopdf =async (req,res)=>{
             return res.status(500).send('could not download file')
         }
         res.setHeader('Content-Type','application/pdf')
-        res.setHeader('Content-Disposition','attatchment;filename="sales Report.pdf"')
+        res.setHeader('Content-Disposition','attatchment;filename="Sales Report.pdf"')
 
         res.send(file)
 

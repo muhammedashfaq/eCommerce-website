@@ -25,27 +25,22 @@ const storage = multer.diskStorage({
 
     },
     filename:function(req,file,cb){
-      if(file.mimetype=== 'image/jpeg' || file.mimetype === 'image/png'|| file.mimetype === 'image/svg'){
-
-     
-        const name= Date.now()+'-'+file.originalname
+           
+      const name= Date.now()+'-'+file.originalname
         cb(null,name)
-      }else {
-        cb(new Error('Only jpg/jpeg images are allowed'))
-      }
+      
     }
 })
-const fileFilter = function (req, file, cb) {
-    // Check if file is a jpg/jpeg image
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/*') {
-      cb(null, true)
-    } else {
-      cb(new Error('Only jpg/jpeg images are allowed'))
-    }
+const imageFilter = function(req, file, cb) {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    req.fileValidationError = 'Only image files are allowed!';
+    return cb(new Error('Only image files are allowed!'), false);
   }
-  
+  cb(null, true);
+};
 
-const upload =multer({storage:storage})
+const upload =multer({storage:storage,fileFilter:imageFilter})
 
 const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')

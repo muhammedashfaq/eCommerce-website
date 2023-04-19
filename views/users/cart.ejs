@@ -73,7 +73,7 @@
 
                       <div class="product_count" style="display: flex;">
                          <a type="button"   onclick="changeQuantity('<%=value.productId._id%>',-1)"  class="genric-btn primary-border small">-</a>
-                        <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="1" max="100">
+                        <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="0" max="100">
 
                         <!-- <a href="#" class="genric-btn primary-border small">S</a> -->
                         <a type="button"  onclick="changeQuantity('<%=value.productId._id%>',1)" class="genric-btn primary-border small">+</a>
@@ -199,18 +199,18 @@
 				method:'post',
 				success:(response)=>{
           
-
 				}
 			}).done((data)=>{
 				if(data.success){
 					location.reload();
-				}else if(data.check){
-					Swal.fire({
-						icon: 'error',
-						title: 'Oops...',
-						text: 'Out Of Stock!'
-					})
+				}else{
+          if (data.remove) {
+          alert("product has removed");
+          location.reload();
 				}
+
+        }
+				
 			})
 		}
 	</script>

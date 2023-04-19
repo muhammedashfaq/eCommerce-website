@@ -757,19 +757,31 @@ const deletcartitem =async(req,res)=>{
 }
         
 
+
 const cartquantity = async(req,res)=>{
     try{
         // const userId = req.body.user
          const proId = req.body.product;
          let count = req.body.count;
-         count = parseInt(count);       
+         count = parseInt(count);  
+         
+         
        const  productData =await cart.updateOne({user:req.session.user_id,"product.productId":req.body.product},{$inc:{"product.$.quantity":count}});
 
-        if(productData){
-            res.json({success:true});
+        if
+            (count == -1) {
+                await cart.updateOne(
+                  { user:req.session.user_id, "product.productId": proId },
+                  {
+                    $pull: { product: { productId: proId } },
+                  }
+                );
+               
 
-        }else{
-            console.log('hello');
+                res.json({ remove: true });
+
+        }else {
+            res.json({success:true});
 
         }
     }catch(error){

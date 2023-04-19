@@ -163,12 +163,14 @@ const veryfyaddess =async(req,res)=>{
 
 const deleteaddress = async (req, res) => {
   try {
-    const id = req.query.id;
+    const id = req.body.id;
+
+
     await user_address.updateOne(
       { user: req.session.user_id },
       { $pull: { address: { _id: id } } }
     );
-    res.redirect("/checkout");
+    res.json({remove:true})
   } catch (error) {
     console.log(error.message);
   }

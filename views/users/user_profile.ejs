@@ -124,7 +124,7 @@
                                           </div>  -->
                                           <div style="margin-left: 10px;">
                                           
-                                            <a class="genric-btn danger-border circle arrow"  href="/delete_address?id=<%=value._id%>">Delete</a>
+                                            <a class="genric-btn danger-border circle arrow" onclick="deleteaddress('<%= value._id%>')" >Delete</a>
                                         
                   
                                          
@@ -158,5 +158,36 @@
 
     </div>
   </section>
+
+  <script>
+     function deleteaddress( id) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/deleteaddress",
+          data: {
+           
+            id: id,
+          },
+          method: "post",
+          success: (response) => {
+            if ((response.remove = true)) {
+              location.reload();
+            }
+          },
+        });
+      }
+    });
+  }
+  </script>
 
   <%- include('../users/layouts/user_footer.ejs')%>

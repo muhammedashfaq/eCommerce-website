@@ -142,6 +142,10 @@ rout.post('/add_address',adddressController.veryfyaddess)
 
 rout.get('/delete_address',adddressController.deleteaddress)
 
+//deleteaddress
+rout.post('/deleteaddress',adddressController.deleteaddress)
+
+
 //edit_address
 
 rout.get('/edit_address',adddressController.editaddress)
