@@ -72,22 +72,21 @@
                       </div> -->
 
                       <div class="product_count" style="display: flex;">
-                         <a type="button"   onclick="changeQuantity('<%=value.productId._id%>',-1)"  class="genric-btn primary-border small">-</a>
-                        <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="0" max="100">
-
+                         <a type="button"   onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',-1,)"  class="genric-btn primary-border small">-</a>
+                        <!-- <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="0" max="100"> -->
+                        <span >&nbsp;&nbsp; <span id="<%=value.productId._id%>"><%=value.quantity%></span> &nbsp;&nbsp; </span>
                         <!-- <a href="#" class="genric-btn primary-border small">S</a> -->
-                        <a type="button"  onclick="changeQuantity('<%=value.productId._id%>',1)" class="genric-btn primary-border small">+</a>
+                        <a type="button"   onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',1,)"  class="genric-btn primary-border small">+</a>
 
 
                       </div>
                     </td>
 
-                    <td>
-                      
-                      <h5><%=value.productId.price%></h5>
+                    <td>                      
+                      <h5 id="price"><%=value.productId.price%></h5>
                     </td>
                     <td>
-                      <h5><%= value.quantity%></h5>
+                      <span id="qnty"   ></span>
                     </td>
 
                    
@@ -118,7 +117,7 @@
                       <h5>Subtotal</h5>
                     </td>
                     <td>
-                      <h5><%=Total%></h5>
+                      <h5 id="total"><%=Total%></h5>
                     </td>
                   </tr>
                   <tr class="shipping_area">
@@ -188,31 +187,62 @@
   </main>
 
   <script>
-		function changeQuantity(proId,count){
+		function changeQuantity(cartId,proId,count,){
+      let quantity=parseInt(document.getElementById(proId).innerHTML)
+      let count1=parseInt(count)
+
+      let price= document.getElementById('price').innerHTML
+      console.log(quantity,count,cartId,proId,price);
+
+      
+
+    
 			$.ajax({
 				url:'/cartqntyincrese',
 				data:{
-					
+					cart:cartId,
 					product:proId,
-					count:count
+					count:count1,
+          quantity:quantity,
+          
 				},
+        
 				method:'post',
 				success:(response)=>{
+          if(response.remove){
+            detelecartitem(proId)
           
-				}
-			}).done((data)=>{
-				if(data.success){
-					location.reload();
-				}else{
-          if (data.remove) {
-          alert("product has removed");
-          location.reload();
-				}
 
-        }
-				
-			})
+
+            }else{
+
+            
+
+        
+          // document.getElementById(proId).innerHTML=quantity+count
+          // document.getElementById("mm").innerHTML=quantity+count
+          // document.getElementById("total").innerHTML=quantity*price
+          document.getElementById(proId).innerHTML = quantity + count;
+          //document.getElementById('qnty').innerHTML = quantity + count;
+
+
+          //document.getElementById('total').innerHTML=price*quantity
+           document.getElementById("total").innerHTML=response.Total
+           document.getElementById("total2").innerHTML=response.Total
+            }
+
+        
+
+        
+          
+          
+          
+          }
+		
+          })	
+			
 		}
+  
 	</script>
 
   <script>

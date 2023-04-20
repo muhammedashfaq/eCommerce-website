@@ -125,7 +125,7 @@ const posteditProduct = async(req,res)=>{
         for(let i=0;i<req.files.length;i++){
             sharp('./public/admin/assets/imgs/'+req.files[i].filename)
             .resize(500,400).toFile('./public/admin/assets/product_images/'+req.files[i].filename)
-         const imageUpdate = await productdb.findByIdAndUpdate({_id:req.query.id},{$push:{image:req.files[i].filename}});
+const imageUpdate = await productdb.findByIdAndUpdate({_id:req.query.id},{$push:{image:req.files[i].filename}});
         }
         res.redirect('/admin/products')
 

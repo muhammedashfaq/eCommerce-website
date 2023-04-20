@@ -10,7 +10,8 @@ const user_address =require('../model/address_Model')
 const order =require('../model/order_Model')
 const Razorpay= require('razorpay')
 
-let dotenv = require('dotenv')
+let dotenv = require('dotenv');
+const { nextTick } = require("process");
 dotenv.config()
 
 let otp
@@ -758,37 +759,84 @@ const deletcartitem =async(req,res)=>{
         
 
 
-const cartquantity = async(req,res)=>{
+const cartquantity = async(req,res,next)=>{
     try{
-        // const userId = req.body.user
+        let cartId = req.body.cart;
          const proId = req.body.product;
-         let count = req.body.count;
-         count = parseInt(count);  
+         let quantity = req.body.quantity;
+
+         let count = req.body.count; 
          
-         
-       const  productData =await cart.updateOne({user:req.session.user_id,"product.productId":req.body.product},{$inc:{"product.$.quantity":count}});
+         if ((count == -1) && (quantity==1)){
+            res.json({remove:true})
 
-        if
-            (count == -1) {
-                await cart.updateOne(
-                  { user:req.session.user_id, "product.productId": proId },
-                  {
-                    $pull: { product: { productId: proId } },
-                  }
-                );
-               
 
-                res.json({ remove: true });
+              }else{
 
-        }else {
-            res.json({success:true});
+    await cart.updateOne({user:req.session.user_id,"product.productId":proId},{$inc:{"product.$.quantity":count}});
 
-        }
+
+        
+        
+      
+
+              }
+              next();
+
+
     }catch(error){
         console.log(error.message);
     }
 }
 
+
+
+
+
+const totalproductprice = async (req, res) => {
+    try {
+
+
+    
+
+        console.log('hihi');
+
+        console.log('hel');
+      const userd=await User.findOne({_id:req.session.user_id})
+
+      console.log(userd);
+  
+      let total = await cart.aggregate([
+        {
+          $match: {
+            user: userd._id,
+          },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            price: "$product.price",
+            quantity: "$product.quantity",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: { $multiply: ["$price", "$quantity"] } },
+          },
+        },
+      ]);
+  
+      let Total = total[0].total;
+
+      console.log(Total);
+      res.json({ success: true, Total });
+    } catch (error) {
+      res.render("user/500");
+    }
+  };
 ///// BUY NOW SECTION
 
 var productId
@@ -798,7 +846,7 @@ const buynow= async (req,res)=>{
 
         const user=await User.findOne({_id:req.session.user_id})
         const id =req.body.id
-productId=id
+        productId=id
         console.log(id);
 
         const prodcut =await productDB.findById({_id:id})
@@ -875,7 +923,7 @@ const placetheorderbuy =async(req,res)=>{
             user:userDetails._id,
             userName:userDetails.name,
             paymentMethod:payment,
-            product:[{productId: prodcutdata._id,quantity : 0}],   
+            product:[{productId: prodcutdata._id,quantity : 1}],   
             totalAmount:Total,
             Date:Date.now(),
             status:status
@@ -1009,6 +1057,7 @@ module.exports={
     verifyOnlinePayment,
     deletcartitem,
     cartquantity,
+    totalproductprice,
     buynow,
     placetheorderbuy,
     verifyBuynowPayment,

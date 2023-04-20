@@ -84,9 +84,9 @@ const getHome=async (req,res)=>{
             console.log(Total);
            console.log(Products);
            console.log(Users);
-           if(onlineCount){
-
-
+          
+           const onlineCounts = await order.aggregate([{$group:{_id:"$paymentMethod",totalPayment:{$count:{}}}}])
+            console.log(onlineCounts);
             let sales = [];
 
             var date = new Date();
@@ -99,7 +99,7 @@ const getHome=async (req,res)=>{
               
             _id:{$dateToString:{format:"%m",date:"$createdAt"}},
                
-            total:{$sum:"$Amount"},  
+            totalAmount:{$sum:"$totalAmount"},  
            
         }},{$sort:{_id:1}}]);
 
@@ -115,27 +115,17 @@ const getHome=async (req,res)=>{
                         result = true
                     }
                 }
-                if(result) sales.push({_id:i,total:0});
+                if(result) sales.push({_id:i,totalAmount:0});
             }
 
             let salesData = [];
             for(let i=0;i<sales.length;i++){
-                salesData.push(sales[i].total);
+                salesData.push(sales[i].totalAmount);
             }
-            console.log('agggregat');
+            
+      
 
-            res.render('home',{userData,Users,Orders,Products,Total,onlineCount,COD,month:salesData})
-
-                if(COD){
-
-                }
-            res.render('home',{userData,Users,Orders,Products,Total,onlineCount,COD,month:salesData})
-
-           }else{
-            res.render('home')
-
-           }
-          
+            res.render('home',{userData,Users,Orders,Products,Total,onlineCount,onlineCounts,COD,month:salesData})
 
         
     } catch (error) {

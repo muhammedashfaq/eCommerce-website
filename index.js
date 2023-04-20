@@ -2,7 +2,6 @@
 
 var mongoose=require('mongoose')
 const mongoDB =require('./config/auth')
-
 mongoDB.mongoDB()
 const path =require('path')
 const express=require("express")

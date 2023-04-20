@@ -44,6 +44,7 @@ const upload =multer({storage:storage,fileFilter:imageFilter})
 
 const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')
+const couponController=require('../controles/coupenController')
 const category_Model = require('../model/category_Model')
 
 
@@ -155,6 +156,12 @@ admin_rout.get('/sales_reports',auth.isLogin,adminController.salesReports)
 /// report export_to_pdf
 admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
 
+
+//coupon
+
+admin_rout.get('/coupon',auth.isLogin,couponController.loadCoupon)
+admin_rout.get('/add_coupon',auth.isLogin,couponController.addloadCoupon)
+admin_rout.post('/add_coupon',auth.isLogin,couponController.postaddcoupon)
 
 
 

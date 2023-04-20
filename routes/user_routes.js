@@ -83,7 +83,7 @@ rout.post('/delete_cartitem',auth.isLogin,userController.deletcartitem)
 rout.post("/add_to_cart",auth.isLogin,userController.addtoCart)
 
 //cartqntyincrese
-rout.post("/cartqntyincrese",auth.isLogin,userController.cartquantity)
+rout.post("/cartqntyincrese",auth.isLogin,userController.cartquantity,userController.totalproductprice)
 
 
 //////checkout////

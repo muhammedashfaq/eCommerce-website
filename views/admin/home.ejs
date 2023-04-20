@@ -176,12 +176,25 @@
           Revenue////
         </h4>
 
-        <div>
+    
 
      
-        <!-- <canvas id="pie"></canvas> -->
+        <canvas id="piechart  "></canvas>
+        <%
+                  onlineCounts.forEach((pay)=>{
+                    if(pay._id == 'COD'){
+                      %>
+                      <input type="hidden" value="<%=pay.totalPayment%>" id="chart">
+                      <%
+                    }else{
+                      %>
+                      <input type="hidden" value="<%=pay.totalPayment%>" id="chart2">
+                      <%
+                    }
+                  })
+                  %>
 
-      </div>
+      
 
         <div
           class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400"
@@ -210,7 +223,7 @@
 
       <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
         <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-          Traffic
+          Sales
         </h4>
 
 
@@ -257,28 +270,30 @@
     </div>
   </div>
 </main>
-<script>
-  // const piePayment = document.getElementById('piechart');
-  // const chart = parseInt(document.getElementById('chart').value);
-  // const chart2 = parseInt(document.getElementById('chart2').value);
-  // new Chart(piePayment,{
-  //   type: 'doughnut',
-  //   data: {
-  //   labels: [
-  //    "razorpay","cod"
-  //   ],
-  //   datasets: [{
-  //     label: 'My First Dataset',
-  //     data: [chart, chart2],
-  //     backgroundColor: [
-  //       'rgb(255, 99, 132)',
-  //       'rgb(54, 162, 235)',
-  //     ],
-  //     hoverOffset: 4
-  //   }]
-  // }
-  // })
 
+<script>
+  const piePayment = document.getElementById('piechart');
+  const chart = parseInt(document.getElementById('chart').value);
+  const chart2 = parseInt(document.getElementById('chart2').value);
+  new Chart(piePayment,{
+    type: 'doughnut',
+    data: {
+    labels: [
+     "online","cod"
+    ],
+    datasets: [{
+      label: 'My First Dataset',
+      data: [chart, chart2],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+      ],
+      hoverOffset: 4
+    }]
+  }
+  })
+  </script>
+  <script>
 
   const monthChart = document.getElementById('monthChart');
   const input1 = Number(document.getElementById('input1').value)
@@ -294,6 +309,11 @@
   const input11 = Number(document.getElementById('input11').value)
   const input12 = Number(document.getElementById('input12').value)
   console.log(input1);
+  console.log(input2);
+  console.log(input4);
+
+  console.log(input4);console.log(input5);
+
   new Chart(monthChart,{
   type: 'bar',
   data: {

@@ -1,0 +1,83 @@
+<%- include('../admin/layouts/admin_header.ejs')%>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container grid px-6 mx-auto">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      <a href="./add_coupon">
+        <button class="btn btn-danger">Add Coupon</button></a
+      >
+    </h2>
+
+    <!-- With avatar -->
+    <!-- With actions -->
+
+    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full whitespace-no-wrap">
+          <thead>
+            <tr
+              class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+            >
+              <th class="px-4 py-3">NO</th>
+              <th class="px-4 py-3">Code</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3">Expr. Date    </th>
+
+              <th class="px-4 py-3">Actions</th>
+
+              <!-- <th class="px-4 py-3">Status</th> -->
+
+            </tr>
+          </thead>
+          <tbody
+
+          <% coupons.forEach((value,index)=>{%>
+
+       
+            class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+          >
+           
+              <tr class="text-gray-700 dark:text-gray-400">
+                <td class="px-4 py-3">
+                  <%=index+1%>
+                </td>
+                <td class="px-4 py-3">
+                  <%=value.code%>
+                </td>
+                <td class="px-4 py-3">
+                  <%=value.status%>
+
+                </td>
+                <td class="px-4 py-3">
+                  <%=value.expiryDate.toISOString().substring(0,10)%>
+
+                </td>
+                <td class="px-4 py-3">
+                  <%value.code%>
+
+                </td>
+
+             
+
+
+
+
+
+
+                
+              </tr>
+
+              <%})%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+
+<%-
+include('../admin/layouts/admin_footer.ejs')%>
