@@ -118,6 +118,13 @@ admin_rout.get('/order_details',auth.isLogin,adminController.orderDetails)
 
  admin_rout.get('/order_cancel',auth.isLogin,adminController.ordercancelstatus)
 
+ //view_orders
+ admin_rout.get('/view_orders',auth.isLogin,adminController.orderview)
+
+ //order_deliverd
+
+ admin_rout.get('/order_deliverd',auth.isLogin,adminController.orderdeliverd)
+
 
 
 

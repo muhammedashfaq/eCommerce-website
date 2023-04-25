@@ -1,0 +1,114 @@
+<%- include('../users/layouts/user_header.ejs')%>
+
+
+<main>
+    <!-- Hero Area Start-->
+    
+    <!--================ confirmation part start =================-->
+
+    <section class="confirmation_part mt-5">
+      <div class="container">
+
+
+
+        
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="order_details_iner">
+              <h3>Order Details</h3>
+              <table class="table table-borderless">
+                <thead>
+                  <tr>  
+                    <th>sl</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product image</th>
+
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"> Amount</th>
+
+
+                  </tr>
+                </the ad>
+                <tbody>
+                  
+                  <%  product.forEach((value,index)=>{%>
+
+              
+                  
+                  <tr>
+                    <td><%=index+1%></td>
+
+                    <td><%=value.productId.name%></td>
+                    <td> <a href="/product_details?id=<%=value.productId._id%>"><img style="width: 50px;height: 50px; margin-right: 20px;" src="../admin/assets/product_images/<%= value.productId.image[0]%>" alt=""></a>
+                    </td>
+
+                    <td><%= value.quantity%></td>
+
+                  
+                    
+                  <td ><%= orderData.status%></td>
+                  <td><%= value.productId.price%></td>
+                    
+                    
+                  </tr>
+                  
+                  <%})%>
+                  
+                 
+                  
+            
+                </tbody>
+
+                
+              </table>
+
+              
+            </div>
+          </div>
+        
+
+          
+        
+        
+      </div>
+      <br>
+      <div class="row">
+    
+      <div  class="col-lg-12 ">
+        <div class="order_box">
+          <h2>Your Order Payement Deatails</h2>
+          
+          <ul class="list list_2">
+            <li>
+              <a>Subtotal
+                <span>RS :<%=orderData.totalAmount%></span>
+              </a>
+            </li>
+            <li>
+              <a >Shipping
+                <span>---</span>
+              </a>
+            </li>
+            <li>
+         
+              <a >Total 
+              <span id="total1">RS :<%=orderData.totalAmount%></span>  
+              </a>
+            
+            </li>
+          </ul>
+         
+           
+        </div> 
+      </div>
+          
+    </div>
+      </div>
+    </section>
+    
+    <!--================ confirmation part end =================-->
+</main>
+
+
+<%- include('../users/layouts/user_footer.ejs')%>

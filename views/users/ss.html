@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+
+    <link rel="stylesheet" href="/user/assets/css/invoicestyle.css">
+
+    <title>TZ Invoice</title>
+  </head>
+  <body>
+
+
+   
+
+    <div class="container bootstrap snippets bootdey">
+        
+        <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="row">
+                    <!-- <div class="col-md-6 col-sm-6 text-left">
+                        <h4><strong>Client</strong> Details</h4>
+                        <ul class="list-unstyled">
+                            <li><strong>First Name:</strong> John</li>
+                            <li><strong>Last Name:</strong> Doe</li> 
+                            <li><strong>Country:</strong> U.S.A.</li>
+                            <li><strong>DOB:</strong> YYYY/MM/DD</li>
+                        </ul> -->
+
+                        <div   class="col-md-3 col-sm-3 text-start">
+                            <h2>fgsf</h2>
+
+
+                        </div>
+
+                    </div>
+    
+                    <div class="col-md-5 col-sm-5 text-left">
+                        <h4><strong>Payment</strong> Details</h4>
+                        <ul class="list-unstyled">
+                            <li><strong>Bank Name:</strong> 012345678901</li>
+                            <li><strong>Account Number:</strong> 012345678901</li>
+                            <li><strong>SWIFT Code:</strong> SWITCH012345678CODE</li>
+                            <li><strong>V.A.T Reg #:</strong> VAT5678901CODE</li>
+                        </ul>
+    
+                    </div>
+    
+                </div>
+    
+                <div class="table-responsive">
+                    <table class="table table-condensed nomargin">
+                        <thead>
+                            <tr>
+                                <th>sl</th>
+                                <th>Item Name</th>
+                                <th></th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% data.forEach((value,index)=>{%>
+
+                            <tr>
+                                <td><%= index+1%></td>
+                                <td>
+                                <div><strong><%=value.productId.name %></strong></div>
+                                </td>
+                                <td></td>
+                                
+                                <td><%=value.quantity %></td>
+                                <td><%=value.productId.price %></td>
+                                
+                                <td><%= report.totalAmount%></td>
+                            </tr>
+                       
+                        
+
+                        </tbody>
+                    </table>
+                </div>
+                
+                <hr class="nomargin-top">
+                <div class="row">
+                    <!-- <div class="col-sm-6 text-left">
+                        <h4><strong>Contact</strong> Details</h4>
+                        <p class="nomargin nopadding">
+                            <strong>Note:</strong> 
+                            Lid est laborum dolo rumes fugats.
+                        </p><br> no P margin for printing - use <br> instead 
+    
+                        <address>
+                            PO Box 21132 <br>
+                            Vivas 2355 Australia<br>
+                            Phone: 1-800-565-2390 <br>
+                            Fax: 1-800-565-2390 <br>
+                            Email:support@yourname.com
+                        </address>
+                    </div> -->
+    
+                    <div class="col-sm-6 text-right">
+                        <ul class="list-unstyled">
+                            <li><strong>Sub - Total Amount:</strong><%=report.totalAmount%></li>
+                            <li><strong>Discount:</strong> 00.0%</li>
+                            <li><strong>Grand Total:</strong> <%=report.totalAmount%></li>
+                        </ul>     
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="panel panel-default text-right">
+            <div class="panel-body">
+
+                <h2>Thank You Visit Again</h2>
+                <!-- <a class="btn btn-warning" href="#"><i class="fa fa-pencil-square-o"></i> EDIT</a>
+                <a class="btn btn-primary" href="#"><i class="fa fa-check"></i> SAVE</a>
+                <a class="btn btn-success" href="page-invoice-print.html" target="_blank"><i class="fa fa-print"></i> PRINT INVOICE</a> -->
+            </div>
+        </div>
+    </div>  
+    <%})%>
+<
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>

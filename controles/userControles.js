@@ -11,14 +11,17 @@ const order =require('../model/order_Model')
 const Razorpay= require('razorpay')
 
 let dotenv = require('dotenv');
-const { nextTick } = require("process");
 dotenv.config()
 
 let otp
 let email2
 let name2
 
-
+///html to pdfgenerate require things forpuchase invoice
+const ejs =require('ejs')
+const pdf=require('html-pdf')
+const fs= require('fs')
+const path = require('path')
 
 var instance = new Razorpay({
     key_id: process.env.Razorid,
@@ -1035,6 +1038,155 @@ const getUser_profile =async(req,res)=>{
     }
 }
 
+//postprofilesubmit
+
+const postprofilesubmit =async(req,res)=>{
+    try {
+        console.log('assss');
+
+        const name = req.body.name
+        const email=req.body.email
+        const mobile= req.body.mobile
+
+        if(name.trim().length==0||email.trim().length==0||mobile.trim().length==0){
+        res.redirect('/user_profile')
+      }else{
+        console.log('alred');
+
+        const alreyMail = await User.findOne({email:email})
+        if(alreyMail){
+            await User.updateOne({_id:req.session.user_id},{$set:{
+                name:name,
+                 mob:mobile
+            }})
+            res.redirect('/user_profile')
+
+        }else{
+            console.log('update');
+
+
+           const data= await User.updateOne({_id:req.session.user_id},{$set:{
+                name:name,
+                email:email,
+                mob:mobile
+            }})
+console.log(data);
+            res.redirect('/user_profile')
+
+        }
+
+      }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const orderlistLoad =async(req,res)=>{
+    try {
+
+
+        const userd=await User.findOne({_id:req.session.user_id})
+
+        // const orders=await order.findOne({user:userd})
+        const orders = await order.find({user : userd._id}).sort({"_id" : -1})
+
+
+
+        res.render('order_list',{user:userd.name,orders})
+    } catch (error) {
+            console.log(error.message);        
+    }
+}
+const ordershowLoad =async(req,res)=>{
+    try {
+        const userd=await User.findOne({_id:req.session.user_id})
+        const id=req.query.id
+
+        const orderData=await order.findById({_id:id}).populate("product.productId")
+        const product=orderData.product
+        res.render('order_list_show',{user:userd.name,product,orderData})
+    } catch (error) {
+            console.log(error.message);        
+    }
+}
+
+//canceluserorder
+const canceluserorder =async(req,res)=>{
+    try {
+        const userd=await User.findOne({_id:req.session.user_id})
+        const id=req.body.id
+
+        await order.updateOne({_id:id},{$set:{status:"canceled"}})
+
+        res.json({remove:true})
+    } catch (error) {
+            console.log(error.message);        
+    }
+}
+
+
+///returnuserorder
+
+const returnuserorder =async(req,res)=>{
+    try {
+        const userd=await User.findOne({_id:req.session.user_id})
+        const id=req.body.id
+
+        await order.updateOne({_id:id},{$set:{status:"waiting for approval"}})
+
+        res.json({return:true})
+    } catch (error) {
+            console.log(error.message);        
+    }
+}
+const orderInvoice=async(req,res)=>{
+    try {
+        
+        const id =req.query.id
+            
+        const orderdetails = await order.findOne({_id:id}).populate("product.productId").sort({Date:-1})
+        
+        const orderData= orderdetails.product
+
+        console.log(orderdetails);
+        
+        const data={
+            report:orderdetails,
+            data:orderData
+        }
+
+        const filepath =path.resolve(__dirname,'../views/users/invoicepdf.ejs')
+        const htmlstring=fs.readFileSync(filepath).toString()
+       
+       let option={
+        format:"A3"
+       }
+       const ejsData=  ejs.render(htmlstring,data)
+       pdf.create(ejsData,option).toFile('Invoice.pdf',(err,response)=>{
+        if(err) console.log(err);
+
+      const filepath= path.resolve(__dirname,'../invoice.pdf')
+      fs.readFile(filepath,(err,file)=>{
+        if(err) {
+            console.log(err);
+            return res.status(500).send('could not download file')
+        }
+        res.setHeader('Content-Type','application/pdf')
+        res.setHeader('Content-Disposition','attatchment;filename="Purchase Invoice.pdf"')
+
+        res.send(file)
+
+      })
+       })
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+}
+
+
 
 module.exports={
     registerLoad,
@@ -1072,6 +1224,12 @@ module.exports={
 
     otpValidation,
     error404,
-    getUser_profile
+    getUser_profile,
+    postprofilesubmit,
+    orderlistLoad,
+    ordershowLoad,
+    canceluserorder,
+    returnuserorder,
+    orderInvoice,
 }
 

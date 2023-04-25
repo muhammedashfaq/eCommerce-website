@@ -180,19 +180,82 @@ const editaddress = async (req, res) => {
   try {
     const id = req.query.id;
     const userd = await User.findOne({ _id: req.session.user_id });
+    const addressData = await user_address.findOne({_id:userd});
+    const userId = req.session.user_id
+    console.log(addressData);
+    const editData = await user_address.findOneAndUpdate({user : userId})
+    console.log(id);
+    const value =editData
 
-    const editData = await user_address.findById({ user: id });
 
-    res.render("edit_address", { user: userd.name, editData });
+    console.log(editData);
+
+    res.render("edit_address", { user: userd.name, value });
   } catch (error) {
     console.log(error.message);
   }
 };
 
+//posteditaddress
+
+const posteditaddress =async (req,res)=>{
+  try {
+
+      const fname=req.body.fname
+      const sname =req.body.sname
+      const mobile=req.body.mobile
+      const email =req.body.email
+      const address=req.body.address
+      const pin =req.body.pin
+
+    if(fname.trim().length==0 ||sname.trim().length==0 ||mobile.trim().length==0 
+    ||email.trim().length==0 ||address.trim().length==0 ||pin.trim().length==0 ){ 
+      res.redirect('/user_profile')
+   }else{
+
+
+    const dataeditaddress = await user_address.findOne({
+      user: req.session.user_id,
+    });
+    console.log(dataeditaddress);
+    if (dataeditaddress) {
+      const update = await user_address.updateOne(
+        { user: req.session.user_id },
+        {
+          $set: {
+            address: {
+              fname: req.body.fname,
+              sname: req.body.sname,
+              mobile: req.body.mobile,
+              email: req.body.email,
+              address: req.body.address,
+              pin: req.body.pin,
+            },
+          },
+        }
+      );
+      console.log(update);
+
+
+
+   }
+
+   res.redirect('/user_profile')
+
+
+
+  }
+
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 module.exports = {
   getadd_address,
   veryfyaddess,
   deleteaddress,
   editaddress,
+  posteditaddress
 };

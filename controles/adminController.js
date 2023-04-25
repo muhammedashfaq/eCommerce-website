@@ -69,24 +69,25 @@ const veryfiLogin=async (req,res)=>{
 
 const getHome=async (req,res)=>{
     try {
+     console.log('home');
+
        
             const userData = await User.find({is_admin:0,is_verified:0});
             const total = await order.aggregate([{$group:{_id:null,totalAmount:{$sum:"$totalAmount"}}}])
+            const Total = total[0].totalAmount;
+
+
             const Users = await User.find({is_admin:0}).count();
             const Orders = await order.find({}).count();
             const Products = await productDB.find({}).count();
-            const Total = total[0].totalAmount;
             const onlineCount = await order.aggregate([{$match:{paymentMethod:"online"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
             const COD = await order.aggregate([{$match:{paymentMethod:"COD"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
-
+            const onlineCounts = await order.aggregate([{$group:{_id:"$paymentMethod",totalPayment:{$count:{}}}}])
+console.log('home');
             // const onlineCount =onlineCount1[1].totalPayment
-            console.log(onlineCount);
-            console.log(Total);
-           console.log(Products);
-           console.log(Users);
-          
-           const onlineCounts = await order.aggregate([{$group:{_id:"$paymentMethod",totalPayment:{$count:{}}}}])
-            console.log(onlineCounts);
+        if(onlineCounts){
+
+
             let sales = [];
 
             var date = new Date();
@@ -123,9 +124,17 @@ const getHome=async (req,res)=>{
                 salesData.push(sales[i].totalAmount);
             }
             
-      
+            console.log('total');
 
             res.render('home',{userData,Users,Orders,Products,Total,onlineCount,onlineCounts,COD,month:salesData})
+        }else{
+
+            console.log('hello');
+
+            res.send('homeempty')
+
+        }
+          
 
         
     } catch (error) {
@@ -193,11 +202,16 @@ const blockUser =async (req,res)=>{
         const userData =await User.findById({_id:id})
 
         if(userData.is_blocked==true){
-            await User.updateOne({_id:id},{$set:{is_blocked:false}})
+             await User.updateOne({_id:id},{$set:{is_blocked:false}})
+          
             res.redirect('/admin/user_details')
 
         }if(userData.is_blocked==false){
-            await User.updateOne({_id:id},{$set:{is_blocked:true}})
+            const block = await User.updateOne({_id:id},{$set:{is_blocked:true}})
+            if(block){
+                req.session.user_id=false
+            }
+
             res.redirect('/admin/user_details')
         }
         
@@ -456,6 +470,49 @@ const ordercancelstatus =async (req,res)=>{
     }
 }
 
+//orderdeliverd
+
+const orderdeliverd =async (req,res)=>{
+    try {
+
+        const id=req.query.id
+
+        console.log(id);
+
+        const orderData =await order.findById({_id:id})
+
+        if(orderData.status=="placed"){
+            await order.updateOne({_id:id},{$set:{status:"delivered"}})
+            res.redirect('/admin/order_details')
+
+        }if(orderData.status=="waiting for approval"){
+            await order.updateOne({_id:id},{$set:{status:"Return Approved"}})
+            res.redirect('/admin/order_details')
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+//orderview
+
+
+const orderview =async (req,res)=>{
+    try {
+
+        const id =req.query.id
+        const orderData=await order.findById({_id:id}).populate("product.productId")
+        const product=orderData.product
+
+        //console.log(orderData);
+
+
+        res.render('order_view',{orderData,product})
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
 
 //salesReports
 const salesReports =async (req,res)=>{
@@ -529,6 +586,8 @@ module.exports={
     orderDetails,
      orderstatus,
      ordercancelstatus,
+     orderdeliverd,
+     orderview,
      salesReports,
      exportTopdf
 }

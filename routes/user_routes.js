@@ -22,6 +22,8 @@ rout.use(express.urlencoded({extended:true}))
 
 const userController= require('../controles/userControles')
 const adddressController= require('../controles/address_controlller')
+const couponController=require('../controles/coupenController')
+
 
 
 
@@ -104,6 +106,10 @@ rout.get('/order-placed',auth.isLogin,userController.orderplaced)
 
 rout.post('/verifyPayment',userController.verifyOnlinePayment)
 
+//applyCoupon
+rout.post('/applyCoupon',couponController.applyCoupon)
+
+
 
 
 /////BUY NOW////
@@ -149,6 +155,9 @@ rout.post('/deleteaddress',adddressController.deleteaddress)
 //edit_address
 
 rout.get('/edit_address',adddressController.editaddress)
+//postedit
+rout.post('/edit_address',adddressController.posteditaddress)
+
 
 
 
@@ -190,6 +199,32 @@ rout.get('/product_details',auth.isLogin,userController.getProduct_details)
 ///user_profile
 
 rout.get('/user_profile',auth.isLogin,userController.getUser_profile)
+rout.post('/user_profile',userController.postprofilesubmit)
+
+
+
+//order list
+
+rout.get('/orderlist',auth.isLogin,userController.orderlistLoad)
+//order_show
+rout.get('/order_show',auth.isLogin,userController.ordershowLoad)
+//cancel_order
+
+rout.post('/cancel_order',auth.isLogin,userController.canceluserorder)
+
+//return_order
+rout.post('/return_order',auth.isLogin,userController.returnuserorder)
+
+
+//invoice printing
+rout.get('/invoice_pdf',auth.isLogin,userController.orderInvoice)
+
+
+
+
+
+
+
 
 
 

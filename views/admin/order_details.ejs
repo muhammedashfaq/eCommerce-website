@@ -1,126 +1,155 @@
 <%- include('../admin/layouts/admin_header.ejs')%>
 
-  
 
 
-         
-    <main class="h-full pb-16 overflow-y-auto">
-          <div class="container grid px-6 mx-auto">
-            <h2
-              class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-            >
-           <a href="#">  <button  class="btn btn-danger" >Order Details  </button></a>
-            </h2>
-           
-            <!-- With avatar -->
-                        <!-- With actions -->
-           
-            <div class="w-full overflow-hidden rounded-lg shadow-xs">
-              <div class="w-full overflow-x-auto">
-                <table class="w-full whitespace-no-wrap">
-                  <thead>
-                    <tr
-                      class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
-                    >         
-                     <th class="px-4 py-3">sl</th>
-                     <th class="px-4 py-3">Name</th>
-                      <th class="px-4 py-3">Date</th>
-                      <th class="px-4 py-3">Price</th>
-                      <th class="px-4 py-3">Method</th>
-                      <th class="px-4 py-3">Status</th>
-                      <th class="px-4 py-3">Order Actions</th>
-                    </tr>
-                  </thead>
 
+
+  <main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+      <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        <a href="#"> <button class="btn btn-danger">Order Details </button></a>
+      </h2>
+
+      <!-- With avatar -->
+      <!-- With actions -->
+
+      <div class="w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto">
+          <table class="w-full whitespace-no-wrap">
+            <thead>
+              <tr
+                class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                <th class="px-4 py-3">sl</th>
+                <th class="px-4 py-3">Name</th>
+                <th class="px-4 py-3">Date</th>
+                <th class="px-4 py-3">Price</th>
+                <th class="px-4 py-3">View</th>
+
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3">Order Actions</th>
+              </tr>
+            </thead>
+
+
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+
+
+              <% if( orderData.length>0 ){
+                for(let i=0;i<orderData.length;i++){ %>
+
+
+
+
+
+
+                  <tr class="text-gray-700 dark:text-gray-400">
+                    <td class="px-4 py-3 text-sm">
+                      <%=i+1%>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                      <%= orderData[i].userName %>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                      <%= orderData[i].Date.toISOString().substring(0,10) %>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                      <%=orderData[i].totalAmount%>
+                    </td>
                   
-              <tbody
-                    class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    <td> <a href="/admin/view_orders?id=<%= orderData[i]._id%>"
+                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        View
+                      </a></td>
+                    <td class="px-4 py-3 text-sm">
 
+                      <% if(orderData[i].status==="placed" ||orderData[i].status==="delivered"||orderData[i].status==="waiting for approval"||orderData[i].status==="Return Approved"  ){%>
 
-                    <% if( orderData.length>0 ){
-                      for(let i=0;i<orderData.length;i++){
-                        %>
-  
-
-
-              
-                
-                    
-                        <tr class="text-gray-700 dark:text-gray-400">
-                         <td class="px-4 py-3 text-sm" ><%=i+1%></td>
-                        <td class="px-4 py-3 text-sm"><%= orderData[i].userName %></td>
-                        <td class="px-4 py-3 text-sm"> <%= orderData[i].Date.toISOString().substring(0,10) %></td>
-                        <td class="px-4 py-3 text-sm"><%=orderData[i].totalAmount%> </td>
-                        <td class="px-4 py-3 text-sm"><%=orderData[i].paymentMethod%></td>
-                        <td class="px-4 py-3 text-sm">
-
-                          <% if(orderData[i].status==="placed"){%>
-                            
-                          <a href="/admin/order_status?id=<%= orderData[i]._id%>">
+                        <a href="/admin/order_status?id=<%= orderData[i]._id%>">
                           <span
-                          class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                        >
-                          <%=orderData[i].status%>
-                        </span>
-                      </a>
-                      <%} if(orderData[i].status==="canceled"){ %>
-                      <a >
-                        <span
-                        class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"
-                        >
-                        <%=orderData[i].status%>
-                      </span></a>
-                     <%}if(orderData[i].status==="pending"){%>
-                      <a href="/admin/order_status?id=<%= orderData[i]._id%>">
-                        <span
-                        class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                        >
-                        <%=orderData[i].status%>
-                      </span>
-                    </a>
-                      
-                      
-                      <%}%>
+                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                            <%=orderData[i].status%>
+                          </span>
+                        </a>
+                        <%} if(orderData[i].status==="canceled" ){ %>
+                          <a>
+                            <span
+                              class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                              <%=orderData[i].status%>
+                            </span></a>
+                          <%}if(orderData[i].status==="pending"){%>
+                            <a href="/admin/order_status?id=<%= orderData[i]._id%>">
+                              <span
+                                class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                <%=orderData[i].status%>
+                              </span>
+                            </a>
+                            <%} %>
 
 
-                     
-                    
-                    
+
+
+
                     </td>
 
-                        <td class="px-4 py-3 text-sm">  
-                          <% if(orderData[i].status==="canceled"){%>
+                    <td class="px-4 py-3 text-sm">
+                      <% if(orderData[i].status==="canceled" ){%>
 
-                             <a 
-                          class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"
-                        >
-                        canceled
-                      </a>
-                      <%}else{ %>
-                          <a href="/admin/order_cancel?id=<%= orderData[i]._id%>">
-                          <span
-                          class="px-2 py-1 font-semibold leading-tight text-red-700 bg-green-100 rounded-full dark:bg-red-700 dark:text-red-100"
-                        >
-                          cancel
-                        </span>
+                        <a
+                          class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                          canceled
                         </a>
-                        <%}%>
-                         </td>
-                    </tr>
-                    
-                    
-                    <%  
-                  }
-                }else{
-                  %>
-                  <tr>
-                    <h1>user not found</h1>
-                  </tr>
-                  <%
-                }
-                %>
+                        <%}else if(orderData[i].status!=="delivered"&& orderData[i].status!=="waiting for approval"&&orderData[i].status!=="Return Approved" ){ %>
+                          <a href="/admin/order_cancel?id=<%= orderData[i]._id%>">
+                            <span
+                              class="px-2 py-1 font-semibold leading-tight text-red-700 bg-green-100 rounded-full dark:bg-red-700 dark:text-red-100">
+                              cancel
+                            </span>&nbsp;
 
-<!--         
+                            <% if(orderData[i].status==="placed" ||orderData[i].status==="delivered"
+                              &&orderData[i].status!=="delivered" &&orderData[i].status!=="pending" ){%>
+                          </a>
+                          <a href="/admin/order_deliverd?id=<%= orderData[i]._id%>">
+                            <span
+                              class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                              Delivered
+                            </span>
+                          </a>
+                          <%}%>
+                            <%}else if(orderData[i].status==="Return Approved" )  {%>
+                              <a >
+                                  <span
+                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+
+                                  Approved
+                                </span>
+                              </a>
+                              
+                              
+                              <%}else if(orderData[i].status!=="delivered"){%>
+                                
+                                <a href="/admin/order_deliverd?id=<%= orderData[i]._id%>">
+                                  <span
+                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Approve 
+                              </span>
+
+                              </a>
+                                <%}%>
+                             
+                             
+                              
+
+                    </td>
+                  </tr>
+
+
+                  <% } }else{ %>
+                    <tr>
+                      <h1>user not found</h1>
+                    </tr>
+                    <% } %>
+
+                      <!--         
                 
          
              
