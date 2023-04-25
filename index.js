@@ -1,4 +1,5 @@
 
+const session=require('express-session')
 
 var mongoose=require('mongoose')
 const mongoDB =require('./config/auth')
@@ -12,6 +13,11 @@ const PORT=3000;
 app.set('view engine','ejs')
 app.set('views','./views/users')
 
+app.use(session({
+  secret:"thisiemysecretkey",
+  resave:false,
+  saveUninitialized:true
+}))
 
 //for cache controll
 app.use((req, res, next) => {

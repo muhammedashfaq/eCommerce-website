@@ -1,190 +1,71 @@
 const express =require('express')
-
 const admin_rout=express()
-const session=require('express-session')
-const  multer=require('multer')
 const path= require('path')
-
-admin_rout.use(session({
-    secret:"thisiemysecretkey",
-    resave:false,
-    saveUninitialized:true
-}))
 const auth=require('../middleware/adminAuth')
-
-admin_rout.set('view engine','ejs')
-admin_rout.set('views','./views/admin')
-
-
-admin_rout.use(express.json())
-admin_rout.use(express.urlencoded({extended:true}))
-
-const storage = multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'../public/admin/assets/imgs'))
-
-    },
-    filename:function(req,file,cb){
-           
-      const name= Date.now()+'-'+file.originalname
-        cb(null,name)
-      
-    }
-})
-const imageFilter = function(req, file, cb) {
-  // Accept images only
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    req.fileValidationError = 'Only image files are allowed!';
-    return cb(new Error('Only image files are allowed!'), false);
-  }
-  cb(null, true);
-};
-
-const upload =multer({storage:storage,fileFilter:imageFilter})
-
 const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')
 const couponController=require('../controles/coupenController')
 const category_Model = require('../model/category_Model')
+const upload=require('../config/multer')
 
 
+admin_rout.set('view engine','ejs')
+admin_rout.set('views','./views/admin')
 
-  
+admin_rout.use(express.json())
+admin_rout.use(express.urlencoded({extended:true}))
+
 
 //login
 admin_rout.get('/',auth.isLogout,adminController.getLogin)
-
 admin_rout.post('/',adminController.veryfiLogin)
-
 
 //admin home
 admin_rout.get('/home',adminController.getHome)
-
-//logout
-
 admin_rout.get('/logout',auth.isLogin,adminController.logout)
 
 
 
 //User Details
 admin_rout.get('/user_details',auth.isLogin,adminController.getTable)
-
-
-
-
-
-//delete_user
 admin_rout.get('/delete_user',auth.isLogin,adminController.deleteUser)
-
-//verify user
 admin_rout.get('/verify_user',auth.isLogin,adminController.veryfiUser)
-
-//block/unblock user
 admin_rout.get('/block_unblockUser',auth.isLogin,adminController.blockUser)
 
-
-
-
-
 // category page
-
 admin_rout.get('/category',auth.isLogin,adminController.categoryLoad)
-
-//add category
 admin_rout.get('/add_category',auth.isLogin,adminController.add_categoryLoad)
-
 admin_rout.post('/add_category',auth.isLogin,adminController.insert_category)
-
-//delete category
-admin_rout.get('/delete_category',auth.isLogin,adminController.deletecategory)
-
-//edit_category
 admin_rout.get('/edit_category',auth.isLogin,adminController.edit_catLoad)
-
 admin_rout.post('/edit_category',adminController.updatecategory)
+// admin_rout.get('/hideshow_category',adminController.hideshowcategory)
+// admin_rout.get('/delete_category',auth.isLogin,adminController.deletecategory)
 
-//hide_show
-
-admin_rout.get('/hideshow_category',adminController.hideshowcategory)
 
 
 //order_details
 admin_rout.get('/order_details',auth.isLogin,adminController.orderDetails)
-
-//
- admin_rout.get('/order_status',auth.isLogin,adminController.orderstatus)
-
- //orderCancel
-
- admin_rout.get('/order_cancel',auth.isLogin,adminController.ordercancelstatus)
-
- //view_orders
- admin_rout.get('/view_orders',auth.isLogin,adminController.orderview)
-
- //order_deliverd
-
- admin_rout.get('/order_deliverd',auth.isLogin,adminController.orderdeliverd)
-
-
-
-
-
+admin_rout.get('/order_status',auth.isLogin,adminController.orderstatus)
+admin_rout.get('/order_cancel',auth.isLogin,adminController.ordercancelstatus)
+admin_rout.get('/view_orders',auth.isLogin,adminController.orderview)
+admin_rout.get('/order_deliverd',auth.isLogin,adminController.orderdeliverd)
 
 // Products page    in productContreoller
-
 admin_rout.get('/products',auth.isLogin,productContreoller.productload)
-
-//add_productsLoad
 admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
-
-//inert_products
-admin_rout.post('/add_products',upload.array('image',5),auth.isLogin,productContreoller.insertProduct)
-
-//edit_products
-
-admin_rout.get('/edit_products',upload.array('image',5),auth.isLogin,productContreoller.editProduct)
-
-admin_rout.post('/edit_products',upload.array('image',5),auth.isLogin,productContreoller.posteditProduct)
-
-//delete_images_in_edit page
-
+admin_rout.post('/add_products',auth.isLogin,upload.upload.array('image',5),auth.isLogin,productContreoller.insertProduct)
+admin_rout.get('/edit_products',auth.isLogin,upload.upload.array('image',5),productContreoller.editProduct)
+admin_rout.post('/edit_products',auth.isLogin,upload.upload.array('image',5),productContreoller.posteditProduct)
 admin_rout.post('/delete_image',auth.isLogin,productContreoller.postdelete_image)
-
-//delete_product
-
-admin_rout.get('/delete_products',upload.array('image',5),auth.isLogin,productContreoller.deletetProduct)
-
-////sales_reports
-
+admin_rout.get('/delete_products',auth.isLogin,upload.upload.array('image',5),productContreoller.deletetProduct)
 
 ///sales report
 admin_rout.get('/sales_reports',auth.isLogin,adminController.salesReports)
-
-/// report export_to_pdf
 admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
 
-
 //coupon
-
 admin_rout.get('/coupon',auth.isLogin,couponController.loadCoupon)
 admin_rout.get('/add_coupon',auth.isLogin,couponController.addloadCoupon)
 admin_rout.post('/add_coupon',auth.isLogin,couponController.postaddcoupon)
-
-
-
-
-
-
-
-
-
-
-// admin_rout.get('*',function (req,res){
-
-//     res.redirect('/admin')
-    
-//     })
-
-
 
 module.exports = admin_rout

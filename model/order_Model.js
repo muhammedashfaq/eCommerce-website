@@ -39,7 +39,10 @@ const orderSchema = new mongoose.Schema({
     },
     paymentId :{
         type : String
-    }
+    },
+    orderWallet:{
+        type:Number
+    },  
 },
   {
     timestamps: true

@@ -76,10 +76,10 @@
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">Phone</p>
+                  <p class="mb-0">wallet</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"></p>
+                  <p class="text-muted mb-0"><%= data.wallet%></p>
                 </div>
               </div>
               <hr>
@@ -91,6 +91,7 @@
                   <input name="mobile" class="text-muted mb-0" value="<%= data.mob%>">
                 </div>
               </div>
+              
              
               <button class=" genric-btn success circle arrow" type="submit">Submit</button>
 
@@ -110,7 +111,7 @@
                 
                 
               
-              <% address.address.forEach((value)=>{
+              <% address.address.forEach((value,index)=>{
                 %>
 
                 <%= value.fname%><%=value.sname%> <br>
@@ -121,9 +122,9 @@
                 <br>
                 <div style="display: flex;">
 
-                                     
+                              <input type="hidden" value="<%= index%>" name="index">       
                                            <div>
-                                            <a class="genric-btn danger-border circle arrow" href="/edit_address?id=<%=value._id%>">Edit</a>
+                                            <a class="genric-btn danger-border circle arrow" href="/edit_address?id=<%=value._id%>&index=<%=index%>">Edit</a>
 
                                           
                                               

@@ -288,16 +288,16 @@ const insert_category =async (req,res)=>{
     }
 }   
 
-const deletecategory =async (req,res)=>{
-    try {
+// const deletecategory =async (req,res)=>{
+//     try {
         
-        const id=req.query.id
-        await CatDB.deleteOne({_id:id})
-        res.redirect('/admin/category')
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+//         const id=req.query.id
+//         await CatDB.deleteOne({_id:id})
+//         res.redirect('/admin/category')
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
 
 
 const add_categoryLoad = async (req,res)=>{
@@ -375,31 +375,31 @@ const updatecategory =async (req,res)=>{
 
 }
 
-const hideshowcategory =async (req,res)=>{
-    try {
+// const hideshowcategory =async (req,res)=>{
+//     try {
 
-        const id=req.query.id
+//         const id=req.query.id
 
 
-        const Cdata =await CatDB.findById({_id:id})
+//         const Cdata =await CatDB.findById({_id:id})
 
-        console.log(Cdata)
+//         console.log(Cdata)
 
-        if(Cdata.blocked==false){
-            await CatDB.updateOne({_id:id},{$set:{blocked:true}})
-            res.redirect('/admin/category')
-        }
-            if(Cdata.blocked==true){
-                await CatDB.updateOne({_id:id},{$set:{blocked:false}})
-                res.redirect('/admin/category')
+//         if(Cdata.blocked==false){
+//             await CatDB.updateOne({_id:id},{$set:{blocked:true}})
+//             res.redirect('/admin/category')
+//         }
+//             if(Cdata.blocked==true){
+//                 await CatDB.updateOne({_id:id},{$set:{blocked:false}})
+//                 res.redirect('/admin/category')
             
-        }
+//         }
 
         
-    } catch (error) {
-        console.log(error)
-    }
-}
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 
 //user order_details listing
@@ -408,7 +408,6 @@ const orderDetails =async (req,res)=>{
     try {
 
         const orderData =await order.find()
-        console.log(orderData);
         res.render('order_details',{orderData})
 
         
@@ -424,7 +423,6 @@ const orderstatus =async (req,res)=>{
     try {
         const id=req.query.id
 
-        console.log(id);
         const orderData =await order.findById({_id:id})
         
         if(orderData.status=="pending"){
@@ -476,9 +474,6 @@ const orderdeliverd =async (req,res)=>{
     try {
 
         const id=req.query.id
-
-        console.log(id);
-
         const orderData =await order.findById({_id:id})
 
         if(orderData.status=="placed"){
@@ -487,13 +482,30 @@ const orderdeliverd =async (req,res)=>{
 
         }if(orderData.status=="waiting for approval"){
             await order.updateOne({_id:id},{$set:{status:"Return Approved"}})
+          
+                if(orderData.paymentMethod=="COD"){
+                    const total = orderData.orderWallet
+                await User.findByIdAndUpdate(orderData.user,{$inc:{wallet:total}})
+                res.redirect('/admin/order_details')
+
+                }else{
+                const total = orderData.totalAmount+orderData.orderWallet
+                await User.findByIdAndUpdate(orderData.user,{$inc:{wallet:total}})
+                res.redirect('/admin/order_details')
+
+                }       
+        }else{
             res.redirect('/admin/order_details')
+
         }
         
     } catch (error) {
         console.log(error.message);
     }
 }
+
+
+
 //orderview
 
 
@@ -580,9 +592,9 @@ module.exports={
     insert_category,
     edit_catLoad,
     updatecategory,
-    deletecategory,
+    // deletecategory,
     add_categoryLoad,
-    hideshowcategory,
+    // hideshowcategory,
     orderDetails,
      orderstatus,
      ordercancelstatus,

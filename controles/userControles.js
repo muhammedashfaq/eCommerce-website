@@ -16,6 +16,7 @@ dotenv.config()
 let otp
 let email2
 let name2
+let pricetotal
 
 ///html to pdfgenerate require things forpuchase invoice
 const ejs =require('ejs')
@@ -216,7 +217,8 @@ const veryfiyUser= async (req,res)=>{
         password:spassword,
         is_admin:0,
         is_verified:0,
-        is_blocked:false
+        is_blocked:false,
+      
 
 
     })
@@ -414,11 +416,40 @@ const userLogout=async(req,res)=>{
 }
 const getShop = async(req,res)=>{
     try {
+        let search =''
+        if(req.query.search){
+            search=req.query.search
+        }
+        let page =req.query.page
+        const limit =3
+const skip = (page-1)*limit
+        
+        if(req.query.page){
+            page=req.query.page
+        }
 
-        const data =await productDB.find()
+       
+        const data =await productDB.find({$and:[{name:{$regex: '.*'+search+'.*',$options:'i'
+
+    }}]}).limit(limit*1)
+    .skip(skip)
+    .exec()
+
+
+    const count =await productDB.find({$and:[{name:{$regex: '.*'+search+'.*',$options:'i'
+
+}}]}).countDocuments()
+
+
+
         const userd=await User.findOne({_id:req.session.user_id})
 
-        res.render('shop',{product:data, user:userd.name})
+        res.render('shop',{product:data, user:userd.name,
+        
+            totalpages:Math.ceil(count/limit),
+            page
+        
+        })
         
     } catch (error) {
         console.log(error.message);
@@ -590,32 +621,31 @@ const getProduct_checkout = async(req,res)=>{
         const Total= total[0].total;
 
         if(address){
-
-
-        
-        if(cartData.product.length>0){
+            if(cartData.product.length>0){
             const addressData = address.address;
-            
-
+            if(total[0].total>=userd.wallet){
+                const Total = total[0].total
+                const grandTotal = (total[0].total) - userd.wallet ;
+                res.render('checkout',{product:data,Total,userd, user:userd.name,address:addressData,grandTotal})
+            }else{
+                const Total = total[0].total;
+                const grandTotal =  1;   
            
-            
-            res.render('checkout',{product:data,Total, user:userd.name,address:addressData})
+                res.render('checkout',{product:data,Total,userd, user:userd.name,address:addressData,grandTotal})
+            }
 
 
+            }else{
+                res.render('checkout',{product:data,Total,userd, user:userd.name,address:addressData})
+
+            }
 
         }else{
-            res.render('checkout',{product:data, user:userd.name,Total})
+            res.render('checkout',{product:data,userd, user:userd.name,Total})
 
             
         }
-    }else{
-
-        res.redirect('/add_address')
-
-    }
-        
-
-       
+ 
         
     } catch (error) {
         console.log(error.message);
@@ -641,7 +671,12 @@ const placetheorder =async(req,res)=>{
             const Total= total[0].total;
            
 
-      
+            const Total1 = req.body.amount;
+            const subtotal = req.body.total;
+            //const pricetotal=totalPrice
+           // const discount = parseInt(req.body.discount);
+            const wallet = subtotal-Total1
+
         const address=req.body.address
         const payment=req.body.payment
         // const userData = req.session.user_id
@@ -661,14 +696,17 @@ const placetheorder =async(req,res)=>{
             userName:userDetails.name,
             paymentMethod:payment,
             product:products,   
-            totalAmount:Total,
+            totalAmount:Total1,
             Date:Date.now(),
-            status:status
-
+            status:status,
+            orderWallet:wallet
         })
 
         const saveOrder = await newOrder.save()
         if(status=="placed"){
+
+            const wal = subtotal - Total1;
+             await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
             await cart.deleteOne({user:userDetails._id})
             res.json({codsuccess:true})
         }
@@ -710,25 +748,38 @@ const orderplaced =async (req,res)=>{
 
 const verifyOnlinePayment =async(req,res)=>{
     try {
-        
+        const userd=await User.findOne({_id:req.session.user_id})
 
-        // const totalPrice = req.body.amount2;
-        // const total = req.body.amount;
-        // const wal = totalPrice - total;
+        const stotal = await cart.aggregate([{$match:{user:userd._id}},
+
+            {$unwind:"$product"},
+
+            {$project:{price:"$product.price",quantity:"$product.quantity"}},
+
+            {$group:{_id:null,total:{$sum:{$multiply:["$price","$quantity"]}}}}]);
+
+           
+          
+           
+            const subtotal= stotal[0].total;
+       
+
+         const total = req.body.amount;
+          const wal = subtotal - total;
+
+
+          console.log(wal+'wallet'+subtotal+total);
         const details= (req.body)
-        console.log(details);
         const crypto = require('crypto');
         let hmac = crypto.createHmac('sha256', process.env.RazorKey);
         hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id)  
             
         hmac = hmac.digest('hex');
-        console.log(hmac);
-
-        console.log(details.payment.razorpay_signature);
+        
         
         if (hmac == details.payment.razorpay_signature) {
 
-
+            await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
             await cart.deleteOne({user:req.session.user_id});
@@ -840,6 +891,8 @@ const totalproductprice = async (req, res) => {
       res.render("user/500");
     }
   };
+
+
 ///// BUY NOW SECTION
 
 var productId
@@ -1113,12 +1166,28 @@ const ordershowLoad =async(req,res)=>{
 //canceluserorder
 const canceluserorder =async(req,res)=>{
     try {
-        const userd=await User.findOne({_id:req.session.user_id})
         const id=req.body.id
+        const orderdata=await order.findById({_id:id})
 
-        await order.updateOne({_id:id},{$set:{status:"canceled"}})
+        console.log(orderdata+"hailll");
+        const wallet=orderdata.orderWallet
+
+        const total=orderdata.totalAmount+wallet
+
+        //const userd=await User.findOne({_id:req.session.user_id})
+console.log('heii');
+        const data=await order.findByIdAndUpdate({_id:id},{$set:{status:"canceled"}})
+        if(data){
+        if(orderdata.paymentMethod=="COD"){
+                await User.findByIdAndUpdate(orderdata.user,{$inc:{wallet:wallet}})
+
+        }else{
+            await User.findByIdAndUpdate(orderdata.user,{$inc:{wallet:total}})
+        }
 
         res.json({remove:true})
+
+    }
     } catch (error) {
             console.log(error.message);        
     }

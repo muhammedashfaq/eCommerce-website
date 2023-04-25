@@ -35,8 +35,9 @@
 
         <% if(value.status=="delivered"){%>
           <a  onclick="returnOrder('<%= value._id%>')" type="button" class="genric-btn danger-border circle arrow">Return</a>
-          <%}%>
+        
           <a   href="./invoice_pdf?id=<%= value._id%>"><span style="color:rgb(6, 0, 12); margin-left: 13px;"><i class="ti-printer"></i></span></a>
+          <%}%>
         </td>
          
 

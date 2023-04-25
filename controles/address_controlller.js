@@ -180,15 +180,23 @@ const editaddress = async (req, res) => {
   try {
     const id = req.query.id;
     const userd = await User.findOne({ _id: req.session.user_id });
-    const addressData = await user_address.findOne({_id:userd});
+    // const addressData = await user_address.findOne({_id:userd});
     const userId = req.session.user_id
-    console.log(addressData);
-    const editData = await user_address.findOneAndUpdate({user : userId})
+    // console.log(addressData);
+    // const editData = await user_address.findOneAndUpdate({user : userId})
     console.log(id);
-    const value =editData
+    // const value =editData
 
 
-    console.log(editData);
+
+    const index=req.query.index
+    console.log(index);
+    const editData = await user_address.findOne({user : userId})
+
+    const value=editData.address[index]
+
+    console.log(value);
+
 
     res.render("edit_address", { user: userd.name, value });
   } catch (error) {
