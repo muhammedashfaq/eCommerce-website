@@ -1,18 +1,17 @@
-
-const session=require('express-session')
-
-var mongoose=require('mongoose')
 const mongoDB =require('./config/auth')
 mongoDB.mongoDB()
 const path =require('path')
 const express=require("express")
 const app=express()
 const PORT=3000;
-
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+const session=require('express-session')
 
 app.set('view engine','ejs')
 app.set('views','./views/users')
 
+//session
 app.use(session({
   secret:"thisiemysecretkey",
   resave:false,
@@ -32,15 +31,11 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname,'public')))
 
 
-
-//console.log(path.join(__dirname,'public'));
 const userRout=require("./routes/user_routes")
-
 app.use('/',userRout)
 
 
 const adminRout=require("./routes/admin_routes")
-
 app.use('/admin',adminRout)
 
 

@@ -25,9 +25,13 @@
             <thead>
               <tr>
                         <th class="px-4 py-3">NO</th>
+                        <th class="px-4 py-3">Name</th>
+
                         <th class="px-4 py-3">Order Id</th>
                         <th class="px-4 py-3">Date</th>
                         <th class="px-4 py-3">Amount</th>
+                        <th class="px-4 py-3">quantity</th>
+
                         <th class="px-4 py-3">Method</th>
 
                       
@@ -38,9 +42,12 @@
                 <% report.forEach((value,index)=>{%>
               <tr>
                 <th scope="row"><%=index+1%></th>
+                <th scope="row"><%=value.userName%></th>
+
                 <td><%=value._id%></td>
                 <td><%=value.Date.toISOString().substring(0,10)%></td>
                 <td>RS: <%= value.totalAmount%></td>
+                <td><%= value.product[0].quantity%></td>
                 <td><%= value.paymentMethod%></td>
                 <td><%= value.status%></td>
                 

@@ -16,7 +16,6 @@ dotenv.config()
 let otp
 let email2
 let name2
-let pricetotal
 
 ///html to pdfgenerate require things forpuchase invoice
 const ejs =require('ejs')
@@ -414,41 +413,44 @@ const userLogout=async(req,res)=>{
         
     }
 }
-const getShop = async(req,res)=>{
+const   getShop = async(req,res)=>{
     try {
-        let search =''
-        if(req.query.search){
-            search=req.query.search
-        }
-        let page =req.query.page
-        const limit =3
-const skip = (page-1)*limit
+        let page = req.query.page || 1
+        const limit = 4
+        const skip = (page-1)*limit
+
+        let search = req.query.search || ''
         
-        if(req.query.page){
-            page=req.query.page
+        let category = req.query.category || 'All'
+        let cat = []
+        const categoryData= await CatDB.find()
+        for(let i = 0 ; i < categoryData.length; i++){
+            cat[i] = categoryData[i].name
         }
+        category == 'All' ? category = [...cat] : category = req.query.category.split(',')
 
-       
-        const data =await productDB.find({$and:[{name:{$regex: '.*'+search+'.*',$options:'i'
+        let sort 
+        let price = req.query.price || 'Low'
+        price == 'Low' ? sort = 1 : sort = -1
+        const productData = await productDB.aggregate([
+            {$match : {name : {$regex : '^'+search, $options : 'i'},category : {$in : [...category]}}},
+            {$sort : {price : sort}},
+            {$skip : skip},
+            {$limit : limit}
+        ])
 
-    }}]}).limit(limit*1)
-    .skip(skip)
-    .exec()
+        const productCount =(await productDB.find({name : {$regex : '^'+search, $options : 'i'}})
+        .where("category").in([...category])).length
 
-
-    const count =await productDB.find({$and:[{name:{$regex: '.*'+search+'.*',$options:'i'
-
-}}]}).countDocuments()
-
-
-
+        const totalpages = Math.ceil(productCount/limit)
         const userd=await User.findOne({_id:req.session.user_id})
-
-        res.render('shop',{product:data, user:userd.name,
-        
-            totalpages:Math.ceil(count/limit),
-            page
-        
+        res.render('shop',{
+            product:productData, user:userd.name,
+            totalpages,
+            page,categoryData,
+            price,
+            category,
+            search
         })
         
     } catch (error) {
@@ -853,12 +855,9 @@ const totalproductprice = async (req, res) => {
 
     
 
-        console.log('hihi');
 
-        console.log('hel');
       const userd=await User.findOne({_id:req.session.user_id})
 
-      console.log(userd);
   
       let total = await cart.aggregate([
         {
@@ -885,7 +884,6 @@ const totalproductprice = async (req, res) => {
   
       let Total = total[0].total;
 
-      console.log(Total);
       res.json({ success: true, Total });
     } catch (error) {
       res.render("user/500");
@@ -1169,13 +1167,11 @@ const canceluserorder =async(req,res)=>{
         const id=req.body.id
         const orderdata=await order.findById({_id:id})
 
-        console.log(orderdata+"hailll");
         const wallet=orderdata.orderWallet
 
         const total=orderdata.totalAmount+wallet
 
         //const userd=await User.findOne({_id:req.session.user_id})
-console.log('heii');
         const data=await order.findByIdAndUpdate({_id:id},{$set:{status:"canceled"}})
         if(data){
         if(orderdata.paymentMethod=="COD"){
@@ -1210,7 +1206,6 @@ const returnuserorder =async(req,res)=>{
 }
 const orderInvoice=async(req,res)=>{
     try {
-        
         const id =req.query.id
             
         const orderdetails = await order.findOne({_id:id}).populate("product.productId").sort({Date:-1})
@@ -1282,15 +1277,11 @@ module.exports={
     buynow,
     placetheorderbuy,
     verifyBuynowPayment,
-
-
     userLogout,
     getShop,
     getContact,
     getAbout,
     buynowrender,
-
-
     otpValidation,
     error404,
     getUser_profile,

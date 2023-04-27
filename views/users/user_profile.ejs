@@ -114,11 +114,12 @@
               <% address.address.forEach((value,index)=>{
                 %>
 
-                <%= value.fname%><%=value.sname%> <br>
-                <%=value.address%><br>
-                <%= value.mobile%><br>
-                <%=value.email%><br>
-                <%= value.pin%><br>
+                Name:   &nbsp;   <%= value.fname%><%=value.sname%> <br>
+                Address:&nbsp; <%=value.address%><br>
+                Phone:  &nbsp;  <%= value.mobile%><br>
+                Email:  &nbsp;  <%=value.email%><br>
+                PIN:    &nbsp;    <%= value.pin%><br>
+
                 <br>
                 <div style="display: flex;">
 

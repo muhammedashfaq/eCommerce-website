@@ -10,11 +10,7 @@ const productDB = require('../model/prodect_model')
  const fs= require('fs')
  const path = require('path')
 
-
 const bcrypt =require('bcrypt')
-const { response } = require("../routes/admin_routes")
-
-
 const securePassword=async(password)=>{
     try {
         const passwordHash=await bcrypt.hash(password,10);
@@ -66,28 +62,18 @@ const veryfiLogin=async (req,res)=>{
 }
 
 
-
 const getHome=async (req,res)=>{
     try {
-     console.log('home');
-
-       
-            const userData = await User.find({is_admin:0,is_verified:0});
+             const userData = await User.find({is_admin:0,is_verified:0});
             const total = await order.aggregate([{$group:{_id:null,totalAmount:{$sum:"$totalAmount"}}}])
             const Total = total[0].totalAmount;
-
-
             const Users = await User.find({is_admin:0}).count();
             const Orders = await order.find({}).count();
             const Products = await productDB.find({}).count();
             const onlineCount = await order.aggregate([{$match:{paymentMethod:"online"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
             const COD = await order.aggregate([{$match:{paymentMethod:"COD"}},{$group:{_id:"$paymentMethod ",total:{$count:{}}}}])
             const onlineCounts = await order.aggregate([{$group:{_id:"$paymentMethod",totalPayment:{$count:{}}}}])
-console.log('home');
-            // const onlineCount =onlineCount1[1].totalPayment
         if(onlineCounts){
-
-
             let sales = [];
 
             var date = new Date();
@@ -103,9 +89,7 @@ console.log('home');
             totalAmount:{$sum:"$totalAmount"},  
            
         }},{$sort:{_id:1}}]);
-
-
-            for(let i=1;i<=12;i++){
+          for(let i=1;i<=12;i++){
                 let result = true;
                 for(let k=0;k<salesByYear.length;k++){
                     result = false;
@@ -124,19 +108,9 @@ console.log('home');
                 salesData.push(sales[i].totalAmount);
             }
             
-            console.log('total');
-
             res.render('home',{userData,Users,Orders,Products,Total,onlineCount,onlineCounts,COD,month:salesData})
-        }else{
-
-            console.log('hello');
-
-            res.send('homeempty')
-
         }
-          
-
-        
+                 
     } catch (error) {
         console.log(error.message,);
         
@@ -168,9 +142,6 @@ const getTable = async(req,res)=>{
     }
 }
 
-
-
-
 const veryfiUser = async(req,res)=>{
     try {
         const id=req.query.id
@@ -183,7 +154,6 @@ const veryfiUser = async(req,res)=>{
             await User.updateOne({_id:id},{$set:{is_verified:0}})
             res.redirect('/admin/user_details')
         }
-
 
 
     } catch (error) {
@@ -220,11 +190,6 @@ const blockUser =async (req,res)=>{
         
     }
 }
-
-
-
-
-
 const deleteUser= async (req,res)=>{
     
     try {
@@ -288,18 +253,6 @@ const insert_category =async (req,res)=>{
     }
 }   
 
-// const deletecategory =async (req,res)=>{
-//     try {
-        
-//         const id=req.query.id
-//         await CatDB.deleteOne({_id:id})
-//         res.redirect('/admin/category')
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
-
 const add_categoryLoad = async (req,res)=>{
     try {
         res.render('add_category')
@@ -310,30 +263,17 @@ const add_categoryLoad = async (req,res)=>{
 }
 
 const edit_catLoad =async(req,res)=>{
-    try {
-
-        
+    try {    
         const id=req.query.id
         const name=req.body.name;
-
-        // const alredy = await CatDB.findOne({name: {$regex:name,$options: "i"}})
-
-
-        // if(alredy){
-        //         res.render('add_category',{message:"This category alredy exist "})
-        // }else{
-
-
-
-        const editData=await CatDB.findById({_id:id})
+       const editData=await CatDB.findById({_id:id})
         if(editData){
             res.render('edit_category',{data:editData})
         }else{
             res.render('edit_category')
 
         }
-    
-        
+            
     } catch (error) {
         console.log(error.message);
         
@@ -344,22 +284,14 @@ const updatecategory =async (req,res)=>{
 
     try {
         const name=req.body.name;
-
-        
-
-        
-        // const name=req.body.name;
         if(name.trim().length==0){``
             res.redirect('/admin/category')
           }else{
             const alredy = await CatDB.findOne({name: {$regex:name,$options: "i"}})
 
-
         if(alredy){
                 res.render('add_category',{message:"This category alredy exist "})
-        }else{
-
-       
+        }else{       
         await CatDB.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name}})
         
                 res.redirect('/admin/category')
@@ -374,34 +306,6 @@ const updatecategory =async (req,res)=>{
 
 
 }
-
-// const hideshowcategory =async (req,res)=>{
-//     try {
-
-//         const id=req.query.id
-
-
-//         const Cdata =await CatDB.findById({_id:id})
-
-//         console.log(Cdata)
-
-//         if(Cdata.blocked==false){
-//             await CatDB.updateOne({_id:id},{$set:{blocked:true}})
-//             res.redirect('/admin/category')
-//         }
-//             if(Cdata.blocked==true){
-//                 await CatDB.updateOne({_id:id},{$set:{blocked:false}})
-//                 res.redirect('/admin/category')
-            
-//         }
-
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-
 //user order_details listing
 
 const orderDetails =async (req,res)=>{
@@ -434,20 +338,15 @@ const orderstatus =async (req,res)=>{
             await order.updateOne({_id:id},{$set:{status:"pending"}})
             res.redirect('/admin/order_details')
 
-
         }else{
             res.redirect('/admin/order_details')
-
-
         }
         
     } catch (error) {
 
-        console.log(error.message);
-        
+        console.log(error.message);      
     }
 }
-
 const ordercancelstatus =async (req,res)=>{
     try {
         const id=req.query.id
@@ -458,10 +357,6 @@ const ordercancelstatus =async (req,res)=>{
             res.redirect('/admin/order_details')
 
         }
-
-
-
-
     } catch (error) {
         console.log(error.message);
         
@@ -483,17 +378,11 @@ const orderdeliverd =async (req,res)=>{
         }if(orderData.status=="waiting for approval"){
             await order.updateOne({_id:id},{$set:{status:"Return Approved"}})
           
-                if(orderData.paymentMethod=="COD"){
-                    const total = orderData.orderWallet
+               
+                    const total = orderData.totalAmount+orderData.orderWallet
                 await User.findByIdAndUpdate(orderData.user,{$inc:{wallet:total}})
                 res.redirect('/admin/order_details')
 
-                }else{
-                const total = orderData.totalAmount+orderData.orderWallet
-                await User.findByIdAndUpdate(orderData.user,{$inc:{wallet:total}})
-                res.redirect('/admin/order_details')
-
-                }       
         }else{
             res.redirect('/admin/order_details')
 
@@ -504,11 +393,7 @@ const orderdeliverd =async (req,res)=>{
     }
 }
 
-
-
 //orderview
-
-
 const orderview =async (req,res)=>{
     try {
 
@@ -529,25 +414,34 @@ const orderview =async (req,res)=>{
 //salesReports
 const salesReports =async (req,res)=>{
   try {
-        const orderdetails = await order.find({status:{$ne:"cancelled"}}).sort({Date:-1})
 
-    res.render('sales_report',{orderdetails})
+    const orderData=await order.find({})
+
+                const data=orderData[0].product[0].productId.name
+            console.log(data);
+
+        const orderdetails = await order.find({status:{$ne:"cancelled"}})
+        const product=orderdetails[0].product
+
+
+    res.render('sales_report',{orderdetails,product,data})
   } catch (error) {
     console.log(error.message);
     
   }
 }
 
-
 //export sales report to pdf
 
 const exportTopdf =async (req,res)=>{
     try {
             
-        const orderdetails = await order.find({status:{$ne:"cancelled"}}).sort({Date:-1})
-        
+        const orderdetails = await order.find({status:{$ne:"cancelled"}}).populate("product.productId").sort({Date:-1})
+        const products=orderdetails.product
+
         const data={
-            report:orderdetails
+            report:orderdetails,
+            product:products
         }
 
         const filepath =path.resolve(__dirname,'../views/admin/salesreporttopdf.ejs')
@@ -592,9 +486,7 @@ module.exports={
     insert_category,
     edit_catLoad,
     updatecategory,
-    // deletecategory,
     add_categoryLoad,
-    // hideshowcategory,
     orderDetails,
      orderstatus,
      ordercancelstatus,

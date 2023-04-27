@@ -29,7 +29,7 @@
 
                   <!-- <a class="btn_3" href="./user_profile">ADD ADDRESS</a> -->
 
-                  <a class="btn_3" href="./add_address">ADD ADDRESS</a> <br><br>
+                  <a class="btn_3" href="./add_addresscheck">ADD ADDRESS</a> <br><br>
 
                  
                   <form  id="checkout">
@@ -43,22 +43,28 @@
                      <% address.forEach((value,index)=>{%>
                       
                    <input class="form-check-input" name="address" type="radio" 
-                 value="  <%= value.fname%><%= value.sname %> 
-                   <%= value.address %> <%= value.pin %>"
+                 value="  <%= value.fname%> <%= value.sname %> 
+                      <%= value.address %>
+                        <%= value.mobile %> 
+                         <%= value.email%>
+                         <%= value.pin %>"
                          id="flexCheckDefault" required> <br>
                         <label class="form-check-label" for="flexCheckDefault">
-                          <%= value.fname%><%= value.sname %> <br>
-                         <%= value.address %> <br>
-                         Ph : <%= value.mobile %>,
-                         <%= value.email%> <br>
-                         <%= value.pin %>
+
+                          Name:   &nbsp;   <%= value.fname%><%=value.sname%> <br>
+                          Address:&nbsp; <%=value.address%><br>
+                          Phone:  &nbsp;  <%= value.mobile%><br>
+                          Email:  &nbsp;  <%=value.email%><br>
+                          PIN:    &nbsp;    <%= value.pin%><br>
+
+                          
                         </label>
                         <br>
                         <div style="display: flex;">
 
                                      
                           <div>
-                           <a class="genric-btn danger-border circle arrow" href="/edit_address?id=<%=value._id%>&index=<%=index%>">Edit</a>
+                           <a class="genric-btn danger-border circle arrow" href="/edit_addresscheck?id=<%=value._id%>&index=<%=index%>">Edit</a>
 
                          
                              
@@ -130,7 +136,7 @@
               
                       <label for="coupon"></label>
                       <input type="text" name="code" id="code" placeholder="Enter Coupon code" required> 
-                      <button  class=" genric-btn success circle arrow"  onclick="applycoupon($('#code').val())">apply</button>
+                      <!-- <button  class=" genric-btn success circle arrow"  onclick="applycoupon($('#code').val())">apply</button> -->
                     
                    
                   </div> 
@@ -240,79 +246,6 @@
   
       </script>
 
-      <script>
-            function applycoupon(code){
-    const amount = document.getElementById('total1').innerHTML;
-    console.log(amount);
-    $.ajax({
-      url:"/applyCoupon",
-      data:{  
-        code:code,
-        amount:amount
-      },
-      method:"post",
-      success:(response)=>{
-        console.log(response);
-        if(response.user){
-          console.log("This User already used this coupon");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'This coupon already used!'
-              })
-        }else if(response.limit){
-          console.log("coupon limit exceeded");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'coupon limit exceeded!'
-              })
-        }else if(response.status){
-          console.log("This coupon now not in use");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'coupon limit exceeded!'
-              })
-        }else if(response.cartAmount){
-          console.log("You cant use the coupon...Buy more");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'You cant use the coupon...Buy more'
-              })
-        }else if(response.date){
-          console.log("coupon date expired");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'date expired!!!'
-              })
-        }else if(response.amountOkey){
-          console.log("discount granded");
-          document.getElementById('gt3').innerHTML = response.disAmount
-          document.getElementById('gt4').innerHTML = response.disTotal
-          console.log("done");
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Discount redeemed',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }else if(response.invalid){
-          console.log("invalid coupon");
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Invalid Coupon!!!'
-              })
-        }
-      }
-    })
-  }
-
-      </script>
 
 <script>
   function deleteaddress( id) {

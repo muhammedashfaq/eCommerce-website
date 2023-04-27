@@ -1,17 +1,11 @@
 const express =require('express')
 const rout=express()
-const session=require('express-session')
 const auth=require('../middleware/userAuth')
-rout.use(express.json())
-rout.use(express.urlencoded({extended:true}))
-
-
-
 
 rout.set('view engine','ejs')
 rout.set('views','./views/users')
 
-//vontrollers
+//controllers
 const userController= require('../controles/userControles')
 const adddressController= require('../controles/address_controlller')
 const couponController=require('../controles/coupenController')
@@ -49,7 +43,7 @@ rout.get('/order-placed',auth.isLogin,userController.orderplaced)
 rout.post('/verifyPayment',userController.verifyOnlinePayment)
 
 //applyCoupon
-rout.post('/applyCoupon',couponController.applyCoupon)
+//rout.post('/applyCoupon',couponController.applyCoupon)
 
 /////BUY NOW////
 rout.post("/buynow",auth.isLogin,userController.buynow)
@@ -64,6 +58,12 @@ rout.get('/delete_address',adddressController.deleteaddress)
 rout.post('/deleteaddress',adddressController.deleteaddress)
 rout.get('/edit_address',adddressController.editaddress)
 rout.post('/edit_address',adddressController.posteditaddress)
+
+rout.get('/add_addresscheck',auth.isLogin,adddressController.getadd_address)
+rout.post('/add_addresscheck',adddressController.veryfyaddesscheck)
+rout.get('/edit_addresscheck',adddressController.editaddress)
+rout.post('/edit_addresscheck',adddressController.posteditaddresscheck)
+
 
 
 

@@ -19,16 +19,22 @@
         <!-- Latest Products Start -->
         <section class="popular-items latest-padding">
             <div class="container">
+                <hr>
                 <div class="row product-btn justify-content-between mb-40">
                     <div class="properties__button">
                         <!--Nav Button  -->
-                        <nav>                                                      
+                        <nav>   
+                                                                     
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">NewestArrivals</a>
-                                <!-- <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Price high to low</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"> Most populer </a> -->
-                                
-                            </div>
+                                <select name="select" id="select1" onchange="location = '/shop?category='+value+'&price=<%= price %>&search=<%= search %>'">
+                                    
+                                    <option value="All">All</option>
+                                    <% categoryData.forEach((value)=>{%>
+                                        
+                                    <option><%= value.name%></option>
+                                    <%})%>
+                                </select>
+                            </div> 
                           
                         </nav>
                         <!--End Nav Button  -->
@@ -39,24 +45,29 @@
                     <!-- Select items -->
                     <div class="select-this d-flex ">
                      
-                        <form action="#">
+                        
                             <div class="select-itms">
-                                <select name="select" id="select1">
-                                    <option value="">40 per page</option>
-                                    <option value="">50 per page</option>
-                                    <option value="">60 per page</option>
-                                    <option value="">70 per page</option>
+                                <select name="select" id="select1" onchange="location = '/shop?category=<%= category %>&price='+value+'&search=<%= search %>'">
+                                    <% if(price == "High"){%>
+                                        <option value="Low">Low to High</option>
+                                        <option value="High" selected>High to Low</option>
+                                    <%}else {%>
+                                        <option value="Low" selected>Low to High</option>
+                                        <option value="High" >High to Low</option>
+                                    <%} %>
                                 </select>
                             </div>
-                        </form>
-                        <form>
+                       
+                    <form action="/shop? %>">
                         <div class="subscribe_form" style="margin-left: 10px;">
                             <input type="text" placeholder="Enter" name="search">
+                            <input type="hidden" name="price" value="<%= price %>">
                             <button type="submit" class="genric-btn success circle arrow">search</button>
                         </div>
                     </form>
                     </div>
                 </div>
+                <hr>
                 <!-- Nav Card -->
                 <div class="tab-content" id="nav-tabContent">
                     <!-- card one -->
@@ -68,7 +79,7 @@
                                         <% product.forEach((value,index)=>{ %>
                               
 
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
                                 <div class="single-popular-items mb-50 text-center">
                                     <div class="popular-img">
                                         <img src="../admin/assets/product_images/<%= value.image[0]%>" alt="">
@@ -109,7 +120,7 @@
 
                                  <%  for(let i=1 ;i<=totalpages;i++){%>
 
-                            <a class="btn btn-danger" href="?page=<%=i%>"><%=i%></a>
+                            <a class="btn btn-danger" href="?page=<%=i%>&category=<%= category %>&price=<%= price %>&search=<%= search %>"><%=i%></a>
 
 
                             

@@ -670,9 +670,14 @@
                         <th class="px-4 py-3">NO</th>
 
                         <th class="px-4 py-3">Order Id</th>
+                        <th class="px-4 py-3">Name</th>
+                        <th class="px-4 py-3"> p Name</th>
+                    
                         <th class="px-4 py-3">Date</th>
                         <th class="px-4 py-3">Amount</th>
                         <th class="px-4 py-3">Method</th>
+                        <th class="px-4 py-3">Quantity</th>
+
                         <th class="px-4 py-3">Status</th>
                       </tr>
                     </thead>
@@ -689,6 +694,16 @@
                         <td class="px-4 py-3 text-sm">
                         <%= value._id%>
                         </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= value.userName%>
+                          </td>
+                          <td class="px-4 py-3 text-sm">
+
+                            <%= data%>
+                            
+                         
+hi
+                            </td>
 
                         <td>
                             <%=value.Date.toISOString().substring(0,10)%>
@@ -699,6 +714,9 @@
                         <td class="px-4 py-3 text-sm">
                           <%= value.paymentMethod%>
                           </td>
+                          <td class="px-4 py-3 text-sm">
+                            <%= value.product[0].quantity%>
+                            </td>
                         <td class="px-4 py-3 text-sm">
                         <%= value.status%>
                         </td>

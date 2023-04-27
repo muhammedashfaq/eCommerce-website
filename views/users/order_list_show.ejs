@@ -9,13 +9,22 @@
     <section class="confirmation_part mt-5">
       <div class="container">
 
-
-
+   
         
         <div class="row">
           <div class="col-lg-12">
+            
             <div class="order_details_iner">
+              <div class="order_box">
+                <h3> <u>Customer Address</u></h3>
+             
+                <%= orderData.deliveryDetails%>
+           
+                
+              </div>
+              <br>
               <h3>Order Details</h3>
+              
               <table class="table table-borderless">
                 <thead>
                   <tr>  
@@ -34,10 +43,10 @@
                   
                   <%  product.forEach((value,index)=>{%>
 
-              
+
                   
                   <tr>
-                    <td><%=index+1%></td>
+                    <td><%=index+1%> </td>
 
                     <td><%=value.productId.name%></td>
                     <td> <a href="/product_details?id=<%=value.productId._id%>"><img style="width: 50px;height: 50px; margin-right: 20px;" src="../admin/assets/product_images/<%= value.productId.image[0]%>" alt=""></a>

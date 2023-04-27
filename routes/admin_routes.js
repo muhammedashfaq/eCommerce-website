@@ -5,16 +5,11 @@ const auth=require('../middleware/adminAuth')
 const adminController =require('../controles/adminController')
 const productContreoller =require('../controles/product_controller')
 const couponController=require('../controles/coupenController')
-const category_Model = require('../model/category_Model')
 const upload=require('../config/multer')
 
 
 admin_rout.set('view engine','ejs')
 admin_rout.set('views','./views/admin')
-
-admin_rout.use(express.json())
-admin_rout.use(express.urlencoded({extended:true}))
-
 
 //login
 admin_rout.get('/',auth.isLogout,adminController.getLogin)
@@ -38,10 +33,6 @@ admin_rout.get('/add_category',auth.isLogin,adminController.add_categoryLoad)
 admin_rout.post('/add_category',auth.isLogin,adminController.insert_category)
 admin_rout.get('/edit_category',auth.isLogin,adminController.edit_catLoad)
 admin_rout.post('/edit_category',adminController.updatecategory)
-// admin_rout.get('/hideshow_category',adminController.hideshowcategory)
-// admin_rout.get('/delete_category',auth.isLogin,adminController.deletecategory)
-
-
 
 //order_details
 admin_rout.get('/order_details',auth.isLogin,adminController.orderDetails)
@@ -53,7 +44,7 @@ admin_rout.get('/order_deliverd',auth.isLogin,adminController.orderdeliverd)
 // Products page    in productContreoller
 admin_rout.get('/products',auth.isLogin,productContreoller.productload)
 admin_rout.get('/add_products',auth.isLogin,productContreoller.addProductload)
-admin_rout.post('/add_products',auth.isLogin,upload.upload.array('image',5),auth.isLogin,productContreoller.insertProduct)
+admin_rout.post('/add_products',auth.isLogin,upload.upload.array('image',5),productContreoller.insertProduct)
 admin_rout.get('/edit_products',auth.isLogin,upload.upload.array('image',5),productContreoller.editProduct)
 admin_rout.post('/edit_products',auth.isLogin,upload.upload.array('image',5),productContreoller.posteditProduct)
 admin_rout.post('/delete_image',auth.isLogin,productContreoller.postdelete_image)

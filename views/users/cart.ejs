@@ -1,40 +1,36 @@
 <%- include('../users/layouts/user_header.ejs')%>
 
   <main>
-      <!-- Hero Area Start-->
-      <div class="slider-area ">
-          <div class="single-slider slider-height2 d-flex align-items-center">
-              <div class="container">
-                  <div class="row">
-                      <div class="col-xl-12">
-                          <div class="hero-cap text-center">
-                              <h2>Cart List</h2>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!--================Cart Area =================-->
-      <section class="cart_area section_padding">
+    <!-- Hero Area Start-->
+    <div class="slider-area ">
+      <div class="single-slider slider-height2 d-flex align-items-center">
         <div class="container">
-          <div class="cart_inner">
-            <div class="table-responsive">
-              
-              
-              <% if(typeof products !== "undefined"){
-                %>
-             
-             
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="hero-cap text-center">
+                <h2>Cart List</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--================Cart Area =================-->
+    <section class="cart_area section_padding">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+
+
+            <% if(typeof products !=="undefined" ){ %>
+
+
 
               <table class="table">
-                  
-                  
-                 
 
                 <thead>
                   <tr>
-                    
+
                     <th scope="col">Product</th>
                     <th scope="col">Quantity</th>
 
@@ -45,256 +41,212 @@
                 <tbody>
                   <%products.forEach((value,index)=>{%>
 
-          
 
 
-                  <tr>
-                    <!-- <td>
+
+                    <tr>
+                      <!-- <td>
                       <h5><%= index+1 %></h5>
                     </td> -->
 
 
-                    <td>
-                      <div class="media">
-                        <div class="d-flex">
-                          <img src="../admin/assets/product_images/<%= value.productId.image[0]%>" alt="">
+                      <td>
+                        <div class="media">
+                          <div class="d-flex">
+                            <img src="../admin/assets/product_images/<%= value.productId.image[0]%>" alt="">
+                          </div>
+                          <div class="media-body">
+                            <p>
+                              <%= value.productId.name%>
+                            </p>
+                          </div>
                         </div>
-                        <div class="media-body">
-                          <p><%= value.productId.name%></p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <!-- <div class="product_count">
+                      </td>
+                      <td>
+                        <!-- <div class="product_count">
                        <button style="width: 30px; height: 30px;">hou</button>
                         <input style="width: 40px; height: 30px;" type="text" value="1" min="0" max="10">
                        <button style="width: 30px; height: 30px;" >hi</button>
                       </div> -->
 
-                      <div class="product_count" style="display: flex;">
-                         <a type="button"   onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',-1,)"  class="genric-btn primary-border small">-</a>
-                        <!-- <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="0" max="100"> -->
-                        <span >&nbsp;&nbsp; <span id="<%=value.productId._id%>"><%=value.quantity%></span> &nbsp;&nbsp; </span>
-                        <!-- <a href="#" class="genric-btn primary-border small">S</a> -->
-                        <a type="button"   onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',1,)"  class="genric-btn primary-border small">+</a>
+                        <div class="product_count" style="display: flex;">
+                          <a type="button" onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',-1,)"
+                            class="genric-btn primary-border small">-</a>
+                          <!-- <input type="text" id="quantity" name="count" class="quantity form-control input-number" value="<%=value.quantity%>" min="0" max="100"> -->
+                          <span>&nbsp;&nbsp; <span id="<%=value.productId._id%>">
+                              <%=value.quantity%>
+                            </span> &nbsp;&nbsp; </span>
+                          <!-- <a href="#" class="genric-btn primary-border small">S</a> -->
+                          <a type="button" onclick="changeQuantity('<%=products._id%>','<%=value.productId._id%>',1,)"
+                            class="genric-btn primary-border small">+</a>
 
 
-                      </div>
-                    </td>
+                        </div>
+                      </td>
 
-                    <td>                      
-                      <h5 id="price"><%=value.productId.price%></h5>
-                    </td>
-                    <td>
-                      <span id="qnty"   ></span>
-                    </td>
+                      <td>
+                        <h5 id="price">
+                          <%=value.productId.price%>
+                        </h5>
+                      </td>
+                      <td>
+                        <span id="qnty"></span>
+                      </td>
+                      <td>
+                        <a onclick="detelecartitem( '<%= value.productId._id%>')"
+                          class="genric-btn danger-border small">Remove</a>
 
-                   
-                   
-                    <td>
-                      <a  onclick="detelecartitem( '<%= value.productId._id%>')" class="genric-btn danger-border small">Remove</a>
+                      </td>
+                    </tr>
+                    <%})%>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <h5>Subtotal</h5>
+                        </td>
+                        <td>
+                          <h5 id="total">
+                            <%=Total%>
+                          </h5>
+                        </td>
+                      </tr>
+                      <tr class="shipping_area">
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <h5>Shipping</h5>
+                        </td>
+                        <td>
 
-                    </td>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                          <div class="shipping_box">
+                            <ul class="list">
+                              <li>
+                                Flat Rate: $5.00
+                                <input type="radio" aria-label="Radio button for following text input">
+                              </li>
+                              <li>
+                                Free Shipping
+                                <input type="radio" aria-label="Radio button for following text input">
+                              </li>
+                              <li>
+                                Flat Rate: $10.00
+                                <input type="radio" aria-label="Radio button for following text input">
+                              </li>
+                              <li class="active">
+                                Local Delivery: $2.00
+                                <input type="radio" aria-label="Radio button for following text input">
+                              </li>
+                            </ul>
 
 
-                    
-
-                  </tr>
-
-                  <%})%>
-
-
-              
-
-
-                
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <h5>Subtotal</h5>
-                    </td>
-                    <td>
-                      <h5 id="total"><%=Total%></h5>
-                    </td>
-                  </tr>
-                  <tr class="shipping_area">
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <h5>Shipping</h5>
-                    </td>
-                    <td>
-                   
-                    </td>
-                    <td>
-                   
-                    </td>
-                    <td>
-                      <div class="shipping_box">
-                        <ul class="list">
-                          <li>
-                            Flat Rate: $5.00
-                            <input type="radio" aria-label="Radio button for following text input">
-                          </li>
-                          <li>
-                            Free Shipping
-                            <input type="radio" aria-label="Radio button for following text input">
-                          </li>
-                          <li>
-                            Flat Rate: $10.00
-                            <input type="radio" aria-label="Radio button for following text input">
-                          </li>
-                          <li class="active">
-                            Local Delivery: $2.00
-                            <input type="radio" aria-label="Radio button for following text input">
-                          </li>
-                        </ul>
-              
-                        
-                      </div>
-                    </td>
-                  </tr>
-                  
-                </tbody>
+                          </div>
+                        </td>
+                      </tr>
+               </tbody>
               </table>
               <div class="checkout_btn_inner float-right">
                 <a class="btn_1 checkout_btn_1" href="./checkout">Proceed to checkout</a>
 
                 <a class="btn_1" href="./shop">Continue Shopping</a>
 
-              <%
-            }else{
-              %>
-              <h1>Your Cart empty</h1>
-              <div class="checkout_btn_inner float-right">
+                <% }else{ %>
+                  <h1>Your Cart empty</h1>
+                  <div class="checkout_btn_inner float-right">
 
-                <a class="btn_1" href="./shop">Go To Shop</a>
+                    <a class="btn_1" href="./shop">Go To Shop</a>
+                  </div>
+                  <% } %>
               </div>
-              <%
-            } %>
-         
-
-         
-              
-              </div>
-            </div>
           </div>
-      </section>
-      <!--================End Cart Area =================-->
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
   </main>
 
   <script>
-		function changeQuantity(cartId,proId,count,){
-      let quantity=parseInt(document.getElementById(proId).innerHTML)
-      let count1=parseInt(count)
+    function changeQuantity(cartId, proId, count,) {
+      let quantity = parseInt(document.getElementById(proId).innerHTML)
+      let count1 = parseInt(count)
 
-      let price= document.getElementById('price').innerHTML
-      console.log(quantity,count,cartId,proId,price);
+      let price = document.getElementById('price').innerHTML
+      console.log(quantity, count, cartId, proId, price);
+      $.ajax({
+        url: '/cartqntyincrese',
+        data: {
+          cart: cartId,
+          product: proId,
+          count: count1,
+          quantity: quantity,
 
-      
+        },
 
-    
-			$.ajax({
-				url:'/cartqntyincrese',
-				data:{
-					cart:cartId,
-					product:proId,
-					count:count1,
-          quantity:quantity,
-          
-				},
-        
-				method:'post',
-				success:(response)=>{
-          if(response.remove){
+        method: 'post',
+        success: (response) => {
+          if (response.remove) {
             detelecartitem(proId)
-          
 
 
-            }else{
 
+          } else {
             
+            document.getElementById(proId).innerHTML = quantity + count;
 
-        
-          // document.getElementById(proId).innerHTML=quantity+count
-          // document.getElementById("mm").innerHTML=quantity+count
-          // document.getElementById("total").innerHTML=quantity*price
-          document.getElementById(proId).innerHTML = quantity + count;
-          //document.getElementById('qnty').innerHTML = quantity + count;
-
-
-          //document.getElementById('total').innerHTML=price*quantity
-           document.getElementById("total").innerHTML=response.Total
-           document.getElementById("total2").innerHTML=response.Total
-            }
-
-        
-
-        
-          
-          
-          
+            document.getElementById("total").innerHTML = response.Total
+            document.getElementById("total2").innerHTML = response.Total
           }
-		
-          })	
-			
-		}
-  
-	</script>
+
+
+
+
+
+
+
+        }
+
+      })
+
+    }
+
+  </script>
 
   <script>
 
-    // function detelecartitem(id){
-    //   console.log(id);
-    //   $.ajax({
-  
-    //       url:"/delete_cartitem",
-    //       method:"post",
-    //       encoded:true,
-    //       data:{
+    function detelecartitem(proId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "/delete_cartitem",
+            data: {
 
-    //         id:id,
-    //       },
-    //   })
-    //   .done((data)=>{
-    //     if(data.success){
-    //      location.reload()
-    //     }
-    //   })
-    // }
-
-
-    function detelecartitem( proId) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: "/delete_cartitem",
-          data: {
-           
-            product: proId,
-          },
-          method: "post",
-          success: (response) => {
-            if ((response.remove = true)) {
-              location.reload();
-            }
-          },
-        });
-      }
-    });
-  }
+              product: proId,
+            },
+            method: "post",
+            success: (response) => {
+              if ((response.remove = true)) {
+                location.reload();
+              }
+            },
+          });
+        }
+      });
+    }
   </script>
 
   <%- include('../users/layouts/user_footer.ejs')%>
