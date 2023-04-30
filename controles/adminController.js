@@ -379,7 +379,7 @@ const orderdeliverd =async (req,res)=>{
             await order.updateOne({_id:id},{$set:{status:"Return Approved"}})
           
                
-                    const total = orderData.totalAmount+orderData.orderWallet
+                const total = orderData.totalAmount+orderData.orderWallet
                 await User.findByIdAndUpdate(orderData.user,{$inc:{wallet:total}})
                 res.redirect('/admin/order_details')
 
@@ -414,20 +414,36 @@ const orderview =async (req,res)=>{
 //salesReports
 const salesReports =async (req,res)=>{
   try {
+    let from = new Date(req.query.from) 
+    let to = new Date(req.query.to)
 
-    const orderData=await order.find({})
+    req.query.from ? from = new Date(req.query.from) : from = 'ALL'
+    req.query.to ? to = new Date(req.query.to) : to = 'ALL'
 
-                const data=orderData[0].product[0].productId.name
-            console.log(data);
+    if(from !== "ALL" && to !== "ALL"){
+        const orderdetails=await order.aggregate([
+            {
+                $match : {
+                    $and : [{Date : {$gte : from}},{Date : {$lte : to}}]
+                }
+            }
+        ])
+        req.session.Orderdtls=orderdetails
+        console.log(orderdetails);
+        const products=orderdetails.product
 
+        res.render('sales_report',{orderdetails,from,to,products})
+    }else{
         const orderdetails = await order.find({status:{$ne:"cancelled"}})
-        const product=orderdetails[0].product
+        const products=orderdetails.product
 
+        res.render('sales_report',{orderdetails,from,to,products})
+    }
 
-    res.render('sales_report',{orderdetails,product,data})
+          
+
   } catch (error) {
     console.log(error.message);
-    
   }
 }
 
@@ -435,12 +451,16 @@ const salesReports =async (req,res)=>{
 
 const exportTopdf =async (req,res)=>{
     try {
-            
+            const from =req.query.from
+            const to =req.query.to
+
+        
+
         const orderdetails = await order.find({status:{$ne:"cancelled"}}).populate("product.productId").sort({Date:-1})
         const products=orderdetails.product
 
         const data={
-            report:orderdetails,
+            report: req.session.Orderdtls,
             product:products
         }
 

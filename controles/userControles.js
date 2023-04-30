@@ -9,6 +9,7 @@ const cart = require('../model/cart_model')
 const user_address =require('../model/address_Model')
 const order =require('../model/order_Model')
 const Razorpay= require('razorpay')
+const coupon =require('../model/coupon_Mode')
 
 let dotenv = require('dotenv');
 dotenv.config()
@@ -16,6 +17,7 @@ dotenv.config()
 let otp
 let email2
 let name2
+
 
 ///html to pdfgenerate require things forpuchase invoice
 const ejs =require('ejs')
@@ -422,6 +424,7 @@ const   getShop = async(req,res)=>{
         let search = req.query.search || ''
         
         let category = req.query.category || 'All'
+        
         let cat = []
         const categoryData= await CatDB.find()
         for(let i = 0 ; i < categoryData.length; i++){
@@ -625,6 +628,8 @@ const getProduct_checkout = async(req,res)=>{
         if(address){
             if(cartData.product.length>0){
             const addressData = address.address;
+
+            
             if(total[0].total>=userd.wallet){
                 const Total = total[0].total
                 const grandTotal = (total[0].total) - userd.wallet ;
@@ -655,6 +660,24 @@ const getProduct_checkout = async(req,res)=>{
     }
 }
 
+const checkwallet =async(req,res)=>{
+        try {
+            const user=req.session.user_id
+            const userData =await User.findOne({_id:user})
+            const walletd=userData.wallet
+            console.log(walletd);
+            if(walletd>0){
+                
+                res.json({success:true,walletd})
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+}
+
+var cpn
+
 const placetheorder =async(req,res)=>{
     try {
         
@@ -675,9 +698,9 @@ const placetheorder =async(req,res)=>{
 
             const Total1 = req.body.amount;
             const subtotal = req.body.total;
+            const wallet1 =req.body.wallet
             //const pricetotal=totalPrice
            // const discount = parseInt(req.body.discount);
-            const wallet = subtotal-Total1
 
         const address=req.body.address
         const payment=req.body.payment
@@ -685,6 +708,10 @@ const placetheorder =async(req,res)=>{
         const userDetails =await User.findOne({_id:req.session.user_id})
         const cartData =await cart.findOne({user:userDetails._id})
         const products=cartData.product
+        const couponamt=req.body.coupon
+        const grandToatal = subtotal-userDetails.wallet
+        const wallet = subtotal-grandToatal
+
 
         const status = payment === "COD"?"placed" :"pending"
 
@@ -699,21 +726,44 @@ const placetheorder =async(req,res)=>{
             paymentMethod:payment,
             product:products,   
             totalAmount:Total1,
+            subtotal:subtotal,
             Date:Date.now(),
             status:status,
-            orderWallet:wallet
+            orderWallet:wallet,
+            ordercoupon:couponamt
         })
 
         const saveOrder = await newOrder.save()
         if(status=="placed"){
+                    
+            const wal = subtotal-Total1-couponamt ;
 
-            const wal = subtotal - Total1;
-             await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
+            console.log(wal+'wallet');
+
+            // const code =req.session.code
+            // const couponData = await coupon.find({code:code})
+
+            // if(couponData){
+            //     await coupon.findByIdAndUpdate({_id:couponData._id},{$push:{user:req.session.user_id}});
+            //      await coupon.findByIdAndUpdate({_id:couponData._id},{$inc:{maxUsers:-1}});
+            //      await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
+            //      await cart.deleteOne({user:userDetails._id})
+            //      res.json({codsuccess:true})
+
+            // }else{
+                await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
             await cart.deleteOne({user:userDetails._id})
             res.json({codsuccess:true})
+
+            
+
+            
+             
         }
         else{
             const orderid=saveOrder._id
+            const couponAmt=saveOrder.ordercoupon
+             cpn=couponAmt
             const totalamount=saveOrder.totalAmount
             var options={
                     amount: totalamount*100,
@@ -767,10 +817,15 @@ const verifyOnlinePayment =async(req,res)=>{
        
 
          const total = req.body.amount;
-          const wal = subtotal - total;
+         const couponamt=cpn
+         console.log(total);
+         console.log(couponamt);
 
 
-          console.log(wal+'wallet'+subtotal+total);
+         const wal = subtotal - total-couponamt;
+
+
+          console.log(wal+"online wallet");
         const details= (req.body)
         const crypto = require('crypto');
         let hmac = crypto.createHmac('sha256', process.env.RazorKey);
@@ -780,6 +835,7 @@ const verifyOnlinePayment =async(req,res)=>{
         
         
         if (hmac == details.payment.razorpay_signature) {
+            
 
             await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
@@ -935,11 +991,26 @@ const buynowrender= async(req,res)=>{
         const Total = prodcut.price
         console.log(prodcut);
         console.log(Total);
+        if(prodcut){
 
-        if (prodcut){
-            res.render('checkoutbuy',{prodcut,Total,user:user.name ,address:addressData})
+    
+
+        if (Total>=user.wallet){
+            
+            const grandTotal=Total-user.wallet
+
+            console.log(grandTotal+'haeloo');
+            res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData,grandTotal})
+
+        }else{
+            grandTotal=1
+            res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData,grandTotal})
 
         }
+    }else{
+        res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData})
+
+    }
 
         
     } catch (error) {
@@ -947,6 +1018,9 @@ const buynowrender= async(req,res)=>{
     }
 }
 
+
+
+var cpnamt
 
 const placetheorderbuy =async(req,res)=>{
     try {
@@ -960,9 +1034,11 @@ const placetheorderbuy =async(req,res)=>{
         const Total = prodcutdata.price
            
 
-      
+        const couponamt=req.body.coupon
+        cpnamt=couponamt
         const address=req.body.address
         const payment=req.body.payment
+        const grandTotal=req.body.amount
         // const userData = req.session.user_id
         const userDetails =await User.findOne({_id:req.session.user_id})
        
@@ -980,13 +1056,20 @@ const placetheorderbuy =async(req,res)=>{
             product:[{productId: prodcutdata._id,quantity : 1}],   
             totalAmount:Total,
             Date:Date.now(),
-            status:status
+            status:status,
+            ordercoupon:couponamt
+
 
         })
 
         const saveOrder = await newOrder.save()
         if(status=="placed"){
+
+
+            const wal = Total-grandTotal-couponamt ;
+                await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
             res.json({codsuccess:true})
+
         }
         else{
             const orderid=saveOrder._id
@@ -1014,8 +1097,8 @@ const verifyBuynowPayment =async(req,res)=>{
     try {
         
 
-        // const totalPrice = req.body.amount2;
-        // const total = req.body.amount;
+        const subtotal = req.body.amount2;
+         const total = req.body.amount;
         // const wal = totalPrice - total;
         const details= (req.body)
         console.log(details);
@@ -1030,6 +1113,10 @@ const verifyBuynowPayment =async(req,res)=>{
         
         if (hmac == details.payment.razorpay_signature) {
 
+            const wal = subtotal - total-cpnamt;
+
+
+            await User.updateOne({_id:req.session.user_id},{$inc:{wallet:-wal}});
 
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
             await order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
@@ -1065,15 +1152,17 @@ const getUser_profile =async(req,res)=>{
 
     try {
         const address =await user_address.findOne({user:req.session.user_id});
-
+        const coupon1= await coupon.find()
         const userd=await User.findOne({_id:req.session.user_id})
         const userData=await User.findOne({_id:req.session.user_id})
+
+
 
         if(address){
 
      
       
-        res.render('user_profile',{user:userd.name,data:userData,address})
+        res.render('user_profile',{user:userd.name,data:userData,address,coupon1})
 
     }else{
         res.render('user_profile',{user:userd.name,data:userData})
@@ -1169,7 +1258,7 @@ const canceluserorder =async(req,res)=>{
 
         const wallet=orderdata.orderWallet
 
-        const total=orderdata.totalAmount+wallet
+        const total=orderdata.totalAmount+wallet-orderdata.ordercoupon
 
         //const userd=await User.findOne({_id:req.session.user_id})
         const data=await order.findByIdAndUpdate({_id:id},{$set:{status:"canceled"}})
@@ -1268,6 +1357,7 @@ module.exports={
     addtoCart,
     getProduct_details,
     getProduct_checkout,
+    checkwallet,
     placetheorder,
     orderplaced,
     verifyOnlinePayment,

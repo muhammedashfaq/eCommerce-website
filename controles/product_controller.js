@@ -3,6 +3,17 @@ const admin = require("../model/admin_model");
 const CatDB = require("../model/category_Model");
 const productdb = require("../model/prodect_model");
 const sharp = require("sharp");
+const cloudinary =require('cloudinary').v2
+
+cloudinary.config({
+
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+  secure:true
+
+});
+
 
 const productload = async (req, res) => {
   try {
@@ -33,9 +44,18 @@ const insertProduct = async (req, res) => {
       sharp("./public/admin/assets/imgs/" + req.files[i].filename)
         .resize(500, 500)
         .toFile(
-          "./public/admin/assets/product_images/" + req.files[i].filename
+          "./public/admin/assets/product_images/" + req.files[i].filename,
+
+
+
         );
+        cloudinary.uploader.upload("./public/admin/assets/product_images/") 
+
+
+
     }
+    console.log(image);
+
     const Data = new productdb({
       name: req.body.name,
       price: req.body.price,

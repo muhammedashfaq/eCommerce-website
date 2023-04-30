@@ -31,6 +31,9 @@ const orderSchema = new mongoose.Schema({
     totalAmount: {
         type: Number,
     },
+    subtotal: {
+        type: Number,
+    },
     Date: {
         type: Date,
     },
@@ -42,7 +45,10 @@ const orderSchema = new mongoose.Schema({
     },
     orderWallet:{
         type:Number
-    },  
+    }, 
+    ordercoupon:{
+        type:Number
+    }, 
 },
   {
     timestamps: true

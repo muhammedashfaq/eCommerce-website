@@ -41,9 +41,12 @@ rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 rout.post('/checkout',userController.placetheorder)
 rout.get('/order-placed',auth.isLogin,userController.orderplaced)
 rout.post('/verifyPayment',userController.verifyOnlinePayment)
+rout.post('/checkwallet',userController.checkwallet)
+
+
 
 //applyCoupon
-//rout.post('/applyCoupon',couponController.applyCoupon)
+rout.post('/applyCoupon',couponController.applyCoupon)
 
 /////BUY NOW////
 rout.post("/buynow",auth.isLogin,userController.buynow)

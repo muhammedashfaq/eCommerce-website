@@ -1,282 +1,431 @@
 <%- include('../users/layouts/user_header.ejs')%>
 
-    <main>
-        <!-- Hero Area Start-->
-        <div class="slider-area ">
-            <div class="single-slider slider-height2 d-flex align-items-center">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="hero-cap text-center">
-                                <h2>Checkout</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--================Checkout Area =================-->
-        <section class="checkout_area section_padding">
-          <div class="container">
-          
-         
-            <div class="billing_details">
-              <div class="row">
-                <div class="col-lg-8">
-                  <h3>Billing Address</h3>
-
-                  <hr>
-
-                  <!-- <a class="btn_3" href="./user_profile">ADD ADDRESS</a> -->
-
-                  <a class="btn_3" href="./add_addresscheck">ADD ADDRESS</a> <br><br>
-
-                 
-                  <form  id="checkout">
-
-                  <% if(typeof address !== "undefined"){%>   
-
-
-                 
-                   <div style="width:auto;height:auto" class="order_box">
-
-                     <% address.forEach((value,index)=>{%>
-                      
-                   <input class="form-check-input" name="address" type="radio" 
-                 value="  <%= value.fname%> <%= value.sname %> 
-                      <%= value.address %>
-                        <%= value.mobile %> 
-                         <%= value.email%>
-                         <%= value.pin %>"
-                         id="flexCheckDefault" required> <br>
-                        <label class="form-check-label" for="flexCheckDefault">
-
-                          Name:   &nbsp;   <%= value.fname%><%=value.sname%> <br>
-                          Address:&nbsp; <%=value.address%><br>
-                          Phone:  &nbsp;  <%= value.mobile%><br>
-                          Email:  &nbsp;  <%=value.email%><br>
-                          PIN:    &nbsp;    <%= value.pin%><br>
-
-                          
-                        </label>
-                        <br>
-                        <div style="display: flex;">
-
-                                     
-                          <div>
-                           <a class="genric-btn danger-border circle arrow" href="/edit_addresscheck?id=<%=value._id%>&index=<%=index%>">Edit</a>
-
-                         
-                             
- 
-                          
-                         </div>                      
-                         <div style="margin-left: 10px;">
-                         
-                           <a class="genric-btn danger-border circle arrow" onclick="deleteaddress('<%= value._id%>')" >Delete</a>
-                       
- 
-                        
-                       </div>
-                     </div>
-                       
-                        <hr>
-                        <% })%>
-                      </div>
-                      <% }%>
-
-
-              
-
-                </div>
-                <div class="col-lg-4">
-                  <div class="order_box">
-                    <h2>Your Order Payement Deatails</h2>
-                    
-                    <ul class="list list_2">
-                      <li>
-                        <a>Subtotal
-                        
-                          <span id="total2"><%= Total%></span>
-                        </a>
-                      </li>
-
-
-                  
-
-
-
-                      <li>
-                        <a >Wallet
-                          <span><%= userd.wallet%></span>
-                        </a>
-                      </li>
-                      <li>
-                   
-                        <a >grandTotal 
-                        <span id="total1"><%=grandTotal%></span>  
-                        </a>
-                      
-                      </li>
-                    </ul>
-                   
-                      <div >
-
-                        <input type="radio" name="Payment" value="COD" required>
-                        <label for="Payement">COD</label>
-                      </div>
-                      <div>
-                        <input type="radio" name="Payment" value="online" required>
-                        <label for="Payement">Online</label>
-                      </div>
-                    <button class="btn_3" type="submit">Place order</button>
-                  </form>
-                
-                  <br>
-              
-                      <label for="coupon"></label>
-                      <input type="text" name="code" id="code" placeholder="Enter Coupon code" required> 
-                      <!-- <button  class=" genric-btn success circle arrow"  onclick="applycoupon($('#code').val())">apply</button> -->
-                    
-                   
-                  </div> 
-                </div>
+  <main>
+    <!-- Hero Area Start-->
+    <div class="slider-area ">
+      <div class="single-slider slider-height2 d-flex align-items-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="hero-cap text-center">
+                <h2>Checkout</h2>
               </div>
             </div>
           </div>
-        </section>
-        <!--================End Checkout Area =================-->
-    </main>
+        </div>
+      </div>
+    </div>
+    <!--================Checkout Area =================-->
+    <section class="checkout_area section_padding">
+      <div class="container">
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+              <h3>Billing Address</h3>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+              <hr>
+
+              <!-- <a class="btn_3" href="./user_profile">ADD ADDRESS</a> -->
+
+              <a class="btn_3" href="./add_addresscheck">ADD ADDRESS</a> <br><br>
 
 
-    <script>
-      $("#checkout").submit((e)=>{
-        const amount = document.getElementById("total1").innerHTML;
-        const amount2 = document.getElementById("total2").innerHTML;
-        // const discount = document.getElementById("gt3").innerHTML;
-        let address = $("input[name=address]:checked").val();
-        let payment = $("input[name=Payment]:checked").val();
+              <form id="checkout">
 
-        console.log(amount);
-        console.log(address)
-        console.log(payment)
-        e.preventDefault();
-        $.ajax({
-          url:"/checkout",
-          method:"post",
-          data:{
-            amount:amount,
-            total:amount2,
-            address:address,
-            payment:payment
-          },
-          success:(response)=>{
-            if(response.codsuccess){
-              location.href = "/order-placed";
-            }else{
-              razorpayPayment(response.order);
-            }
+                <% if(typeof address !=="undefined" ){%>
+
+
+
+                  <div style="width:auto;height:auto" class="order_box">
+
+                    <% address.forEach((value,index)=>{%>
+
+                      <input class="form-check-input" name="address" type="radio" value="  <%= value.fname%> <%= value.sname %> 
+                      <%= value.address %>
+                        <%= value.mobile %> 
+                         <%= value.email%>
+                         <%= value.pin %>" id="flexCheckDefault" required> <br>
+                      <label class="form-check-label" for="flexCheckDefault">
+
+                        Name: &nbsp; <%= value.fname%>
+                          <%=value.sname%> <br>
+                            Address:&nbsp; <%=value.address%><br>
+                              Phone: &nbsp; <%= value.mobile%><br>
+                                Email: &nbsp; <%=value.email%><br>
+                                  PIN: &nbsp; <%= value.pin%><br>
+
+
+                      </label>
+                      <br>
+                      <div style="display: flex;">
+
+
+                        <div>
+                          <a class="genric-btn danger-border circle arrow"
+                            href="/edit_addresscheck?id=<%=value._id%>&index=<%=index%>">Edit</a>
+
+
+
+
+
+                        </div>
+                        <div style="margin-left: 10px;">
+
+                          <a class="genric-btn danger-border circle arrow"
+                            onclick="deleteaddress('<%= value._id%>')">Delete</a>
+
+
+
+                        </div>
+                      </div>
+
+                      <hr>
+                      <% })%>
+                  </div>
+                  <% }%>
+
+
+
+
+            </div>
+            <div class="col-lg-4">
+              <div class="order_box">
+                <h2>Your Order Payement Deatails</h2>
+
+                <ul class="list list_2">
+                  <li>
+                    <a>Subtotal
+
+                      <span id="total2">
+                        <%= Total%>
+                      </span>
+                    </a>
+                  </li>
+
+
+
+
+
+
+                  <li>
+                    <div class="switch-wrap d-flex justify-content-between">
+                      <input type="hidden" name="wallet" id="" value="<%= userd.wallet%>"> <a>Wallet</a>
+                      <h6 id="wallet">
+                        <%= userd.wallet%>
+                      </h6>
+
+                      <div class="form-check">
+
+
+
+                        <label class="form-check-label ">
+                          <input type="checkbox" class="form-check-input" value="" id="" onclick="checkwallet()">
+                        </label>
+                      </div>
+                    </div>
+
+                  </li>
+
+
+                  <li>
+                    <a>CouponAmount:
+                      <span id="coupon"></span>
+                    </a>
+
+                  </li>
+
+                  <input type="hidden" name="grand" id="hide" value="<%= Total - userd.wallet %>">
+
+
+
+                  <li>
+
+                    <a>grandTotal
+                      <span id="total1">
+                        <%=grandTotal%>
+                      </span>
+                    </a>
+
+                  </li>
+                </ul>
+
+                <div>
+
+                  <input type="radio" name="Payment" value="COD" required>
+                  <label for="Payement">COD</label>
+                </div>
+                <div>
+                  <input type="radio" name="Payment" value="online" required>
+                  <label for="Payement">Online</label>
+                </div>
+                <button class="btn_3" type="submit">Place order</button>
+                </form>
+
+                <br>
+
+                <label for="coupon"></label>
+                <input type="text" name="code" id="code" placeholder="Enter Coupon code" required>
+                <button class=" genric-btn success circle arrow" onclick="applycoupon($('#code').val())">apply</button>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Checkout Area =================-->
+  </main>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+  <script>
+    $("#checkout").submit((e) => {
+
+
+
+      const amount = document.getElementById("total1").innerHTML;
+      const amount2 = document.getElementById("total2").innerHTML;
+      const hide = document.getElementById("wallet").innerHTML;
+      const coupon1 = document.getElementById('coupon').innerHTML;
+      const grand1 = amount2 - hide
+      let address = $("input[name=address]:checked").val();
+      let payment = $("input[name=Payment]:checked").val();
+
+
+
+
+
+
+
+      console.log(amount);
+      console.log(address)
+      console.log(payment)
+      e.preventDefault();
+      $.ajax({
+        url: "/checkout",
+        method: "post",
+        data: {
+          amount: amount,
+          total: amount2,
+          address: address,
+          payment: payment,
+          wallet: hide,
+          coupon: coupon1
+        },
+        success: (response) => {
+          if (response.codsuccess) {
+            location.href = "/order-placed";
+          } else {
+            razorpayPayment(response.order);
           }
-        })
+        }
       })
-    
-      function razorpayPayment(order){
-    
-              var options = {
-                  "key": "rzp_test_QK6YRj6TBJfBBw", // Enter the Key ID generated from the Dashboard
-                  "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                  "currency": "INR",
-                  "name": "TZ watches", //your business name
-                  "description": "Test Transaction",
-                  "image": "https://example.com/your_logo",
-                  "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                  "handler": function (response){
-                    
-    // alert(response.razorpay_payment_id);
-    // alert(response.razorpay_order_id);
-    // alert(response.razorpay_signature)
-                      verifyPayment(response, order);
-                  },
-                  "prefill": {
-                      "name": "Gaurav Kumar", //your customer's name
-                      "email": "gaurav.kumar@example.com",
-                      "contact": "9000090000" 
-                  },
-                  "notes": {
-                      "address": "Razorpay Corporate Office"
-                  },
-                  "theme": {
-                      "color": "#3399cc"
-                  }
-              };
-              var rzp1 = new Razorpay(options);
-                  rzp1.open();
-            }
-      function verifyPayment(payment,order){
-        const amount = document.getElementById("total1").innerHTML;
-        // const amount2 = document.getElementById("gt2").innerHTML;
-        $.ajax({
-          url:"/verifyPayment",
-          method:"post",
-          data:{
-            payment,
-            amount,
-            order
-          },
-          success:(response)=>{
-            if(response.success){
-              location.href = '/order-placed';
-            }else{
-              alert('payment failed');
-              location.href = '/home';
+    })
 
-            }
+    function razorpayPayment(order) {
+
+      var options = {
+        "key": "rzp_test_QK6YRj6TBJfBBw", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "TZ watches", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+
+          // alert(response.razorpay_payment_id);
+          // alert(response.razorpay_order_id);
+          // alert(response.razorpay_signature)
+          verifyPayment(response, order);
+        },
+        "prefill": {
+          "name": "Gaurav Kumar", //your customer's name
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    }
+    function verifyPayment(payment, order) {
+      const amount = document.getElementById("total1").innerHTML;
+      // const amount2 = document.getElementById("gt2").innerHTML;
+      $.ajax({
+        url: "/verifyPayment",
+        method: "post",
+        data: {
+          payment,
+          amount,
+          order
+        },
+        success: (response) => {
+          if (response.success) {
+            location.href = '/order-placed';
+          } else {
+            alert('payment failed');
+            location.href = '/home';
+
           }
-        })
-      }
+        }
+      })
+    }
 
 
 
 
-  
-      </script>
+
+  </script>
 
 
-<script>
-  function deleteaddress( id) {
- Swal.fire({
-   title: "Are you sure?",
-   text: "You won't be able to revert this!",
-   icon: "warning",
-   showCancelButton: true,
-   confirmButtonColor: "#3085d6",
-   cancelButtonColor: "#d33",
-   confirmButtonText: "Yes, delete it!",
-   cancelButtonText: "Cancel",
- }).then((result) => {
-   if (result.isConfirmed) {
-     $.ajax({
-       url: "/deleteaddress",
-       data: {
-        
-         id: id,
-       },
-       method: "post",
-       success: (response) => {
-         if ((response.remove = true)) {
-           location.reload();
-         }
-       },
-     });
-   }
- });
-}
-</script>
+  <script>
+    function deleteaddress(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "/deleteaddress",
+            data: {
 
-   
-    <%- include('../users/layouts/user_footer.ejs')%>
+              id: id,
+            },
+            method: "post",
+            success: (response) => {
+              if ((response.remove = true)) {
+                location.reload();
+              }
+            },
+          });
+        }
+      });
+    }
+  </script>
+
+  <script>
+    function applycoupon(code) {
+      const amount = document.getElementById('total1').innerHTML;
+      console.log(amount);
+      $.ajax({
+        url: "/applyCoupon",
+        data: {
+          code: code,
+          amount: amount
+        },
+        method: "post",
+        success: (response) => {
+          console.log(response);
+          if (response.user) {
+            console.log("This User already used this coupon");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'This coupon already used!'
+            })
+          } else if (response.limit) {
+            console.log("coupon limit exceeded");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'coupon limit exceeded!'
+            })
+          } else if (response.status) {
+            console.log("This coupon now not in use");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'coupon limit exceeded!'
+            })
+          } else if (response.cartAmount) {
+            console.log("You cant use the coupon...Buy more");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'You cant use the coupon...Buy more'
+            })
+          } else if (response.date) {
+            console.log("coupon date expired");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'date expired!!!'
+            })
+          } else if (response.amountOkey) {
+            console.log("discount granded");
+            document.getElementById('coupon').innerHTML = response.disAmount
+            document.getElementById('total1').innerHTML = response.disTotal
+            console.log("done");
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Discount redeemed',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          } else if (response.invalid) {
+            console.log("invalid coupon");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Invalid Coupon!!!'
+            })
+          }
+        }
+      })
+    }
+
+  </script>
+
+  <script>
+    function checkwallet() {
+      const stotlal = document.getElementById('total2').innerHTML
+      const gtotal = document.getElementById('total1').innerHTML
+      const checkwallet = document.getElementById('wallet').innerHTML
+      $.ajax({
+        url: "/checkwallet",
+        method: 'post',
+        success: (response) => {
+          if (response.success) {
+
+            console.log(response.walletd + "resjmmdk");
+
+            checkwallet.innerHTML = response.walletd
+            
+            const a = gtotal.innerHTML = stotlal - response.walletd
+
+            console.log(a + 'gtot');
+            let final = gtotal - response.walletd
+
+            console.log(final + 'final');
+            if (final < 0) {
+              gtotal.innerHTML = 1
+
+            }
+
+          }
+        }
+
+      })
+    }
+  </script>
+  <%- include('../users/layouts/user_footer.ejs')%>

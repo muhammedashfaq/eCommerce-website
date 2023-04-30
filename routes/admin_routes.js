@@ -58,5 +58,11 @@ admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
 admin_rout.get('/coupon',auth.isLogin,couponController.loadCoupon)
 admin_rout.get('/add_coupon',auth.isLogin,couponController.addloadCoupon)
 admin_rout.post('/add_coupon',auth.isLogin,couponController.postaddcoupon)
+admin_rout.get('/edit_coupon',auth.isLogin,couponController.editCoupon)
+admin_rout.post('/edit_coupon',auth.isLogin,couponController.posteditCoupon)
+admin_rout.get('/delete_coupon',auth.isLogin,couponController.deleteCoupon)
+
+
+
 
 module.exports = admin_rout
