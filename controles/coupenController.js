@@ -61,7 +61,6 @@ const applyCoupon = async (req, res) => {
       res.json({ user: true });
     } else {
       const couponData = await coupon.findOne({ code: code });
-      console.log(couponData);
       if (couponData) {
         if (couponData.maxUsers <= 0) {
           res.json({ limit: true });
@@ -107,7 +106,6 @@ const applyCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
     await coupon.deleteOne({ _id: id });
     res.redirect("/admin/coupon");
   } catch (error) {
@@ -118,7 +116,6 @@ const deleteCoupon = async (req, res) => {
 const editCoupon = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
     const couponData = await coupon.findById({ _id: id });
     res.render("edit_coupon", { couponData });
   } catch (error) {

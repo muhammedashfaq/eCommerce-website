@@ -41,7 +41,7 @@ rout.get('/checkout',auth.isLogin,userController.getProduct_checkout)
 rout.post('/checkout',userController.placetheorder)
 rout.get('/order-placed',auth.isLogin,userController.orderplaced)
 rout.post('/verifyPayment',userController.verifyOnlinePayment)
-rout.post('/checkwallet',userController.checkwallet)
+rout.post('/walamount',userController.walamount)
 
 
 

@@ -630,16 +630,13 @@ const getProduct_checkout = async(req,res)=>{
             const addressData = address.address;
 
             
-            if(total[0].total>=userd.wallet){
+         
                 const Total = total[0].total
-                const grandTotal = (total[0].total) - userd.wallet ;
+                const grandTotal = total[0].total ;
                 res.render('checkout',{product:data,Total,userd, user:userd.name,address:addressData,grandTotal})
-            }else{
-                const Total = total[0].total;
-                const grandTotal =  1;   
-           
-                res.render('checkout',{product:data,Total,userd, user:userd.name,address:addressData,grandTotal})
-            }
+         
+                
+            
 
 
             }else{
@@ -660,12 +657,28 @@ const getProduct_checkout = async(req,res)=>{
     }
 }
 
-const checkwallet =async(req,res)=>{
+const walamount =async(req,res)=>{
         try {
+
             const user=req.session.user_id
+            const wal =req.body.wal
+            const grandTotals=req.body.gtotal
+            const subtotals=req.body.stotlal
+            const userd=await User.findOne({_id:user})
+            const twallet=userd.wallet
+
+            if(userd.wallet<wal){
+                res.json({limit:true})
+
+            }else{
+                const grandtotal=subtotals-wal
+                res.json({success:true,grandtotal,wal,twallet})
+            }
+
+
+
             const userData =await User.findOne({_id:user})
             const walletd=userData.wallet
-            console.log(walletd);
             if(walletd>0){
                 
                 res.json({success:true,walletd})
@@ -710,7 +723,7 @@ const placetheorder =async(req,res)=>{
         const products=cartData.product
         const couponamt=req.body.coupon
         const grandToatal = subtotal-userDetails.wallet
-        const wallet = subtotal-grandToatal
+        const wallet = req.body.wallet
 
 
         const status = payment === "COD"?"placed" :"pending"
@@ -1357,7 +1370,7 @@ module.exports={
     addtoCart,
     getProduct_details,
     getProduct_checkout,
-    checkwallet,
+    walamount,
     placetheorder,
     orderplaced,
     verifyOnlinePayment,
