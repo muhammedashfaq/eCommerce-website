@@ -28,7 +28,7 @@
         <td><%=value.paymentMethod%></td>
         <td><%=value.status %></td>
         <td><a href="./order_show?id=<%= value._id%>" type="button" class="genric-btn info-border circle arrow">View</a>
-          <% if(value.status!=="canceled"&&value.status!=="delivered"&&value.status!=="Return Approved"){%>
+          <% if(value.status!=="canceled"&&value.status!=="delivered"&&value.status!=="Return Approved"&&value.status!=="pending"&&value.status!=="waiting for approval"){%>
 
           <a  onclick="cancelOrder('<%= value._id%>')" type="button" class="genric-btn danger-border circle arrow">cancel</a>
           <%}%>
@@ -104,8 +104,16 @@
          },
          method: "post",
          success: (response) => {
-           if ((response.return = true)) {
-             location.reload();
+           if ((response.datelimit)) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Return Date expired'
+            })
+           }else if(response.return) {
+            
+            location.reload();
+            
            }
          },
        });

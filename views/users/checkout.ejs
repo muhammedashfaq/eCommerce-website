@@ -37,6 +37,7 @@
 
 
         </div>
+        <br>
 
         <div class="billing_details">
           <div class="row">
@@ -442,12 +443,11 @@
               title: 'Oops...',
               text: 'Wallet limit exceeded!'
             })
-          
+        
           }else{
             document.getElementById('wallet').innerHTML = response.wal
             document.getElementById('total1').innerHTML = response.grandtotal
             document.getElementById('walletbalance').innerHTML=response.twallet-response.wal
-            console.log("done");
             Swal.fire({
               position: 'center',
               icon: 'success',
@@ -462,4 +462,4 @@
       })
     }
   </script>
-  <%- include('../users/layouts/user_footer.ejs')%>
+  <%- include('../users/layouts/user_footer.ejs')%> 

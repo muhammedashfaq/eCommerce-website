@@ -28,6 +28,16 @@ const addloadCoupon = async (req, res) => {
 
 const postaddcoupon = async (req, res) => {
   try {
+
+    const code= req.body.code
+
+            const codealredy=  await coupon.findOne({code:code})
+
+
+    if(codealredy){
+            res.render('add_coupon',{message:"This Coupon alredy exist "})
+    }else{
+
     const coupons = new coupon({
       code: req.body.code,
       discountType: req.body.discountType,
@@ -43,10 +53,11 @@ const postaddcoupon = async (req, res) => {
     } else {
       res.redirect("/admin/coupon");
     }
+  }
   } catch (error) {
     console.log(error.message);
   }
-};
+}
 
 const applyCoupon = async (req, res) => {
   try {
@@ -125,6 +136,15 @@ const editCoupon = async (req, res) => {
 
 const posteditCoupon = async (req, res) => {
   try {
+
+    const code= req.body.code
+
+            const codealredy=  await coupon.findOne({code:code})
+
+
+    if(codealredy){
+            res.render('add_coupon',{message:"This Coupon alredy exist "})
+    }else{
     const id = req.query.id;
     const code = req.body.code;
     const discountType = req.body.discountType;
@@ -160,7 +180,7 @@ const posteditCoupon = async (req, res) => {
 
       await savecoupon.save();
       res.redirect("/admin/coupon");
-    }
+    }}
   } catch (error) {
     console.log(error.message);
   }

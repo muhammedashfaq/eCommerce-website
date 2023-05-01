@@ -667,22 +667,16 @@ const walamount =async(req,res)=>{
             const userd=await User.findOne({_id:user})
             const twallet=userd.wallet
 
-            if(userd.wallet<wal){
-                res.json({limit:true})
-
-            }else{
+            if(userd.wallet>=wal){
                 const grandtotal=subtotals-wal
                 res.json({success:true,grandtotal,wal,twallet})
+            }else {
+                res.json({limit:true})
+            
+            
+            
             }
-
-
-
-            const userData =await User.findOne({_id:user})
-            const walletd=userData.wallet
-            if(walletd>0){
-                
-                res.json({success:true,walletd})
-            }
+          
 
         } catch (error) {
             console.log(error.message);
@@ -717,6 +711,8 @@ const placetheorder =async(req,res)=>{
 
         const address=req.body.address
         const payment=req.body.payment
+        const exprdate = new Date(Date.now() +(14 * 24 * 60 * 60 * 1000))
+
         // const userData = req.session.user_id
         const userDetails =await User.findOne({_id:req.session.user_id})
         const cartData =await cart.findOne({user:userDetails._id})
@@ -741,6 +737,7 @@ const placetheorder =async(req,res)=>{
             totalAmount:Total1,
             subtotal:subtotal,
             Date:Date.now(),
+            exprdate:exprdate,
             status:status,
             orderWallet:wallet,
             ordercoupon:couponamt
@@ -968,6 +965,7 @@ const buynow= async (req,res)=>{
 
 
         const user=await User.findOne({_id:req.session.user_id})
+        req.session.wallet=user.wallet
         const id =req.body.id
         productId=id
         console.log(id);
@@ -994,7 +992,7 @@ const buynowrender= async(req,res)=>{
 
         const user=await User.findOne({_id:req.session.user_id})
         const id =req.body.id
- console.log(id);
+ 
 
         const prodcut =await productDB.findById({_id:productId})
 
@@ -1002,26 +1000,16 @@ const buynowrender= async(req,res)=>{
         console.log(productId);
 
         const Total = prodcut.price
-        console.log(prodcut);
-        console.log(Total);
+        const grandTotal=prodcut.price
+       
         if(prodcut){
 
-    
+            res.render('checkoutbuy',{prodcut,Total,userw:req.session.wallet,user:user.name ,address:addressData,grandTotal})
 
-        if (Total>=user.wallet){
-            
-            const grandTotal=Total-user.wallet
 
-            console.log(grandTotal+'haeloo');
-            res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData,grandTotal})
-
-        }else{
-            grandTotal=1
-            res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData,grandTotal})
-
-        }
+       
     }else{
-        res.render('checkoutbuy',{prodcut,Total,user,user:user.name ,address:addressData})
+        res.render('checkoutbuy',{prodcut,Total,userw:req.session.wallet,user:user.name ,address:addressData})
 
     }
 
@@ -1052,6 +1040,8 @@ const placetheorderbuy =async(req,res)=>{
         const address=req.body.address
         const payment=req.body.payment
         const grandTotal=req.body.amount
+        const exprdate = new Date(Date.now() +(14 * 24 * 60 * 60 * 1000))
+
         // const userData = req.session.user_id
         const userDetails =await User.findOne({_id:req.session.user_id})
        
@@ -1069,6 +1059,7 @@ const placetheorderbuy =async(req,res)=>{
             product:[{productId: prodcutdata._id,quantity : 1}],   
             totalAmount:Total,
             Date:Date.now(),
+            exprdate:exprdate,
             status:status,
             ordercoupon:couponamt
 
@@ -1242,9 +1233,7 @@ const orderlistLoad =async(req,res)=>{
 
         // const orders=await order.findOne({user:userd})
         const orders = await order.find({user : userd._id}).sort({"_id" : -1})
-
-
-
+        
         res.render('order_list',{user:userd.name,orders})
     } catch (error) {
             console.log(error.message);        
@@ -1298,14 +1287,24 @@ const returnuserorder =async(req,res)=>{
     try {
         const userd=await User.findOne({_id:req.session.user_id})
         const id=req.body.id
+        const date= await order.findById({_id:id})
+        console.log(date.exprdate);
+        if(Date.now()>date.exprdate){
 
-        await order.updateOne({_id:id},{$set:{status:"waiting for approval"}})
+            res.json({datelimit:true})
 
-        res.json({return:true})
+        }else{
+            await order.updateOne({_id:id},{$set:{status:"waiting for approval"}})
+
+            res.json({return:true})
+        }
+        
     } catch (error) {
             console.log(error.message);        
     }
 }
+
+
 const orderInvoice=async(req,res)=>{
     try {
         const id =req.query.id

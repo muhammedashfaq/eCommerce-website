@@ -22,6 +22,7 @@
     "express-session": "^1.17.3",
     "html-pdf": "^3.0.1",
     "js-image-zoom": "^0.7.0",
+    "moment-timezone": "^0.5.43",
     "mongoose": "^7.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",

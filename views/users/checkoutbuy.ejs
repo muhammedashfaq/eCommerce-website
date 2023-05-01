@@ -20,7 +20,26 @@
         <section class="checkout_area section_padding">
           <div class="container">
           
-         
+            <div class="order_box col-lg-4">
+
+              <h2>Coupon</h2>
+              
+              <label for="coupon"></label>
+                    <input type="text" name="code" id="code" placeholder="Enter Coupon code" required>
+                    <button class=" genric-btn success circle arrow" onclick="applycoupon($('#code').val())">apply</button>
+                    <br>
+                    <br>
+                    <h2> wallet</h2><h6 id="walletbalance"><%=userw%></h6>
+    
+    
+                 
+                    <label for="wal"></label>
+                    <input type="text" name="wal" id="wal" placeholder="Enter Wallet Amount" required>
+                    <button class=" genric-btn success circle arrow" onclick="walamount($('#wal').val())">Add</button>
+    
+    
+            </div>
+            <br>
             <div class="billing_details">
               <div class="row">
                 <div class="col-lg-8">
@@ -89,15 +108,22 @@
 
                       
 <li >
-                    	<div class="switch-wrap d-flex justify-content-between">
-                       <a>Wallet</a>   <span  ><%=user.wallet%></span>
+  <div class="switch-wrap d-flex justify-content-between">
+    <input type="hidden" name="wallet" id="" value="<%= user.wallet%>"> <a>Wallet</a>
+    <h6 id="wallet" >
+      
+    </h6>
 
-                        <div class="form-check">
-                          <label class="form-check-label ">
-                            <input type="checkbox" class="form-check-input" value="">
-                          </label>
-                        </div>
-                      </div>
+    <!-- <div class="form-check">
+
+
+
+      <label class="form-check-label ">
+        <input type="checkbox" class="form-check-input" value="" id="" >
+      </label>
+    </div> -->
+  </div>
+
                     </li>
                       
                      
@@ -134,10 +160,7 @@
                 
                   <br>
               
-                      <label for="coupon"></label>
-                      <input type="text" name="code" id="code" placeholder="Enter Coupon code" required> 
-                      <button  class=" genric-btn success circle arrow"  onclick="applycoupon($('#code').val())">apply</button>
-                    
+                      
                    
                   </div> 
                 </div>
@@ -322,5 +345,59 @@ Swal.fire({
 })
 }
 
+</script>
+
+<script>
+  function walamount(wal) {
+
+    const stotlal = document.getElementById('total2').innerHTML
+    const gtotal = document.getElementById('total1').innerHTML
+    //const wal = document.getElementById('wal').innerHTML
+    console.log(wal);
+
+    $.ajax({
+      url: "/walamount",
+      data: {
+        wal: wal,
+        gtotal: gtotal,
+        stotlal:stotlal
+      },
+      method: 'post',
+
+      success: (response) => {
+        console.log('hi2');
+
+        if(response.limit){
+          
+          console.log("coupon limit exceeded");
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Wallet limit exceeded!'
+          })
+        
+        }else if (response.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Invalid !!!'
+          })
+        }else{
+          document.getElementById('wallet').innerHTML = response.wal
+          document.getElementById('total1').innerHTML = response.grandtotal
+          document.getElementById('walletbalance').innerHTML=response.twallet-response.wal
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Wallet Amount Added',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+       
+      }
+
+    })
+  }
 </script>
     <%- include('../users/layouts/user_footer.ejs')%>

@@ -413,28 +413,31 @@ const orderview =async (req,res)=>{
 
 //salesReports
 const salesReports =async (req,res)=>{
+    const moment= require('moment-timezone')
   try {
-    let from = new Date(req.query.from) 
-    let to = new Date(req.query.to)
-
-    req.query.from ? from = new Date(req.query.from) : from = 'ALL'
-    req.query.to ? to = new Date(req.query.to) : to = 'ALL'
+    
+    let from = req.query.from ? moment.utc(req.query.from) : 'ALL'
+    let to = req.query.to ? moment.utc(req.query.to) :  'ALL'
 
     if(from !== "ALL" && to !== "ALL"){
         const orderdetails=await order.aggregate([
             {
                 $match : {
-                    $and : [{Date : {$gte : from}},{Date : {$lte : to}}]
-                }
-            }
-        ])
+                    Date:{
+                        $gte:new Date(from),
+                        $lte:new Date(to.endOf('day'))}}},
+               
+            {$match:{status:{$nin:['canceled']}}}
+      ])
         req.session.Orderdtls=orderdetails
         console.log(orderdetails);
         const products=orderdetails.product
 
         res.render('sales_report',{orderdetails,from,to,products})
-    }else{
+    }else {
         const orderdetails = await order.find({status:{$ne:"cancelled"}})
+        req.session.Orderdtls=orderdetails
+
         const products=orderdetails.product
 
         res.render('sales_report',{orderdetails,from,to,products})

@@ -24,6 +24,10 @@
           />
           
         </label>
+        <% if(typeof message !== 'undefined'){ %>
+          <p id="para" style="color: red;font-family: Georgia, 'Times New Roman', Times, serif;"><%=message%></p>
+        
+          <% } %>
 
         <label class="block mt-4 text-sm">
           <span class="text-gray-700 dark:text-gray-400">

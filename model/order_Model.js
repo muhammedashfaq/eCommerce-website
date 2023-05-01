@@ -37,6 +37,9 @@ const orderSchema = new mongoose.Schema({
     Date: {
         type: Date,
     },
+    exprdate:{
+        type:Date
+    },
     status: {
         type: String,
     },
