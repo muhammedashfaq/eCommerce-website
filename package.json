@@ -20,7 +20,6 @@
     "env": "^0.0.2",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "html-pdf": "^3.0.1",
     "js-image-zoom": "^0.7.0",
     "moment-timezone": "^0.5.43",
     "mongoose": "^7.0.2",

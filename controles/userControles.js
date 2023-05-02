@@ -19,10 +19,10 @@ let email2;
 let name2;
 
 ///html to pdfgenerate require things forpuchase invoice
-const ejs = require("ejs");
-const pdf = require("html-pdf");
-const fs = require("fs");
-const path = require("path");
+// const ejs = require("ejs");
+// const pdf = require("html-pdf");
+// const fs = require("fs");
+// const path = require("path");
 
 var instance = new Razorpay({
   key_id: process.env.Razorid,
@@ -1209,53 +1209,53 @@ const returnuserorder = async (req, res) => {
   }
 };
 
-const orderInvoice = async (req, res) => {
-  try {
-    const id = req.query.id;
+// const orderInvoice = async (req, res) => {
+//   try {
+//     const id = req.query.id;
 
-    const orderdetails = await order
-      .findOne({ _id: id })
-      .populate("product.productId")
-      .sort({ Date: -1 });
+//     const orderdetails = await order
+//       .findOne({ _id: id })
+//       .populate("product.productId")
+//       .sort({ Date: -1 });
 
-    const orderData = orderdetails.product;
+//     const orderData = orderdetails.product;
 
-    console.log(orderdetails);
+//     console.log(orderdetails);
 
-    const data = {
-      report: orderdetails,
-      data: orderData,
-    };
+//     const data = {
+//       report: orderdetails,
+//       data: orderData,
+//     };
 
-    const filepath = path.resolve(__dirname, "../views/users/invoicepdf.ejs");
-    const htmlstring = fs.readFileSync(filepath).toString();
+//     const filepath = path.resolve(__dirname, "../views/users/invoicepdf.ejs");
+//     const htmlstring = fs.readFileSync(filepath).toString();
 
-    let option = {
-      format: "A3",
-    };
-    const ejsData = ejs.render(htmlstring, data);
-    pdf.create(ejsData, option).toFile("Invoice.pdf", (err, response) => {
-      if (err) console.log(err);
+//     let option = {
+//       format: "A3",
+//     };
+//     const ejsData = ejs.render(htmlstring, data);
+//     pdf.create(ejsData, option).toFile("Invoice.pdf", (err, response) => {
+//       if (err) console.log(err);
 
-      const filepath = path.resolve(__dirname, "../invoice.pdf");
-      fs.readFile(filepath, (err, file) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).send("could not download file");
-        }
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader(
-          "Content-Disposition",
-          'attatchment;filename="Purchase Invoice.pdf"'
-        );
+//       const filepath = path.resolve(__dirname, "../invoice.pdf");
+//       fs.readFile(filepath, (err, file) => {
+//         if (err) {
+//           console.log(err);
+//           return res.status(500).send("could not download file");
+//         }
+//         res.setHeader("Content-Type", "application/pdf");
+//         res.setHeader(
+//           "Content-Disposition",
+//           'attatchment;filename="Purchase Invoice.pdf"'
+//         );
 
-        res.send(file);
-      });
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+//         res.send(file);
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 
 module.exports = {
   registerLoad,
