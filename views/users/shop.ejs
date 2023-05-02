@@ -25,6 +25,7 @@
           <!--Nav Button  -->
           
           <nav>
+            <form action="/shop? %>">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <select
                 name="select"
@@ -62,7 +63,7 @@
             </select>
           </div>
 
-          <form action="/shop? %>">
+         
             <div class="subscribe_form" style="margin-left: 10px">
               <input type="text" placeholder="Enter" name="search" />
               <input type="hidden" name="price" value="<%= price %>" />
@@ -90,7 +91,7 @@
               <div class="single-popular-items mb-50 text-center">
                 <div class="popular-img">
                   <img
-                    src="../admin/assets/product_images/<%= value.image[0]%>"
+                    src="<%= value.image[0]%>"
                     alt=""
                   />
 

@@ -36,25 +36,23 @@ const addProductload = async (req, res) => {
   }
 };
 
+
 const insertProduct = async (req, res) => {
   try {
     const image = [];
+    let cdnArr = []
     for (let i = 0; i < req.files.length; i++) {
       image[i] = req.files[i].filename;
-      sharp("./public/admin/assets/imgs/" + req.files[i].filename)
+      await sharp("./public/admin/assets/imgs/" + req.files[i].filename) // added await to ensure image is resized before uploading
         .resize(500, 500)
         .toFile(
           "./public/admin/assets/product_images/" + req.files[i].filename,
-
-
-
         );
-        cloudinary.uploader.upload("./public/admin/assets/product_images/") 
 
-
-
+      const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
+      cdnArr.push(data.secure_url)
     }
-    console.log(image);
+
 
     const Data = new productdb({
       name: req.body.name,
@@ -63,10 +61,10 @@ const insertProduct = async (req, res) => {
       stock: req.body.stock,
       quantity: req.body.quantity,
       description: req.body.description,
-      image: image,
+      image: cdnArr,
       blocked: false,
     });
-    const productdata = await Data.save();
+    const productdata =  await Data.save(); // added await to ensure data is saved before redirecting
 
     if (productdata) {
       res.redirect("/admin/products");
@@ -78,6 +76,52 @@ const insertProduct = async (req, res) => {
   }
 };
 
+
+// const insertProduct = async (req, res) => {
+//   try {
+//     const image = [];
+//     let cdnArr = []
+//     for (let i = 0; i < req.files.length; i++) {
+//       image[i] = req.files[i].filename;
+//       sharp("./public/admin/assets/imgs/" + req.files[i].filename)
+//         .resize(500, 500)
+//         .toFile(
+//           "./public/admin/assets/product_images/" + req.files[i].filename,
+//         );
+
+//         const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
+//         // console.log(data.secure_url);
+//         cdnArr.push(data.secure_url)
+      
+
+
+
+//     }
+
+//     console.log(cdnArr+ haii);
+    
+//     const Data = new productdb({
+//       name: req.body.name,
+//       price: req.body.price,
+//       category: req.body.category,
+//       stock: req.body.stock,
+//       quantity: req.body.quantity,
+//       description: req.body.description,
+//       image: cdnArr,
+//       blocked: false,
+//     });
+//     const productdata =  Data.save();
+
+//     if (productdata) {
+//       res.redirect("/admin/products");
+//     } else {
+//       res.render("add_products", { message: "error" });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
 const editProduct = async (req, res) => {
   try {
     const id = req.query.id;
@@ -87,8 +131,12 @@ const editProduct = async (req, res) => {
     res.render("edit_products", { dataedit: editData, Catdata: data });
   } catch (error) {}
 };
+
+
 const posteditProduct = async (req, res) => {
   try {
+  
+    const cdnArr=[]
     const name = req.body.name;
     if (name.trim().length == 0) {
       res.redirect("/admin/products");
@@ -107,16 +155,22 @@ const posteditProduct = async (req, res) => {
         });
 
         for (let i = 0; i < req.files.length; i++) {
-          sharp("./public/admin/assets/imgs/" + req.files[i].filename)
+
+          await  sharp("./public/admin/assets/imgs/" + req.files[i].filename)
             .resize(500, 500)
             .toFile(
               "./public/admin/assets/product_images/" + req.files[i].filename
             );
+
+  const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
+  cdnArr.push(data.secure_url)
+
           await productdb.findByIdAndUpdate(
             { _id: req.query.id },
-            { $push: { image: req.files[i].filename } }
+            { $push: { image:cdnArr[i] } }
           );
         }
+
         res.redirect("/admin/products");
       } else {
         const id = req.query.id;

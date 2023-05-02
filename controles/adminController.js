@@ -431,14 +431,21 @@ const salesReports =async (req,res)=>{
       ])
         req.session.Orderdtls=orderdetails
         console.log(orderdetails);
-        const products=orderdetails.product
+
+        const products=await order
+  .find({ status: { $ne: "cancelled" } })
+  .populate("product.productId")
+  .sort({ Date: -1 });
 
         res.render('sales_report',{orderdetails,from,to,products})
     }else {
         const orderdetails = await order.find({status:{$ne:"cancelled"}})
         req.session.Orderdtls=orderdetails
 
-        const products=orderdetails.product
+        const products=await order
+        .find({ status: { $ne: "cancelled" } })
+        .populate("product.productId")
+        .sort({ Date: -1 });
 
         res.render('sales_report',{orderdetails,from,to,products})
     }
