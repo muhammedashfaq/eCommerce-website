@@ -85,7 +85,7 @@ rout.get('/orderlist',auth.isLogin,userController.orderlistLoad)
 rout.get('/order_show',auth.isLogin,userController.ordershowLoad)
 rout.post('/cancel_order',auth.isLogin,userController.canceluserorder)
 rout.post('/return_order',auth.isLogin,userController.returnuserorder)
-rout.get('/invoice_pdf',auth.isLogin,userController.orderInvoice)
+// rout.get('/invoice_pdf',auth.isLogin,userController.orderInvoice)
 
 
 

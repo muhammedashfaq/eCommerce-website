@@ -506,6 +506,6 @@ module.exports = {
   ordercancelstatus,
   orderdeliverd,
   orderview,
-  salesReports,
-  exportTopdf,
+  salesReports
+  // exportTopdf,
 };

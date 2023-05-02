@@ -52,7 +52,7 @@ admin_rout.get('/delete_products',auth.isLogin,upload.upload.array('image',5),pr
 
 ///sales report
 admin_rout.get('/sales_reports',auth.isLogin,adminController.salesReports)
-admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
+// admin_rout.get('/export_to_pdf',auth.isLogin,adminController.exportTopdf)
 
 //coupon
 admin_rout.get('/coupon',auth.isLogin,couponController.loadCoupon)

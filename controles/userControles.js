@@ -1295,6 +1295,6 @@ module.exports = {
   orderlistLoad,
   ordershowLoad,
   canceluserorder,
-  returnuserorder,
-  orderInvoice,
+  returnuserorder
+  // orderInvoice,
 };
