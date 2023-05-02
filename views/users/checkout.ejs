@@ -21,19 +21,22 @@
         <div class="order_box col-lg-4">
 
           <h2>Coupon</h2>
-          
+
           <label for="coupon"></label>
-                <input type="text" name="code" id="code" placeholder="Enter Coupon code" required>
-                <button class=" genric-btn success circle arrow" onclick="applycoupon($('#code').val())">apply</button>
-                <br>
-                <br>
-                <h2> wallet</h2><h6 id="walletbalance"><%=userd.wallet%></h6>
+          <input type="text" name="code" id="code" placeholder="Enter Coupon code" required>
+          <button class=" genric-btn success circle arrow" onclick="applycoupon($('#code').val())">apply</button>
+          <br>
+          <br>
+          <h2> wallet</h2>
+          <h6 id="walletbalance">
+            <%=userd.wallet%>
+          </h6>
 
 
-             
-                <label for="wal"></label>
-                <input type="text" name="wal" id="wal" placeholder="Enter Wallet Amount" required>
-                <button class=" genric-btn success circle arrow" onclick="walamount($('#wal').val())">Add</button>
+
+          <label for="wal"></label>
+          <input type="text" name="wal" id="wal" placeholder="Enter Wallet Amount" required>
+          <button class=" genric-btn success circle arrow" onclick="walamount($('#wal').val())">Add</button>
 
 
         </div>
@@ -131,8 +134,8 @@
                   <li>
                     <div class="switch-wrap d-flex justify-content-between">
                       <input type="hidden" name="wallet" id="" value="<%= userd.wallet%>"> <a>Wallet</a>
-                      <h6 id="wallet" >
-                        
+                      <h6 id="wallet">
+
                       </h6>
 
                       <!-- <div class="form-check">
@@ -184,13 +187,13 @@
 
                 <br>
 
-                
+
 
               </div>
 
-          
+
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -260,9 +263,6 @@
         "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response) {
 
-          // alert(response.razorpay_payment_id);
-          // alert(response.razorpay_order_id);
-          // alert(response.razorpay_signature)
           verifyPayment(response, order);
         },
         "prefill": {
@@ -344,7 +344,6 @@
   <script>
     function applycoupon(code) {
       const amount = document.getElementById('total1').innerHTML;
-      console.log(amount);
       $.ajax({
         url: "/applyCoupon",
         data: {
@@ -353,44 +352,37 @@
         },
         method: "post",
         success: (response) => {
-          console.log(response);
           if (response.user) {
-            console.log("This User already used this coupon");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'This coupon already used!'
             })
           } else if (response.limit) {
-            console.log("coupon limit exceeded");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'coupon limit exceeded!'
             })
           } else if (response.status) {
-            console.log("This coupon now not in use");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'coupon limit exceeded!'
             })
           } else if (response.cartAmount) {
-            console.log("You cant use the coupon...Buy more");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'You cant use the coupon...Buy more'
             })
           } else if (response.date) {
-            console.log("coupon date expired");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'date expired!!!'
             })
           } else if (response.amountOkey) {
-            console.log("discount granded");
             document.getElementById('coupon').innerHTML = response.disAmount
             document.getElementById('total1').innerHTML = response.disTotal
             console.log("done");
@@ -402,7 +394,6 @@
               timer: 1500
             })
           } else if (response.invalid) {
-            console.log("invalid coupon");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -428,26 +419,26 @@
         data: {
           wal: wal,
           gtotal: gtotal,
-          stotlal:stotlal
+          stotlal: stotlal
         },
         method: 'post',
 
         success: (response) => {
           console.log('hi2');
 
-          if(response.limit){
-            
+          if (response.limit) {
+
             console.log("coupon limit exceeded");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'Wallet limit exceeded!'
             })
-        
-          }else{
+
+          } else {
             document.getElementById('wallet').innerHTML = response.wal
             document.getElementById('total1').innerHTML = response.grandtotal
-            document.getElementById('walletbalance').innerHTML=response.twallet-response.wal
+            document.getElementById('walletbalance').innerHTML = response.twallet - response.wal
             Swal.fire({
               position: 'center',
               icon: 'success',
@@ -456,10 +447,10 @@
               timer: 1500
             })
           }
-         
+
         }
 
       })
     }
   </script>
-  <%- include('../users/layouts/user_footer.ejs')%> 
+  <%- include('../users/layouts/user_footer.ejs')%>

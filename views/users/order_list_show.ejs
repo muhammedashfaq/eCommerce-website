@@ -89,19 +89,24 @@
           <h2>Your Order Payement Deatails</h2>
           
           <ul class="list list_2">
-            <li>
+            <!-- <li>
               <a>Subtotal
                 <span>RS :<%=orderData.totalAmount%></span>
               </a>
+            </li> -->
+            <li>
+              <a >Wallet
+                <span><%= orderData.orderWallet%></span>
+              </a>
             </li>
             <li>
-              <a >Shipping
-                <span>---</span>
+              <a >Coupon
+                <span><%=orderData.ordercoupon%></span>
               </a>
             </li>
             <li>
          
-              <a >Total 
+              <a >Grand Total 
               <span id="total1">RS :<%=orderData.totalAmount%></span>  
               </a>
             

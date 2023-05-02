@@ -3,17 +3,14 @@ const admin = require("../model/admin_model");
 const CatDB = require("../model/category_Model");
 const productdb = require("../model/prodect_model");
 const sharp = require("sharp");
-const cloudinary =require('cloudinary').v2
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-
   cloud_name: process.env.cloud_name,
   api_key: process.env.api_key,
   api_secret: process.env.api_secret,
-  secure:true
-
+  secure: true,
 });
-
 
 const productload = async (req, res) => {
   try {
@@ -36,23 +33,23 @@ const addProductload = async (req, res) => {
   }
 };
 
-
 const insertProduct = async (req, res) => {
   try {
     const image = [];
-    let cdnArr = []
+    let cdnArr = [];
     for (let i = 0; i < req.files.length; i++) {
       image[i] = req.files[i].filename;
       await sharp("./public/admin/assets/imgs/" + req.files[i].filename) // added await to ensure image is resized before uploading
         .resize(500, 500)
         .toFile(
-          "./public/admin/assets/product_images/" + req.files[i].filename,
+          "./public/admin/assets/product_images/" + req.files[i].filename
         );
 
-      const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
-      cdnArr.push(data.secure_url)
+      const data = await cloudinary.uploader.upload(
+        "./public/admin/assets/product_images/" + req.files[i].filename
+      );
+      cdnArr.push(data.secure_url);
     }
-
 
     const Data = new productdb({
       name: req.body.name,
@@ -64,7 +61,7 @@ const insertProduct = async (req, res) => {
       image: cdnArr,
       blocked: false,
     });
-    const productdata =  await Data.save(); // added await to ensure data is saved before redirecting
+    const productdata = await Data.save(); // added await to ensure data is saved before redirecting
 
     if (productdata) {
       res.redirect("/admin/products");
@@ -76,52 +73,6 @@ const insertProduct = async (req, res) => {
   }
 };
 
-
-// const insertProduct = async (req, res) => {
-//   try {
-//     const image = [];
-//     let cdnArr = []
-//     for (let i = 0; i < req.files.length; i++) {
-//       image[i] = req.files[i].filename;
-//       sharp("./public/admin/assets/imgs/" + req.files[i].filename)
-//         .resize(500, 500)
-//         .toFile(
-//           "./public/admin/assets/product_images/" + req.files[i].filename,
-//         );
-
-//         const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
-//         // console.log(data.secure_url);
-//         cdnArr.push(data.secure_url)
-      
-
-
-
-//     }
-
-//     console.log(cdnArr+ haii);
-    
-//     const Data = new productdb({
-//       name: req.body.name,
-//       price: req.body.price,
-//       category: req.body.category,
-//       stock: req.body.stock,
-//       quantity: req.body.quantity,
-//       description: req.body.description,
-//       image: cdnArr,
-//       blocked: false,
-//     });
-//     const productdata =  Data.save();
-
-//     if (productdata) {
-//       res.redirect("/admin/products");
-//     } else {
-//       res.render("add_products", { message: "error" });
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
 const editProduct = async (req, res) => {
   try {
     const id = req.query.id;
@@ -132,11 +83,9 @@ const editProduct = async (req, res) => {
   } catch (error) {}
 };
 
-
 const posteditProduct = async (req, res) => {
   try {
-  
-    const cdnArr=[]
+    const cdnArr = [];
     const name = req.body.name;
     if (name.trim().length == 0) {
       res.redirect("/admin/products");
@@ -155,19 +104,20 @@ const posteditProduct = async (req, res) => {
         });
 
         for (let i = 0; i < req.files.length; i++) {
-
-          await  sharp("./public/admin/assets/imgs/" + req.files[i].filename)
+          await sharp("./public/admin/assets/imgs/" + req.files[i].filename)
             .resize(500, 500)
             .toFile(
               "./public/admin/assets/product_images/" + req.files[i].filename
             );
 
-  const data=await cloudinary.uploader.upload("./public/admin/assets/product_images/" + req.files[i].filename)
-  cdnArr.push(data.secure_url)
+          const data = await cloudinary.uploader.upload(
+            "./public/admin/assets/product_images/" + req.files[i].filename
+          );
+          cdnArr.push(data.secure_url);
 
           await productdb.findByIdAndUpdate(
             { _id: req.query.id },
-            { $push: { image:cdnArr[i] } }
+            { $push: { image: cdnArr[i] } }
           );
         }
 

@@ -202,7 +202,6 @@ const veryfyaddesscheck = async (req, res) => {
   }
 };
 
-
 const posteditaddresscheck = async (req, res) => {
   try {
     const index = req.body.index;

@@ -449,7 +449,7 @@
                       &nbsp;&nbsp;
                       <button type="submit"
                         class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">check</button>
-                    </form>  
+                    </form>
 
                   </div>
 
@@ -458,9 +458,7 @@
                     <th class="px-4 py-3">NO</th>
 
                     <th class="px-4 py-3">Order Id</th>
-                    <th class="px-4 py-3">Name</th>
-                    <th class="px-4 py-3"> p Name</th>
-
+                    <th class="px-4 py-3">Costomer Name</th>
                     <th class="px-4 py-3">Date</th>
                     <th class="px-4 py-3">Amount</th>
                     <th class="px-4 py-3">Method</th>
@@ -484,16 +482,7 @@
                       <td class="px-4 py-3 text-sm">
                         <%= value.userName%>
                       </td>
-                      <td class="px-4 py-3 text-sm">
 
-                        <% value.product.forEach((product,index)=>{%>
-                          <%=product.productId.name%>
-                          
-                          <%})%>
-
-
-                         
-                      </td>
 
                       <td>
                         <%=value.Date.toISOString().substring(0,10)%>
@@ -505,7 +494,9 @@
                         <%= value.paymentMethod%>
                       </td>
                       <td class="px-4 py-3 text-sm">
+                        <%= value.product[0].quantity%>
                       </td>
+
                       <td class="px-4 py-3 text-sm">
                         <%= value.status%>
                       </td>
@@ -522,8 +513,8 @@
 
 
 
-          <a class="my-4 text-2 font-semibold text-gray-700 dark:text-gray-200" href="/admin/export_to_pdf?from=<%=from%>&to=<%=to%>"> <button
-              class="btn btn-danger">Dowload </button></a>
+          <a class="my-4 text-2 font-semibold text-gray-700 dark:text-gray-200"
+            href="/admin/export_to_pdf?from=<%=from%>&to=<%=to%>"> <button class="btn btn-danger">Dowload </button></a>
 
 
 

@@ -28,36 +28,33 @@ const addloadCoupon = async (req, res) => {
 
 const postaddcoupon = async (req, res) => {
   try {
+    const code = req.body.code;
 
-    const code= req.body.code
+    const codealredy = await coupon.findOne({ code: code });
 
-            const codealredy=  await coupon.findOne({code:code})
-
-
-    if(codealredy){
-            res.render('add_coupon',{message:"This Coupon alredy exist "})
-    }else{
-
-    const coupons = new coupon({
-      code: req.body.code,
-      discountType: req.body.discountType,
-      discountAmount: req.body.amount,
-      maxCartAmount: req.body.cartAmount,
-      maxDiscountAmount: req.body.discountAmount,
-      maxUsers: req.body.couponCount,
-      expiryDate: req.body.date,
-    });
-    const couponData = await coupons.save();
-    if (couponData) {
-      res.redirect("/admin/coupon");
+    if (codealredy) {
+      res.render("add_coupon", { message: "This Coupon alredy exist " });
     } else {
-      res.redirect("/admin/coupon");
+      const coupons = new coupon({
+        code: req.body.code,
+        discountType: req.body.discountType,
+        discountAmount: req.body.amount,
+        maxCartAmount: req.body.cartAmount,
+        maxDiscountAmount: req.body.discountAmount,
+        maxUsers: req.body.couponCount,
+        expiryDate: req.body.date,
+      });
+      const couponData = await coupons.save();
+      if (couponData) {
+        res.redirect("/admin/coupon");
+      } else {
+        res.redirect("/admin/coupon");
+      }
     }
-  }
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 const applyCoupon = async (req, res) => {
   try {
@@ -136,51 +133,50 @@ const editCoupon = async (req, res) => {
 
 const posteditCoupon = async (req, res) => {
   try {
-
-    const code= req.body.code
-
-            const codealredy=  await coupon.findOne({code:code})
-
-
-    if(codealredy){
-            res.render('add_coupon',{message:"This Coupon alredy exist "})
-    }else{
-    const id = req.query.id;
     const code = req.body.code;
-    const discountType = req.body.discountType;
-    const discountAmount = req.body.amount;
-    const maxCartAmount = req.body.cartAmount;
-    const maxDiscountAmount = req.body.discountAmount;
-    const maxUsers = req.body.couponCount;
-    const expiryDate = req.body.date;
 
-    if (
-      code.trim().length == 0 ||
-      discountAmount.trim().length == 0 ||
-      maxCartAmount.trim().length == 0 ||
-      maxDiscountAmount.trim().length == 0 ||
-      maxUsers.trim().length == 0
-    ) {
-      res.redirect("/admin/coupon");
+    const codealredy = await coupon.findOne({ code: code });
+
+    if (codealredy) {
+      res.render("add_coupon", { message: "This Coupon alredy exist " });
     } else {
-      const savecoupon = await coupon.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            code: req.body.code,
-            discountType: req.body.discountType,
-            discountAmount: req.body.amount,
-            maxCartAmount: req.body.cartAmount,
-            maxDiscountAmount: req.body.discountAmount,
-            maxUsers: req.body.couponCount,
-            expiryDate: req.body.date,
-          },
-        }
-      );
+      const id = req.query.id;
+      const code = req.body.code;
+      const discountType = req.body.discountType;
+      const discountAmount = req.body.amount;
+      const maxCartAmount = req.body.cartAmount;
+      const maxDiscountAmount = req.body.discountAmount;
+      const maxUsers = req.body.couponCount;
+      const expiryDate = req.body.date;
 
-      await savecoupon.save();
-      res.redirect("/admin/coupon");
-    }}
+      if (
+        code.trim().length == 0 ||
+        discountAmount.trim().length == 0 ||
+        maxCartAmount.trim().length == 0 ||
+        maxDiscountAmount.trim().length == 0 ||
+        maxUsers.trim().length == 0
+      ) {
+        res.redirect("/admin/coupon");
+      } else {
+        const savecoupon = await coupon.findByIdAndUpdate(
+          { _id: id },
+          {
+            $set: {
+              code: req.body.code,
+              discountType: req.body.discountType,
+              discountAmount: req.body.amount,
+              maxCartAmount: req.body.cartAmount,
+              maxDiscountAmount: req.body.discountAmount,
+              maxUsers: req.body.couponCount,
+              expiryDate: req.body.date,
+            },
+          }
+        );
+
+        await savecoupon.save();
+        res.redirect("/admin/coupon");
+      }
+    }
   } catch (error) {
     console.log(error.message);
   }

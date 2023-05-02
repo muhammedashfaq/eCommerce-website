@@ -1,203 +1,187 @@
 <%- include('../users/layouts/user_header.ejs')%>
 
-<main>
-  <!-- Hero Area Start-->
-  <div class="slider-area">
-    <div lass="single-slider slider-height2 d-flex align-items-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="hero-cap text-center">
-              <h2 style="margin-top: 20px">Watch Shop</h2>
+  <main>
+    <!-- Hero Area Start-->
+    <div class="slider-area">
+      <div lass="single-slider slider-height2 d-flex align-items-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="hero-cap text-center">
+                <h2 style="margin-top: 20px">Watch Shop</h2>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Hero Area End-->
-  <!-- Latest Products Start -->
-  <section class="popular-items latest-padding">
-    <div class="container">
-      <hr />
-      <div class="row product-btn justify-content-between mb-40">
-        <div class="properties__button">
-          <!--Nav Button  -->
-          
-          <nav>
-            <form action="/shop? %>">
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <select
-                name="select"
-                id="select1"
-                onchange="location = '/shop?category='+value+'&price=<%= price %>&search=<%= search %>'"
-              >
-              
-                <option value="All">All</option>
-                <% categoryData.forEach((value)=>{%>
+    <!-- Hero Area End-->
+    <!-- Latest Products Start -->
+    <section class="popular-items latest-padding">
+      <div class="container">
+        <hr />
+        <div class="row product-btn justify-content-between mb-40">
+          <div class="properties__button">
+            <!--Nav Button  -->
 
-                <option><%= value.name%></option>
-                <%})%>
+            <nav>
+              <form action="/shop? %>">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <select name="category" id="selxaect1"
+                    onchange="location = '/shop?category='+value+'&price=<%= price %>&search=<%= search %>'">
+
+                    <option value="All">All</option>
+                    <% categoryData.forEach((value)=>{%>
+
+                      <option>
+                        <%= value.name%>
+                      </option>
+                      <%})%>
+                  </select>
+                </div>
+            </nav>
+            <!--End Nav Button  -->
+          </div>
+          <!-- Grid and List view -->
+          <div class="grid-list-view"></div>
+          <!-- Select items -->
+          <div class="select-this d-flex">
+            <div class="select-itms">
+              <select name="price" id="select1"
+                onchange="location = '/shop?category=<%= category %>&price='+value+'&search=<%= search %>'">
+                <% if(price=="High" ){%>
+                  <option value="Low">Low to High</option>
+                  <option value="High" selected>High to Low</option>
+                  <%}else {%>
+                    <option value="Low" selected>Low to High</option>
+                    <option value="High">High to Low</option>
+                    <%} %>
               </select>
             </div>
-          </nav>
-          <!--End Nav Button  -->
-        </div>
-        <!-- Grid and List view -->
-        <div class="grid-list-view"></div>
-        <!-- Select items -->
-        <div class="select-this d-flex">
-          <div class="select-itms">
-            <select
-              name="select"
-              id="select1"
-              onchange="location = '/shop?category=<%= category %>&price='+value+'&search=<%= search %>'"
-            >
-              <% if(price == "High"){%>
-              <option value="Low">Low to High</option>
-              <option value="High" selected>High to Low</option>
-              <%}else {%>
-              <option value="Low" selected>Low to High</option>
-              <option value="High">High to Low</option>
-              <%} %>
-            </select>
-          </div>
 
-         
+
             <div class="subscribe_form" style="margin-left: 10px">
               <input type="text" placeholder="Enter" name="search" />
-              <input type="hidden" name="price" value="<%= price %>" />
+
               <button type="submit" class="genric-btn success circle arrow">
                 search
               </button>
             </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-      <hr />
-      <!-- Nav Card -->
-      <div class="tab-content" id="nav-tabContent">
-        <!-- card one -->
-        <div
-          class="tab-pane fade show active"
-          id="nav-home"
-          role="tabpanel"
-          aria-labelledby="nav-home-tab"
-        >
-          <div class="row">
-            <% product.forEach((value,index)=>{ %>
+        <hr />
+        <!-- Nav Card -->
+        <div class="tab-content" id="nav-tabContent">
+          <!-- card one -->
+          <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+              <% product.forEach((value,index)=>{ %>
 
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-              <div class="single-popular-items mb-50 text-center">
-                <div class="popular-img">
-                  <img
-                    src="<%= value.image[0]%>"
-                    alt=""
-                  />
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                  <div class="single-popular-items mb-50 text-center">
+                    <div class="popular-img">
+                      <img src="<%= value.image[0]%>" alt="" />
 
-                  <div class="favorit-items">
-                    <span class="flaticon-heart"></span>
+                      <div class="favorit-items">
+                        <span class="flaticon-heart"></span>
+                      </div>
+                    </div>
+                    <div class="popular-caption">
+                      <h3>
+                        <a href="./product_details?id=<%=value._id%>">
+                          <%=value.name%>
+                        </a>
+                      </h3>
+                      <span>
+                        <%= value.price%>
+                      </span>
+
+                      <button type="submit" onclick="addToCart('<%=value._id%>')" class="btn btn-danger">
+                        add to cart
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div class="popular-caption">
-                  <h3>
-                    <a href="./product_details?id=<%=value._id%>"
-                      ><%=value.name%></a
-                    >
-                  </h3>
-                  <span><%= value.price%></span>
 
-                  <button
-                    type="submit"
-                    onclick="addToCart('<%=value._id%>')"
-                    class="btn btn-danger"
-                  >
-                    add to cart
-                  </button>
-                </div>
+                <% })%>
+            </div>
+          </div>
+        </div>
+        <!-- End Nav Card -->
+      </div>
+      <h3>
+        <ul class="pagination justify-content-center" style="margin: 20px 0">
+          <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+          <% for(let i=1 ;i<=totalpages;i++){%>
+
+            <li class="page-item ml-4  ">
+              <a class="page-link" href="?page=<%=i%>&category=<%= category %>&price=<%= price %>&search=<%= search %>">
+                <%=i%>
+              </a>
+            </li>
+
+            <%} %>
+      </h3>
+      <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+      </ul>
+    </section>
+    <!-- Latest Products End -->
+    <!--? Shop Method Start-->
+    <div class="shop-method-area">
+      <div class="container">
+        <div class="method-wrapper">
+          <div class="row d-flex justify-content-between">
+            <div class="col-xl-4 col-lg-4 col-md-6">
+              <div class="single-method mb-40">
+                <i class="ti-package"></i>
+                <h6>Free Shipping Method</h6>
+                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
               </div>
             </div>
-
-            <% })%>
-          </div>
-        </div>
-      </div>
-      <!-- End Nav Card -->
-    </div>
-    <h3>
-    <ul class="pagination justify-content-center" style="margin: 20px 0">
-      <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
-      <% for(let i=1 ;i<=totalpages;i++){%>
-
-     -- <li class="page-item">
-        <a
-          class="page-link"
-          href="?page=<%=i%>&category=<%= category %>&price=<%= price %>&search=<%= search %>"
-          ><%=i%></a
-        >
-      </li>--
-
-      <%} %>
-    </h3>
-      <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
-    </ul>
-  </section>
-  <!-- Latest Products End -->
-  <!--? Shop Method Start-->
-  <div class="shop-method-area">
-    <div class="container">
-      <div class="method-wrapper">
-        <div class="row d-flex justify-content-between">
-          <div class="col-xl-4 col-lg-4 col-md-6">
-            <div class="single-method mb-40">
-              <i class="ti-package"></i>
-              <h6>Free Shipping Method</h6>
-              <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+            <div class="col-xl-4 col-lg-4 col-md-6">
+              <div class="single-method mb-40">
+                <i class="ti-unlock"></i>
+                <h6>Secure Payment System</h6>
+                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+              </div>
             </div>
-          </div>
-          <div class="col-xl-4 col-lg-4 col-md-6">
-            <div class="single-method mb-40">
-              <i class="ti-unlock"></i>
-              <h6>Secure Payment System</h6>
-              <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
-            </div>
-          </div>
-          <div class="col-xl-4 col-lg-4 col-md-6">
-            <div class="single-method mb-40">
-              <i class="ti-reload"></i>
-              <h6>Secure Payment System</h6>
-              <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+            <div class="col-xl-4 col-lg-4 col-md-6">
+              <div class="single-method mb-40">
+                <i class="ti-reload"></i>
+                <h6>Secure Payment System</h6>
+                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Shop Method End-->
-</main>
+    <!-- Shop Method End-->
+  </main>
 
-<script>
-  function addToCart(id) {
-    console.log(id);
-    $.ajax({
-      url: "/add_to_cart",
-      method: "post",
-      encoded: true,
-      data: {
-        id: id,
-      },
-    }).done((data) => {
-      if (data.success) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Product added to cart",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    });
-  }
-</script>
+  <script>
+    function addToCart(id) {
+      console.log(id);
+      $.ajax({
+        url: "/add_to_cart",
+        method: "post",
+        encoded: true,
+        data: {
+          id: id,
+        },
+      }).done((data) => {
+        if (data.success) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Product added to cart",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    }
+  </script>
 
-<%- include('../users/layouts/user_footer.ejs')%>
+  <%- include('../users/layouts/user_footer.ejs')%>
