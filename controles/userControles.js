@@ -229,8 +229,9 @@ const veryfiLogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const userData = await User.findOne({ email: email });
-
-    if (userData.is_verified == 1) {
+    if(userData == null){
+      res.redirect("/")
+    }else if (userData.is_verified == 1) {
       if (userData.is_blocked == false) {
         if (userData.email) {
           const passwordMatch = await bcrypt.compare(
