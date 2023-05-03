@@ -544,7 +544,7 @@ const getProduct_details = async (req, res) => {
     const prodata = await productDB.findById({ _id: id });
     const userd = await User.findOne({ _id: req.session.user_id });
 
-    res.render("Product_details", { product: prodata, user: userd.name });
+    res.render("product_details", { product: prodata, user: userd.name });
   } catch (error) {
     console.log(error.message);
   }
