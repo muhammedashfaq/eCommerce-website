@@ -33,9 +33,15 @@
                     <option value="All">All</option>
                     <% categoryData.forEach((value)=>{%>
 
-                      <option>
-                        <%= value.name%>
-                      </option>
+                      <% if(category == value.name){%>\
+                        <option selected>
+                          <%= value.name%>
+                        </option>
+                      <%}else { %>
+                        <option>
+                          <%= value.name%>
+                        </option>
+                      <%} %>
                       <%})%>
                   </select>
                 </div>
