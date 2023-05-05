@@ -44,7 +44,7 @@
       
                       <form action="" method="post" class="mx-1 mx-md-4">
       
-                        <div class="d-flex flex-row align-items-center mb-4">
+                        <div class="d-flex flex-row align-items-center ">
                           <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                             <input type="text" name="name" id="form2Example11" class="form-control" required />
@@ -53,7 +53,7 @@
                           </div>
                         </div>
       
-                        <div class="d-flex flex-row align-items-center mb-4">
+                        <div class="d-flex flex-row align-items-center">
                           <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                             <input type="email" name="email" id="form2Example12" class="form-control" required />
@@ -69,7 +69,7 @@
                        
 
 
-                        <div class="d-flex flex-row align-items-center mb-4">
+                        <div class="d-flex flex-row align-items-center ">
                             <i class="fas fa-mobile fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
                               <input type="number" name="mob" id="form2Example13" class="form-control" required />
@@ -80,11 +80,20 @@
                           </div>
 
       
-                        <div class="d-flex flex-row align-items-center mb-4">
+                        <div class="d-flex flex-row align-items-center ">
                           <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                             <input type="password" name="password" id="form2Example14" class="form-control" required />
                             <label class="form-label" for="form3Example4c">Password</label>
+                            <span id="er4" style="color: red;"></span>
+
+                          </div>
+                        </div>
+                          <div class="d-flex flex-row align-items-center ">
+                          <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                          <div class="form-outline flex-fill mb-0">
+                            <input type="password" name="Cpassword" id="form2Example15" class="form-control" required />
+                            <label class="form-label" for="form3Example4c">Confirm Password</label>
                             <span id="er4" style="color: red;"></span>
 
                           </div>
@@ -121,7 +130,7 @@
 
                       
                     <div class="d-flex align-items-center justify-content-center pb-4">
-                      <p class="mb-0 me-2">alredy have account?</p>
+                      <p class="mb-0 me-2">Alredy Have Account?</p>
 
                       <a  href="/">Login</a>
                       <!-- <button type="button" class="btn btn-outline-danger">Create new</button> -->
@@ -150,6 +159,8 @@
         const semail = document.getElementById('form2Example12')
         const smob=document.getElementById('form2Example13')
         const spassword = document.getElementById('form2Example14')
+        const Cpassword = document.getElementById('form2Example15')
+
 
 
         sname.addEventListener('input',() => {
@@ -195,6 +206,20 @@
             spassword.setCustomValidity(' Password contain 8 ')
           }else{
             spassword.setCustomValidity("")
+          }
+        })
+
+        Cpassword.addEventListener('input',() => {
+          if(Cpassword.value.trim().length==''){
+            Cpassword.setCustomValidity('This Field Canot be Null')
+          }
+          else if(Cpassword.value.trim().length <8){
+            Cpassword.setCustomValidity(' Password contain 8 ')
+          }
+          else if(Cpassword.value!==spassword.value){
+            Cpassword.setCustomValidity(' Password Not Match  ')
+          }else{
+            Cpassword.setCustomValidity("")
           }
         })
 

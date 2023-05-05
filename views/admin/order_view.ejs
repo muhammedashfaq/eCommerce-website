@@ -18,10 +18,51 @@
 
         <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
           Customer Name : - <%= orderData.userName%>
-        </h4>
 
 
-      </div>
+          <form action="">
+          <div  style=" display: flex; justify-content: center;">
+            <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+              <br>
+              <span class="text-gray-700 dark:text-gray-400"> Status </span>
+              
+              <select  name="category"
+              class="block w-25 mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+              > 
+              
+              
+                <option>ff</option>
+                
+                <option> <a href="#"> No Category Availiable</a></option>  <option>ff</option>
+                
+                <option> <a href="#"> No Category Availiable</a></option>
+                
+                
+                <option>ff</option>
+                
+                <option> <a href="#"> No Category Availiable</a></option>
+                
+              </select>
+              
+            </h4>
+            
+            <a style="margin: 10px; width: 70px; height: 40px; margin-top: 50px;" href="#"
+            class="px-3 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" >
+            Update
+          </a>
+          
+          
+        </div>
+      </form>
+        
+        
+        
+
+
+
+
+    </h4>
+    </div>
       <% product.forEach((value,index)=>{%>
 
 
@@ -38,7 +79,7 @@
 
                   <th class="px-4 py-3">Method</th>
 
-                  <!-- <th class="px-4 py-3">Status</th> -->
+                  <th class="px-4 py-3">Status</th>
 
                 </tr>
 
@@ -62,6 +103,11 @@
                     <%=orderData.paymentMethod%>
 
                   </td>
+                  <td class="px-4 py-3">
+                    <%=orderData.status%>
+
+                  </td>
+                 
               </tbody>
               </thead>
               <tbody></tbody>

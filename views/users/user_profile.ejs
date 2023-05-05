@@ -45,6 +45,8 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center p-3">Vailidty Till
                   <p class="mb-0"> <u> Coupons </u></p>
                 </li>
+                <% if(typeof coupon1 !=="undefined" ){%>
+
                 <% coupon1.forEach((value)=>{%>
 
                   <li class="list-group-item d-flex justify-content-between align-items-center p-3">
@@ -57,7 +59,7 @@
                   </li>
 
                   <% })%>
-
+                  <%}%>
 
               </ul>
             </div>
@@ -174,6 +176,7 @@
 
 
                                 <%}%>
+                               
 
 
 

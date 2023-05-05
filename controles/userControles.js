@@ -60,11 +60,11 @@ const sendVerifymail = async (name, email, otp) => {
       //html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
       // html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/otp " '+email+' >varify</a> for verify and enter the '+otp+ ' </p>'
       html:
-        "<p>hi" +
-        name +
-        ',please click here to<a href="http://localhost:3000/otp">varify</a> and enter the' +
-        otp +
-        " for your verification " +
+        "<p>hi"  +
+        name + 
+        ',please click here to<a href="https://tzwatches.shop/otp">varify</a> and enter the' +
+        otp + 
+        " for your verification "  +
         email +
         "</p>",
     };
@@ -103,7 +103,7 @@ const resetsendVerifymail = async (name, email, token) => {
       html:
         "<p>hi " +
         name +
-        ' ,please click here to<a href="http://localhost:3000/reset_password?token=' +
+        ' ,please click here to<a href="https://tzwatches.shop/reset_password?token=' +
         token +
         '">Reset</a> your password </p>',
     };
@@ -150,14 +150,19 @@ const resend = async (req, res) => {
 const otpValidation = async (req, res) => {
   try {
     const otpinput = req.body.otp;
+    const email = req.body.email;
+
+
 
     if (otpinput == otp) {
-      await User.findOneAndUpdate(
+ 
+
+   const userData=   await User.findOneAndUpdate(
         { email: email2 },
         { $set: { is_verified: 1 } }
       );
-
-      res.render("login", { message: "success..!!!" });
+   
+      res.render("login", {userData,email2, message: "success..!!!" });
     } else res.redirect("/otp");
   } catch (error) {
     console.log(error.message);
@@ -205,7 +210,7 @@ const veryfiyUser = async (req, res) => {
         otp = otpGenarated;
 
         sendVerifymail(req.body.name, req.body.email, otpGenarated);
-        res.render("otp_verification");
+        res.render("otp_verification",{email});
       } else {
         res.render("register", { alert: "registration not completed" });
       }
@@ -218,7 +223,9 @@ const veryfiyUser = async (req, res) => {
 //login page
 const loadLogin = async (req, res) => {
   try {
-    res.render("login");
+    const userData = await User.find({});
+
+    res.render("login",{userData});
   } catch (error) {
     console.log(error.message);
   }
@@ -243,21 +250,44 @@ const veryfiLogin = async (req, res) => {
             req.session.user_id = userData._id;
             res.redirect("/home");
           } else {
-            res.render("login", { message: "Incorrect Email Or Password" });
+            res.render("login", {userData, email,message: "Incorrect Email Or Password" });
           }
         } else {
-          res.render("login", { message: "Incorrect Email Or Password" });
+          res.render("login", {userData,email, message: "Incorrect Email Or Password" });
         }
       } else {
-        res.render("login", { message: "Your Blocked..." });
+        res.render("login", {userData,email, message: "Your Blocked..." });
       }
     } else {
-      res.render("login", { message: "Your Not verified" });
+      res.render("login", {userData,email,password, verfy: "Your Not verified" });
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+
+//verifyuser
+ const verifyFromLogin =async(req,res)=>{
+  try {
+   
+    const email=req.query.email
+    email2=email
+    const udata = await User.find({email:email})
+
+    const otpGenarated = Math.floor(1000 + Math.random() * 9999);
+      
+
+        sendVerifymail("User", email, otpGenarated);
+        res.render("otp_verification");
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
 
 ///forget passwd
 
@@ -285,7 +315,7 @@ const forgetSendtoEmail = async (req, res) => {
         );
         const user = await User.findOne({ email: email });
 
-        resetsendVerifymail(user.name, user.email, randomstrinG);
+        resetsendVerifymail("User", user.email, randomstrinG);
 
         res.render("forget_password", {
           message: "Please check your Mail for Reset your password",
@@ -325,14 +355,17 @@ const resetpassverify = async (req, res) => {
       { $set: { password: spassword, token: "" } }
     );
 
-    res.redirect("/");
+    res.redirect("/"  );
   } catch (error) {
     console.log(error.message);
   }
 };
 const getHome = async (req, res) => {
   try {
-    const data = await productDB.find();
+
+
+
+    const data = await productDB.find().limit(3);
     const userd = await User.findOne({ _id: req.session.user_id });
 
     res.render("home", { product: data, user: userd.name });
@@ -393,6 +426,7 @@ const getShop = async (req, res) => {
     const totalpages = Math.ceil(productCount / limit);
     const userd = await User.findOne({ _id: req.session.user_id });
     res.render("shop", {
+      message:"hi",
       product: productData,
       user: userd.name,
       totalpages,
@@ -899,6 +933,8 @@ const buynow = async (req, res) => {
 };
 const buynowrender = async (req, res) => {
   try {
+
+    console.log('buy');
     const address = await user_address.findOne({ user: req.session.user_id });
     const addressData = address.address;
 
@@ -1058,8 +1094,8 @@ const getUser_profile = async (req, res) => {
     const coupon1 = await coupon.find();
     const userd = await User.findOne({ _id: req.session.user_id });
     const userData = await User.findOne({ _id: req.session.user_id });
-
-    if (address) {
+    
+    if (address&&coupon1) {
       res.render("user_profile", {
         user: userd.name,
         data: userData,
@@ -1265,6 +1301,7 @@ module.exports = {
   resend,
   loadLogin,
   veryfiLogin,
+  verifyFromLogin,
   forgetLoad,
   forgetSendtoEmail,
   resetpassLoad,

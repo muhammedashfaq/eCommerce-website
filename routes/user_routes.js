@@ -17,7 +17,10 @@ rout.post("/register",userController.veryfiyUser)
 //login
 rout.get('/',auth.isLogout,userController.loadLogin)
 rout.get('/login',auth.isLogout,userController.loadLogin)
-rout.post('/login',userController.veryfiLogin)
+ rout.post('/login',userController.veryfiLogin)
+// verify_from_login
+rout.get('/verify_from_login',userController.verifyFromLogin)
+
 rout.get('/otp',userController.otpVerify)
 rout.post('/otp',userController.otpValidation)
 rout.get('/forget',auth.isLogout,userController.forgetLoad)
