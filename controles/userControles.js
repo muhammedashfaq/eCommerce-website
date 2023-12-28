@@ -60,11 +60,11 @@ const sendVerifymail = async (name, email, otp) => {
       //html:"<p> Hii  " +name+ "  please enter  " +otp+ "  as your OTP for verification </p>"
       // html:'<p>hi '+name+' ,please click here to<a href="http://localhost:3000/otp " '+email+' >varify</a> for verify and enter the '+otp+ ' </p>'
       html:
-        "<p>hi"  +
-        name + 
+        "<p>hi" +
+        name +
         ',please click here to<a href="https://tzwatches.shop/otp">varify</a> and enter the' +
-        otp + 
-        " for your verification "  +
+        otp +
+        " for your verification " +
         email +
         "</p>",
     };
@@ -152,17 +152,13 @@ const otpValidation = async (req, res) => {
     const otpinput = req.body.otp;
     const email = req.body.email;
 
-
-
     if (otpinput == otp) {
- 
-
-   const userData=   await User.findOneAndUpdate(
+      const userData = await User.findOneAndUpdate(
         { email: email2 },
         { $set: { is_verified: 1 } }
       );
-   
-      res.render("login", {userData,email2, message: "success..!!!" });
+
+      res.render("login", { userData, email2, message: "success..!!!" });
     } else res.redirect("/otp");
   } catch (error) {
     console.log(error.message);
@@ -210,7 +206,7 @@ const veryfiyUser = async (req, res) => {
         otp = otpGenarated;
 
         sendVerifymail(req.body.name, req.body.email, otpGenarated);
-        res.render("otp_verification",{email});
+        res.render("otp_verification", { email });
       } else {
         res.render("register", { alert: "registration not completed" });
       }
@@ -225,7 +221,7 @@ const loadLogin = async (req, res) => {
   try {
     const userData = await User.find({});
 
-    res.render("login",{userData});
+    res.render("login", { userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -236,9 +232,9 @@ const veryfiLogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const userData = await User.findOne({ email: email });
-    if(userData == null){
-      res.redirect("/")
-    }else if (userData.is_verified == 1) {
+    if (userData == null) {
+      res.redirect("/");
+    } else if (userData.is_verified == 1) {
       if (userData.is_blocked == false) {
         if (userData.email) {
           const passwordMatch = await bcrypt.compare(
@@ -250,16 +246,29 @@ const veryfiLogin = async (req, res) => {
             req.session.user_id = userData._id;
             res.redirect("/home");
           } else {
-            res.render("login", {userData, email,message: "Incorrect Email Or Password" });
+            res.render("login", {
+              userData,
+              email,
+              message: "Incorrect Email Or Password",
+            });
           }
         } else {
-          res.render("login", {userData,email, message: "Incorrect Email Or Password" });
+          res.render("login", {
+            userData,
+            email,
+            message: "Incorrect Email Or Password",
+          });
         }
       } else {
-        res.render("login", {userData,email, message: "Your Blocked..." });
+        res.render("login", { userData, email, message: "Your Blocked..." });
       }
     } else {
-      res.render("login", {userData,email,password, verfy: "Your Not verified" });
+      res.render("login", {
+        userData,
+        email,
+        password,
+        verfy: "Your Not verified",
+      });
     }
   } catch (error) {
     console.log(error.message);
@@ -267,27 +276,20 @@ const veryfiLogin = async (req, res) => {
 };
 
 //verifyuser
- const verifyFromLogin =async(req,res)=>{
+const verifyFromLogin = async (req, res) => {
   try {
-   
-    const email=req.query.email
-    email2=email
-    const udata = await User.find({email:email})
+    const email = req.query.email;
+    email2 = email;
+    const udata = await User.find({ email: email });
 
     const otpGenarated = Math.floor(1000 + Math.random() * 9999);
-      
 
-        sendVerifymail("User", email, otpGenarated);
-        res.render("otp_verification");
-    
+    sendVerifymail("User", email, otpGenarated);
+    res.render("otp_verification");
   } catch (error) {
     console.log(error.message);
   }
-}
-
-
-
-
+};
 
 ///forget passwd
 
@@ -355,16 +357,13 @@ const resetpassverify = async (req, res) => {
       { $set: { password: spassword, token: "" } }
     );
 
-    res.redirect("/"  );
+    res.redirect("/");
   } catch (error) {
     console.log(error.message);
   }
 };
 const getHome = async (req, res) => {
   try {
-
-
-
     const data = await productDB.find().limit(3);
     const userd = await User.findOne({ _id: req.session.user_id });
 
@@ -426,7 +425,7 @@ const getShop = async (req, res) => {
     const totalpages = Math.ceil(productCount / limit);
     const userd = await User.findOne({ _id: req.session.user_id });
     res.render("shop", {
-      message:"hi",
+      message: "hi",
       product: productData,
       user: userd.name,
       totalpages,
@@ -933,8 +932,7 @@ const buynow = async (req, res) => {
 };
 const buynowrender = async (req, res) => {
   try {
-
-    console.log('buy');
+    console.log("buy");
     const address = await user_address.findOne({ user: req.session.user_id });
     const addressData = address.address;
 
@@ -1094,8 +1092,8 @@ const getUser_profile = async (req, res) => {
     const coupon1 = await coupon.find();
     const userd = await User.findOne({ _id: req.session.user_id });
     const userData = await User.findOne({ _id: req.session.user_id });
-    
-    if (address&&coupon1) {
+
+    if (address && coupon1) {
       res.render("user_profile", {
         user: userd.name,
         data: userData,
@@ -1333,6 +1331,6 @@ module.exports = {
   orderlistLoad,
   ordershowLoad,
   canceluserorder,
-  returnuserorder
+  returnuserorder,
   // orderInvoice,
 };

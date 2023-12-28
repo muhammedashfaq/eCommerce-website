@@ -173,7 +173,6 @@
     function changeQuantity(cartId, proId, count,) {
       let quantity = parseInt(document.getElementById(proId).innerHTML)
       let count1 = parseInt(count)
-
       let price = document.getElementById('price').innerHTML
       console.log(quantity, count, cartId, proId, price);
       $.ajax({
