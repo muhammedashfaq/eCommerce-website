@@ -1,8 +1,7 @@
 # TimeZone Watches E-commerce 🕰️🌟
 
 ![Project Image](./public/display/ecom.png)
-![Project Image](./public/display/com2.png)
-![Project Image](./public/display/com3.png)
+
 ## Overview
 
 Welcome to TimeZone Watches E-commerce! This sleek and stylish e-commerce platform is built with Node.js, Express, and MongoDB. Explore a world of elegant watches with features like a shopping cart, secure checkout, payment integration with Razorpay, user coupons, wallet functionality, and comprehensive order management.
